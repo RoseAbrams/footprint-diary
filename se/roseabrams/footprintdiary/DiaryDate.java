@@ -20,6 +20,11 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         this.DAY = day;
     }
 
+    public DiaryDate(String dateString) {
+        this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 6)),
+                Byte.parseByte(dateString.substring(7, 8)));
+    }
+
     public DiaryDate(GregorianCalendar c) {
         this((short) c.get(GregorianCalendar.YEAR), (byte) c.get(GregorianCalendar.MONTH),
                 (byte) c.get(GregorianCalendar.DAY_OF_MONTH));

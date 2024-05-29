@@ -19,6 +19,12 @@ public class DiaryDateTime extends DiaryDate {
         this.SECOND = second;
     }
 
+    public DiaryDateTime(String dateString) {
+        this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 7)),
+                Byte.parseByte(dateString.substring(8, 10)), Byte.parseByte(dateString.substring(11, 13)),
+                Byte.parseByte(dateString.substring(14, 16)), Byte.parseByte(dateString.substring(17, 19)));
+    }
+
     public GregorianCalendar getDetailedDate() {
         if (detailedDate != null)
             return detailedDate;

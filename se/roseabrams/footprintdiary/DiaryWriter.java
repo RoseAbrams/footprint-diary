@@ -13,7 +13,8 @@ public class DiaryWriter {
                 new DiaryDate((short) 2021, (byte) 12, (byte) 31));
 
         try {
-            d.add(CameraCapture.create(new File("/data/camera captures.txt")));
+            d.add(CameraCapture.create(new File("/data/camera Camera.txt")));
+            //d.add(CameraCapture.create(new File("/data/camera Kina.txt")));
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);
