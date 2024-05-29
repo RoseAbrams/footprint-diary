@@ -1,4 +1,4 @@
-package entries;
+package se.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiary.entries;
 
 import DiaryDate;
 import DiaryEntry;

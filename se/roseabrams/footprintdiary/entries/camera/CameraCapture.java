@@ -1,4 +1,4 @@
-package entries.camera;
+package se.roseabrams.footprintdiary.entries.camera;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-
+package se.roseabrams.footprintdiary;
 
 import java.io.Serializable;
 import interfaces.DiaryEntryData;

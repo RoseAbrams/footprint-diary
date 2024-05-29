@@ -1,4 +1,4 @@
-package entries.discord;
+package se.roseabrams.footprintdiary.entries.discord;
 
 import interfaces.RemoteResource;
 

@@ -1,4 +1,4 @@
-package entries.health;
+package se.roseabrams.footprintdiary.entries.health;
 
 import DiaryDate;
 import DiaryEntry;

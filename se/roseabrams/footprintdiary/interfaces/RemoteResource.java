@@ -1,4 +1,4 @@
-package interfaces;
+package se.roseabrams.footprintdiary.interfaces;
 
 import java.net.URL;
 

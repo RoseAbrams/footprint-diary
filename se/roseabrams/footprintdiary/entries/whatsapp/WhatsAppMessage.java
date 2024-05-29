@@ -1,4 +1,4 @@
-package entries.whatsapp;
+package se.roseabrams.footprintdiary.entries.whatsapp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

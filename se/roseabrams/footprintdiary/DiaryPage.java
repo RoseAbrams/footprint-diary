@@ -1,3 +1,4 @@
+package se.roseabrams.footprintdiary;
 
 import java.util.ArrayList;
 import java.util.HashMap;

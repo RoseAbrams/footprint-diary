@@ -1,4 +1,4 @@
-package entries.email;
+package se.roseabrams.footprintdiary.entries.email;
 
 import DiaryEntry;
 import interfaces.Message;
