@@ -1,0 +1,81 @@
+public abstract class DiaryEntry implements Serializable {
+public final EntryType TYPE;
+public final short YEAR;
+public final byte MONTH;
+public final byte DAY;
+public final byte HOUR;
+public final byte MINUTE;
+public final byte SECOND;
+private transient Date date = null;
+public static final int CUTOFF_YEAR = 2023;
+
+public Date getDate() {
+if (date!=null) return date;
+date = new Date(...);
+return date;
+}
+
+public boolean hasTimeOfDay() {
+return HOUR!=null&&MINUTE!=null&&SECOND!=null;
+}
+
+@Override
+public abstract String toString();
+
+}
+
+public static enum EntryType {
+DISCORD, REDDIT, TORRENT, CAMERA_CAPTURE, MEME_SAVED, MEME_MADE, STEPS_WALKED, ...
+}
+
+public interface Text {...}
+public interface Message {
+getSender();
+getRecipient();
+}
+public interface PlainText implements Text {...}
+public interface RichText implements Text {...}
+public interface Resource {
+public String getPathToResource();
+}
+public interface RemoteResource implements ResourceEntry {
+public URL getURLOfResource();
+}
+public interface LocalResource implements ResourceEntry {
+public File getFileOfResource();
+}
+public interface Media {...}
+public interface Picture implements Media {...}
+public interface Video implements Media {...}
+public interface Audio implements Media {...}
+
+public class DiscordMessage extends DiaryEntry implements Message {...}
+public class DiscordMediaMessage extends DiscordMessage implements Media {...}
+public class DiscordFileMessage extends DiscordMessage implements RemoteResource {...}
+
+public abstract class CameraCapture extends DiaryEntry implements LocalResource {...}
+public class CameraPicture extends CameraCapture implements Picture {...}
+public class CameraVideo extends CameraCapture implements Video {...}
+
+public abstract class HealthData extends DiaryEntry {...}
+public class MovementData extends HealthData {...}
+
+public abstract class Email extends DiaryEntry implements RichText, Message {
+public EmailType guessType() {...}
+public static enum EmailType {...}
+}
+
+public class ManualEntry extends DiaryEntry {
+// known events: starting and leaving jobs and schools, important meetings, travel
+}
+
+
+private static void export(DiaryEntry[] d) {
+...
+Date startDate = ...;
+Date endDate = ...;
+int[][] output = new int[EntryType.size()][Date.getDifference(startDate, endDate];
+for (e in d) {
+...
+}
+}
