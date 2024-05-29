@@ -15,8 +15,7 @@ public class DiaryWriter {
 
         try {
             d.add(CameraCapture.createFromLog(new File("\\data\\camera Camera.txt")));
-            // d.add(CameraCapture.createFromLog(new File("/data/camera Kina.txt"))); //
-            // dating will be harder with mixed modifieddate, maybe there's other metadata?
+            // d.add(CameraCapture.createFromLog(new File("/data/camera Kina.txt")));  // dating will be harder with mixed modifieddate, maybe there's other metadata?
             d.add(DiscordMessage.createAllFromCsv(new File("\\data\\discord\\messages")));
         } catch (IOException e) {
             System.err.println(e);

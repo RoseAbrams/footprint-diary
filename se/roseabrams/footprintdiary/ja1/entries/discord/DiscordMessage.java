@@ -53,6 +53,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     }
 
     public static DiscordMessage[] createAllFromCsv(File messagesDirectory) {
+        ArrayList<DiscordMessage> output = new ArrayList<>();
         File f = new File(messagesDirectory, "index.json");
         JSONObject index = Util.loadJsonFile(f, 20000);
         Map<String, Object> indexMap = index.toMap();
@@ -60,7 +61,6 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
             String conversationCode = i.getKey();
             String conversationName = (String) i.getValue();
 
-            ArrayList<CameraCapture> output = new ArrayList<>();
             Scanner s = new Scanner(new File(messagesDirectory + "\\c" + conversationCode, "messages.csv"));
             s.useDelimiter(",");
 
@@ -87,12 +87,14 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
 
                 DiaryDateTime d = new DiaryDateTime(timestamp.substring(0, 20));
                 if (attachmentsUrl == null) {
-                    new DiscordMessage(d, id, contents, recipient, type);
+                    output.add(new DiscordMessage(d, id, contents, recipient, type));
                 } else {
-                    new DiscordFileMessage(d, id, contents, recipient, type, attachmentsUrl); // distinguish filetypes?
+                    output.add(new DiscordFileMessage(d, id, contents, recipient, type, attachmentsUrl)); // filetypes?
                 }
             }
+            s.close();
         }
+        return output.toArray(new DiscordMessage[output.size()]);
     }
 
     public static enum Type {

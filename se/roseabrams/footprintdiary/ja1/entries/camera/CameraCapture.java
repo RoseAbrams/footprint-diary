@@ -41,8 +41,8 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
         while (s.hasNextLine()) {
             String filename = s.nextLine();
             File file = new File("D:\\Dropbox\\Camera Uploads", filename);
-            DiaryDateTime date = new DiaryDateTime(filename.substring(0, filename.lastIndexOf(".")));
-            String filetype = filename.substring(filename.lastIndexOf(".") + 1);
+            DiaryDateTime date = new DiaryDateTime(filename.substring(0, filename.lastIndexOf('.')));
+            String filetype = filename.substring(filename.lastIndexOf('.') + 1);
 
             CameraCapture i;
             switch (filetype) {
