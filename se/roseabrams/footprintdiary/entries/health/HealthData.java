@@ -1,11 +1,12 @@
 package se.roseabrams.footprintdiary.entries.health;
 
+import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.EntrySource;
+import se.roseabrams.footprintdiary.DiaryEntrySource;
 
 public abstract class HealthData extends DiaryEntry {
 
-    public HealthData(short year, byte month, byte day, byte hour, byte minute, byte second) {
-        super(EntrySource.HEALTH, year, month, day, hour, minute, second);
+    public HealthData(DiaryDate date) {
+        super(DiaryEntrySource.HEALTH, date);
     }
 }
