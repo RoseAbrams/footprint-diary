@@ -1,9 +1,9 @@
-package se.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiaryse.roseabrams.footprintdiary.entries;
+package se.roseabrams.footprintdiary.entries;
 
-import DiaryDate;
-import DiaryEntry;
-import DiaryEntrySource;
-import interfaces.PlainText;
+import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class ManualEntry extends DiaryEntry implements PlainText {
 

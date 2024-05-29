@@ -9,14 +9,13 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 
-import DiaryDate;
-import DiaryDateTime;
-import DiaryEntry;
-import DiaryEntrySource;
-import Util;
-import entries.camera.CameraCapture;
-import interfaces.Message;
-import interfaces.PlainText;
+import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.Util;
+import se.roseabrams.footprintdiary.interfaces.Message;
+import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     private final long ID;

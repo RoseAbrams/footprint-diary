@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import DiaryDate;
-import DiaryDateTime;
-import DiaryEntry;
-import DiaryEntrySource;
-import interfaces.LocalResource;
+import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class CameraCapture extends DiaryEntry implements LocalResource {
 

@@ -1,8 +1,8 @@
 package se.roseabrams.footprintdiary.entries.email;
 
-import DiaryEntry;
-import interfaces.Message;
-import interfaces.RichText;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.interfaces.Message;
+import se.roseabrams.footprintdiary.interfaces.RichText;
 
 public abstract class Email extends DiaryEntry implements RichText, Message {
 

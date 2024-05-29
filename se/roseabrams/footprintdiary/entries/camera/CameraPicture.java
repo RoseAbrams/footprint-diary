@@ -2,8 +2,8 @@ package se.roseabrams.footprintdiary.entries.camera;
 
 import java.io.File;
 
-import DiaryDate;
-import interfaces.Picture;
+import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.interfaces.Picture;
 
 public class CameraPicture extends CameraCapture implements Picture {
 

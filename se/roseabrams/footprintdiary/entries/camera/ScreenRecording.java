@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.entries.camera;
 
 import java.io.File;
 
-import DiaryDate;
+import se.roseabrams.footprintdiary.DiaryDate;
 
 public class ScreenRecording extends CameraVideo {
 

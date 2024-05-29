@@ -1,7 +1,8 @@
 package se.roseabrams.footprintdiary;
 
 import java.io.Serializable;
-import interfaces.DiaryEntryData;
+
+import se.roseabrams.footprintdiary.interfaces.DiaryEntryData;
 
 public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     public final DiaryEntrySource SOURCE;

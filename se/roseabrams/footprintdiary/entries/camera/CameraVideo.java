@@ -2,8 +2,8 @@ package se.roseabrams.footprintdiary.entries.camera;
 
 import java.io.File;
 
-import DiaryDate;
-import interfaces.Video;
+import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.interfaces.Video;
 
 public class CameraVideo extends CameraCapture implements Video {
 

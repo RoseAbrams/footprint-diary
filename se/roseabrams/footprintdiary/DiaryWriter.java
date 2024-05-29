@@ -3,8 +3,8 @@ package se.roseabrams.footprintdiary;
 import java.io.File;
 import java.io.IOException;
 
-import entries.camera.CameraCapture;
-import entries.discord.DiscordMessage;
+import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
+import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 
 public class DiaryWriter {
     public static final short MY_CUTOFF_YEAR = 2023;

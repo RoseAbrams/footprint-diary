@@ -1,6 +1,6 @@
 package se.roseabrams.footprintdiary.entries.discord;
 
-import interfaces.RemoteResource;
+import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
 public class DiscordFileMessage extends DiscordMessage implements RemoteResource {
 }
