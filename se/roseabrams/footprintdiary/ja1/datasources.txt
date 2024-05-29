@@ -1,0 +1,30 @@
+DMs from all platforms
+posts from all platforms
+Skype DMs from my manual logs
+camera pictures and videos
+    ... including the China ones
+res/ pictures and videos by modified date
+    other folders?
+    modified date only tells fraction of story
+    created date? I think Windows and Dropbox has separate and then Dropbox would be better
+    how to get that? API access?
+steps walked from Health
+emails sent and received on all accounts
+Steam?
+    DMs, screenshots, achievements
+    games played by amount per date?
+    harder to export, need to look through account reports
+Spotify listening?
+YouTube watching?
+torrents – res/t/nsr modified date
+anime list
+    run MALytics one final time?
+TinderDB
+    run Carbon one final time!
+files from Utb/
+    most schoolworks are short so modified date should reflect activity more
+medical records😨
+IOEÅ😨
+ArbFörm😨
+purchase history (Wish, ...)
+banking history
