@@ -55,6 +55,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                     i = new CameraVideo(date, file);
                     break;
                 case "png":
+                case "webp":
                     i = new Screenshot(date, file);
                     break;
                 case "mp4":

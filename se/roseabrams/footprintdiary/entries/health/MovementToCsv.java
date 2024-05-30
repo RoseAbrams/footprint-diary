@@ -1,9 +1,7 @@
 package se.roseabrams.footprintdiary.entries.health;
 
 import java.io.File;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.IOException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -14,11 +12,10 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
 
 public class MovementToCsv {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         StringBuilder output = new StringBuilder(1000000);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document d = db.parse(exportFile);
+        Document d = Util.readXmlFile(
+                new File("D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\apple\\health export.xml"));
         NodeList allNodes = d.getDocumentElement().getChildNodes();
         for (int i = 0; i < allNodes.getLength(); i++) {
             Node node = allNodes.item(i);
@@ -37,11 +34,14 @@ public class MovementToCsv {
                 DiaryDateTime startDate = new DiaryDateTime(startDateS.substring(0, 20));
                 DiaryDateTime endDate = new DiaryDateTime(endDateS.substring(0, 20));
 
-                output.append(type).append(',').append(sourceName).append(',').append(sourceVersion).append(',')
-                        .append(device).append(',').append(unit).append(',').append(value).append(',')
-                        .append(creationDate).append(',').append(startDate).append(',').append(endDate).append('\n');
+                output.append(type).append(Util.DELIM).append(sourceName).append(Util.DELIM).append(sourceVersion)
+                        .append(Util.DELIM).append(device).append(Util.DELIM).append(unit).append(Util.DELIM)
+                        .append(value).append(Util.DELIM).append(creationDate).append(Util.DELIM).append(startDate)
+                        .append(Util.DELIM).append(endDate).append(Util.NEWLINE);
             }
         }
-        Util.writeFile(new File(...), output.toString());
+        Util.writeFile(
+                (new File("D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\apple\\health export.csv")),
+                output.toString());
     }
 }

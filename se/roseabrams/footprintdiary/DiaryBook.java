@@ -36,7 +36,7 @@ public class DiaryBook extends Diary implements Serializable {
 
     public String csv(boolean blankZeroes) {
         StringBuilder output = new StringBuilder(1000000);
-        for (DiaryEntrySource s : DiaryEntrySource.values()) {
+        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
             output.append(s).append(Util.DELIM);
         }
         output.deleteCharAt(output.length() - 1);

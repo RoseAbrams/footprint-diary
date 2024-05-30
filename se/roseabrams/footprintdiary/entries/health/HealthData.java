@@ -7,6 +7,6 @@ import se.roseabrams.footprintdiary.DiaryEntrySource;
 public abstract class HealthData extends DiaryEntry {
 
     public HealthData(DiaryDate date) {
-        super(DiaryEntrySource.HEALTH, date);
+        super(DiaryEntrySource.ACTIVITY, date);
     }
 }

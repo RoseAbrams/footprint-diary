@@ -1,7 +1,7 @@
 package se.roseabrams.footprintdiary.entries.whatsapp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -44,10 +44,18 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
         return SENDER == "Rosa";
     }
 
-    public static DiaryEntry[] createAllFromTxt(...) {
+    public static DiaryEntry[] createAllFromTxt(File chatsFolder) throws IOException {
+        ArrayList<WhatsAppMessage> output = new ArrayList<>();
+
+        File[] chatFiles = chatsFolder.listFiles();
+        for (File chatFile : chatFiles) {
+            output.addAll(createFromTxt(chatFile, chatFile.getName()));
+        }
+
+        return output.toArray(new WhatsAppMessage[output.size()]);
     }
 
-    public static WhatsAppMessage[] createFromTxt(File chatFile, String channelName) throws FileNotFoundException {
+    public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, String channelName) throws IOException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>();
         Scanner s = new Scanner(chatFile);
         while (s.hasNextLine()) {
@@ -57,16 +65,16 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
             String sender = s2.substring(s2.indexOf(']') + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
 
-            DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2); // because ", " has two chars and this is
-                                                                             // for one char
+            DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2);
+            // because ", " has two chars and this is for one char
 
             if (text.startsWith("<attached")) {
-                // ?
+                // TODO
             } else {
                 output.add(new WhatsAppMessage(date, sender, channelName, text));
             }
         }
         s.close();
-        return output.toArray(new WhatsAppMessage[output.size()]);
+        return output;
     }
 }

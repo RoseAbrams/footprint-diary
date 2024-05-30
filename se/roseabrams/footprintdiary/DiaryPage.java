@@ -24,7 +24,7 @@ public class DiaryPage extends Diary implements Serializable {
 
     public String csv() {
         StringBuilder output = new StringBuilder(DATE.toString());
-        for (DiaryEntrySource s : DiaryEntrySource.values()) {
+        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
             output.append(Util.DELIM).append(E.getOrDefault(s, EMPTY_LIST).size());
         }
         return output.toString();
@@ -34,10 +34,10 @@ public class DiaryPage extends Diary implements Serializable {
         StringBuilder output = new StringBuilder(250);
         output.append("Dear diary,").append(Util.NEWLINE).append("today I did ").append(E.size())
                 .append(" different things.").append(Util.NEWLINE).append(Util.NEWLINE);
-        for (DiaryEntrySource s : DiaryEntrySource.values()) {
+        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
             assert E.containsKey(s);
             ArrayList<DiaryEntry> es = E.get(s);
-            output.append(s.prose(es));
+            output.append(s.describeInProse(es));
             output.append(Util.NEWLINE);
         }
         output.append(Util.NEWLINE).append("See you tomorrow.");

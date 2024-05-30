@@ -18,7 +18,7 @@ import se.roseabrams.footprintdiary.Util;
 
 public class DailyActivity extends HealthData {
 
-    // TODO if all values are zero, an object should n 
+    // TODO if all values are zero because of no data, an object should not exist
     public final String STEPS_TAKEN;
     public final String DISTANCE_WALKED;
     public final String CALORIES_BURNED;

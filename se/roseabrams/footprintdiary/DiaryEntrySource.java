@@ -1,108 +1,175 @@
 package se.roseabrams.footprintdiary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
+import se.roseabrams.footprintdiary.entries.camera.CameraPicture;
+import se.roseabrams.footprintdiary.entries.camera.CameraVideo;
+import se.roseabrams.footprintdiary.entries.camera.ScreenRecording;
+import se.roseabrams.footprintdiary.entries.camera.Screenshot;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
+import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
+import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
+import se.roseabrams.footprintdiary.interfaces.Message;
 
 public enum DiaryEntrySource { // categorization intent is for human displaying
     DISCORD {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I sent " + filteredList.size() + " messages on Discord.";
         }
     },
     TORRENT {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I started downloading " + filteredList.size() + " torrents.";
         }
     },
     CAMERA {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            int nPictures = 0;
+            int nVideos = 0;
+            int nScreenshots = 0;
+            int nScreenRecordings = 0;
+            for (DiaryEntry e : filteredList) {
+                if (e instanceof CameraPicture)
+                    nPictures++;
+                else if (e instanceof CameraVideo)
+                    nVideos++;
+                else if (e instanceof Screenshot)
+                    nScreenshots++;
+                else if (e instanceof ScreenRecording)
+                    nScreenRecordings++;
+            }
+
             StringBuilder output = new StringBuilder(40);
-            output.append("I used my camera ").append(totals[0]).append(" times. I took ");
-            if (totals[1] != 0) {
-                output.append(totals[1]).append(" photos, ");
+            output.append("I used my camera ").append(nPictures + nVideos + nScreenshots + nScreenRecordings)
+                    .append(" times. I took ");
+            if (nPictures != 0) {
+                output.append(nPictures).append(" photos, ");
             }
-            if (totals[2] != 0) {
-                output.append(totals[2]).append(" videos, ");
+            if (nVideos != 0) {
+                output.append(nVideos).append(" videos, ");
             }
-            if (totals[3] != 0) {
-                output.append(totals[3]).append(" screenshots, ");
+            if (nScreenshots != 0) {
+                output.append(nScreenshots).append(" screenshots, ");
             }
-            if (totals[4] != 0) {
-                output.append(totals[4]).append(" screen recordings, ");
+            if (nScreenRecordings != 0) {
+                output.append(nScreenRecordings).append(" screen recordings, ");
             }
             output.substring(0, output.length() - 3);
             output.append('.');
-            String outputS = output.toString();
-            return outputS;
+            return output.toString();
         }
     },
     MEME_SAVED {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I saved " + filteredList.size() + " memes that I found online.";
         }
     },
     MEME_CREATED {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I made " + filteredList.size() + " memes that I published online.";
         }
     },
     WALLPAPER_SAVED {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I saved " + filteredList.size() + " wallpapers that I found online.";
         }
     },
     OTHER_MEMESQUE_SAVED {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " things that I found online, but never managed to quite sort them so not sure what they are.";
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            return "I saved " + filteredList.size()
+                    + " other things that I found online and never managed to sort them.";
         }
     },
-    HEALTH {
+    ACTIVITY {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I walked " + ((DailyActivity) filteredList.get(0)).DISTANCE_WALKED + " kilometers.";
+            // TODO update when more classes are finished
         }
     },
     MANUAL {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
-            return "Finally, I wanna note this event today: " + totals[0];
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            return "Finally, I wanna note this event today: " + filteredList.get(0);
         }
     },
     WHATSAPP {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
-            return "I sent " + totals[0] + " messages on WhatsApp.";
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            int nSent = 0;
+            int nRecieved = 0;
+            for (DiaryEntry e : filteredList) {
+                if (((Message) e).isByMe())
+                    nSent++;
+                else
+                    nRecieved++;
+            }
+            return "I sent " + nSent + " messages on WhatsApp, and received " + nRecieved + ".";
         }
     },
     SPOTIFY {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
-            return "I listened to " + totals[0] + " songs on Spotify, adding " + totals[1] + " of them to playlists.";
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            int nPlayed = 0;
+            int nPlaylisted = 0;
+            for (DiaryEntry e : filteredList) {
+                if (e instanceof SpotifyPlayback)
+                    nPlayed++;
+                else if (e instanceof SpotifyPlaylisting)
+                    nPlaylisted++;
+            }
+            return "I listened to " + nPlayed + " songs on Spotify, adding " + nPlaylisted + " of them to playlists.";
         }
     },
     STEAM {
         @Override
-        public String prose(ArrayList<DiaryEntry> filteredList) {
-            return "I bought " + totals[0] + " games on Steam.";
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            return "I bought " + filteredList.size() + " games on Steam.";
+            // TODO update when more classes are finished
         }
     };
 
-    public int getOrdering() {
+    public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
+
+    public int customOrder() {
         switch (this) {
             case MANUAL:
-                return Integer.MAX_VALUE;
+                return values().length - 1;
             default:
                 return ordinal();
         }
     }
 
-    public abstract String prose(ArrayList<DiaryEntry> filteredList);
+    public static DiaryEntrySource[] valuesCustomOrder() {
+        DiaryEntrySource[] output = values().clone();
+        Arrays.sort(output, new CustomOrder());
+        return output;
+        /*
+         * DiaryEntrySource[] output = new DiaryEntrySource[values().length];
+         * for (int i = 0; i < output.length; i++) {
+         * for (DiaryEntrySource s : values()) {
+         * if (s.getOrdering() == i)
+         * output[i] = s;
+         * }
+         * }
+         * return output;
+         */
+    }
+
+    private static class CustomOrder implements Comparator<DiaryEntrySource> {
+
+        @Override
+        public int compare(DiaryEntrySource o1, DiaryEntrySource o2) {
+            return Integer.compare(o1.customOrder(), o2.customOrder());
+        }
+    }
 }
