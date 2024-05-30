@@ -16,7 +16,8 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
     public ResFile(DiaryEntrySource source, DiaryDateTime dd, File file) {
         super(source, dd);
         assert source == DiaryEntrySource.MEME_SAVED || source == DiaryEntrySource.MEME_CREATED
-                || source == DiaryEntrySource.WALLPAPER_SAVED || source == DiaryEntrySource.OTHER_MEMESQUE_SAVED;
+                || source == DiaryEntrySource.WALLPAPER_SAVED || source == DiaryEntrySource.OTHER_MEMESQUE_SAVED
+                || source == DiaryEntrySource.TORRENT;
         FILE = file;
     }
 
@@ -51,6 +52,9 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                 case "wp":
                     s = DiaryEntrySource.WALLPAPER_SAVED;
                     break;
+                case "t":
+                    s = DiaryEntrySource.TORRENT;
+                    break;
                 default:
                     s = DiaryEntrySource.OTHER_MEMESQUE_SAVED;
                     break;
@@ -72,8 +76,12 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                 case "gif":
                     r = new ResGif();
                     break;
+                case "torrent":
+                    r = new Torrent();
+                    break;
                 default:
-                    //throw new UnsupportedOperationException("Unrecognized filename: " + filetype);
+                    // throw new UnsupportedOperationException("Unrecognized filename: " +
+                    // filetype);
                     System.err.println("Unrecognized filetype: " + filetype);
                     break;
             }

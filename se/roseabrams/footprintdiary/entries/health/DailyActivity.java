@@ -16,13 +16,18 @@ import org.xml.sax.SAXException;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
 
-public class Movement extends HealthData {
+public class DailyActivity extends HealthData {
+
+    // TODO if all values are zero, an object should n 
+    public final String STEPS_TAKEN;
+    public final String DISTANCE_WALKED;
+    public final String CALORIES_BURNED;
 
     @Override
     public String getStringSummary() {
     }
 
-    public static Movement[] createDaysFromXml(File exportFile) throws IOException {
+    public static DailyActivity[] createDaysFromXml(File exportFile) throws IOException {
         Document d = Util.readXmlFile(exportFile);
         NodeList allNodes = d.getDocumentElement().getChildNodes();
         for (int i = 0; i < allNodes.getLength(); i++) {

@@ -33,4 +33,17 @@ public class DiaryBook extends Diary implements Serializable {
         System.err.println("Entry date (" + e.DATE + ") was outside of Diary date range (" + PAGES[0].DATE + " - "
                 + PAGES[PAGES.length - 1].DATE + ")");
     }
+
+    public String csv(boolean blankZeroes) {
+        StringBuilder output = new StringBuilder(1000000);
+        for (DiaryEntrySource s : DiaryEntrySource.values()) {
+            output.append(s).append(Util.DELIM);
+        }
+        output.deleteCharAt(output.length() - 1);
+        output.append(Util.NEWLINE);
+        for (DiaryPage page : PAGES) {
+            output.append(page.csv()).append(Util.NEWLINE);
+        }
+        return blankZeroes ? output.toString().replace(",0,", ",,") : output.toString();
+    }
 }

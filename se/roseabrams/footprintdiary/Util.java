@@ -17,6 +17,8 @@ import org.xml.sax.SAXException;
 public class Util {
     private static DocumentBuilderFactory dbf = null;
     private static DocumentBuilder db = null;
+    public static final char DELIM = ',';
+    public static final char NEWLINE = '\n';
 
     @Deprecated // figure out something simpler and more modern for simple text ingest
     public static String readFile(File f, int maxLength) throws IOException {

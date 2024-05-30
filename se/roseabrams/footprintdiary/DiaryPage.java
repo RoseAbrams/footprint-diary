@@ -17,32 +17,30 @@ public class DiaryPage extends Diary implements Serializable {
         if (!DATE.equals(e.DATE, false))
             throw new IllegalArgumentException(
                     "DiaryEntry don't belong on this DiaryPage - expected " + DATE + ", got " + e.DATE);
-        if (!E.containsKey(e.SOURCE)) {
+        if (!E.containsKey(e.SOURCE))
             E.putIfAbsent(e.SOURCE, new ArrayList<>());
-        }
         E.get(e.SOURCE).add(e);
     }
 
-    public String csv(String delim) {
+    public String csv() {
         StringBuilder output = new StringBuilder(DATE.toString());
         for (DiaryEntrySource s : DiaryEntrySource.values()) {
-            output.append(delim + E.getOrDefault(s, EMPTY_LIST).size());
+            output.append(Util.DELIM).append(E.getOrDefault(s, EMPTY_LIST).size());
         }
         return output.toString();
     }
 
-    public String prose(String newline) {
+    public String prose() {
         StringBuilder output = new StringBuilder(250);
-        output.append("Dear diary,").append(newline).append("today I did ").append(E.size())
-                .append(" different things.").append(newline).append(newline);
+        output.append("Dear diary,").append(Util.NEWLINE).append("today I did ").append(E.size())
+                .append(" different things.").append(Util.NEWLINE).append(Util.NEWLINE);
         for (DiaryEntrySource s : DiaryEntrySource.values()) {
-            if (E.containsKey(s)) {
-                ArrayList<DiaryEntry> es = E.get(s);
-                // where to put the logic and stringspecs?
-                output.append(newline);
-            }
+            assert E.containsKey(s);
+            ArrayList<DiaryEntry> es = E.get(s);
+            output.append(s.prose(es));
+            output.append(Util.NEWLINE);
         }
-        output.append(newline).append("See you tomorrow.");
+        output.append(Util.NEWLINE).append("See you tomorrow.");
         return output.toString();
     }
 }
