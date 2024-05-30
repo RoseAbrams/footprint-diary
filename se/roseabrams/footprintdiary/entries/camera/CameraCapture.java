@@ -13,7 +13,7 @@ import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class CameraCapture extends DiaryEntry implements LocalResource {
 
-    private final File FILE;
+    public final File FILE;
 
     public CameraCapture(DiaryDate date, File file) {
         super(DiaryEntrySource.CAMERA, date);

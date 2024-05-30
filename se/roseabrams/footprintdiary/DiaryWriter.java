@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
+import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
+import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 
 public class DiaryWriter {
     public static final short MY_CUTOFF_YEAR = 2023;
@@ -17,6 +19,10 @@ public class DiaryWriter {
             d.add(CameraCapture.createFromLog(new File("\\data\\camera Camera.txt")));
             // d.add(CameraCapture.createFromLog(new File("/data/camera Kina.txt")));  // dating will be harder with mixed modifieddate, maybe there's other metadata?
             d.add(DiscordMessage.createAllFromCsv(new File("\\data\\discord\\messages")));
+            d.add(WhatsAppMessage.createAllFromTxt(...));
+            d.add(SpotifyPlayback.createAllFromJson(new File("\\data\\spotify\\endsong_0")));
+            d.add(SpotifyPlayback.createAllFromJson(new File("\\data\\spotify\\endsong_1")));
+            d.add(SpotifyPlayback.createAllFromJson(new File("\\data\\spotify\\endsong_2")));
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);

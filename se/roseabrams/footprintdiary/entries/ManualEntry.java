@@ -7,7 +7,7 @@ import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class ManualEntry extends DiaryEntry implements PlainText {
 
-    private final String TEXT;
+    public final String TEXT;
 
     public ManualEntry(DiaryDate dd, String text) {
         super(DiaryEntrySource.MANUAL, dd);

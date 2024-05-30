@@ -11,14 +11,14 @@ public class SpotifyTrack {
     public final String NAME;
     public final String ALBUM;
     public final String ARTIST;
-    private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
     private static final ArrayList<SpotifyTrack> CACHE = new ArrayList<>(1000);
+    private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
         ID = id;
         NAME = name;
-        ALBUM = album;
-        ARTIST = artist;
+        ALBUM = album.intern();
+        ARTIST = artist.intern();
     }
 
     public URI getUri() {
@@ -49,9 +49,10 @@ public class SpotifyTrack {
     public static SpotifyTrack create(String id, String name, String album, String artist) {
         if (id == null)
             return NULL_TRACK;
-        assert name != null;
-        assert album != null;
-        assert artist != null;
+        assert !name.isBlank() && id.length() == 62;
+        assert name != null && !name.isBlank();
+        assert album != null && !album.isBlank();
+        assert artist != null && !artist.isBlank();
 
         for (SpotifyTrack t : CACHE) {
             if (id.equals(t.ID))

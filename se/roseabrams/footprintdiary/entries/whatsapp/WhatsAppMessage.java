@@ -13,9 +13,9 @@ import se.roseabrams.footprintdiary.interfaces.Message;
 import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
-    private final String SENDER;
-    private final String RECIPIENT;
-    private final String TEXT;
+    public final String SENDER;
+    public final String RECIPIENT;
+    public final String TEXT;
 
     public WhatsAppMessage(DiaryDate dd, String sender, String recipient, String text) {
         super(DiaryEntrySource.WHATSAPP, dd);
@@ -44,6 +44,9 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
         return SENDER == "Rosa";
     }
 
+    public static DiaryEntry[] createAllFromTxt(...) {
+    }
+
     public static WhatsAppMessage[] createFromTxt(File chatFile, String channelName) throws FileNotFoundException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>();
         Scanner s = new Scanner(chatFile);
@@ -54,7 +57,8 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
             String sender = s2.substring(s2.indexOf(']') + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
 
-            DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2);  // because ", " has two chars and this is for one char
+            DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2); // because ", " has two chars and this is
+                                                                             // for one char
 
             if (text.startsWith("<attached")) {
                 // ?

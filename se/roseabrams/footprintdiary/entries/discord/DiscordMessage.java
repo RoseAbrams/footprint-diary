@@ -18,10 +18,10 @@ import se.roseabrams.footprintdiary.interfaces.Message;
 import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class DiscordMessage extends DiaryEntry implements Message, PlainText {
-    private final long ID;
-    private final String RECIPIENT;
-    private final Type TYPE;
-    private final String CONTENTS;
+    public final long ID;
+    public final String RECIPIENT;
+    public final Type TYPE;
+    public final String CONTENTS;
 
     public DiscordMessage(DiaryDate date, long id, String contents, String recipient, Type type) {
         super(DiaryEntrySource.DISCORD, date);
