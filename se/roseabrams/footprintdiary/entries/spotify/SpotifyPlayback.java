@@ -2,22 +2,16 @@ package se.roseabrams.footprintdiary.entries.spotify;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
-import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
 import se.roseabrams.footprintdiary.Util;
-import se.roseabrams.footprintdiary.interfaces.Audio;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
-public class SpotifyPlayback extends DiaryEntry implements Audio, RemoteResource {
+public class SpotifyPlayback extends SpotifyTrackEvent {
 
-    public final SpotifyTrack SONG;
     // public final int USERNAME;
     public final String PLATFORM;
     public final int PLAYTIME;
@@ -33,11 +27,10 @@ public class SpotifyPlayback extends DiaryEntry implements Audio, RemoteResource
     public final boolean INCOGNITO;
     public static final int MY_USERNAME = 1144943067;
 
-    public SpotifyPlayback(DiaryDateTime dd, SpotifyTrack song, String platform, int playtime,
+    public SpotifyPlayback(DiaryDateTime dd, SpotifyTrack track, String platform, int playtime,
             String country, String ip, String agent, StartReason startReason, EndReason endReason, boolean shuffle,
             boolean skipped, boolean offline, DiaryDateTime offlineStart, boolean incognito) {
-        super(DiaryEntrySource.SPOTIFY, dd);
-        SONG = song;
+        super(dd, track);
         PLATFORM = platform.intern();
         PLAYTIME = playtime;
         COUNTRY = country.intern();
@@ -53,13 +46,8 @@ public class SpotifyPlayback extends DiaryEntry implements Audio, RemoteResource
     }
 
     @Override
-    public String getPathToResource() {
-        return SONG.getUri().toString();
-    }
-
-    @Override
     public String getStringSummary() {
-        return SONG.toString() + " (" + getPlaytimeString() + ")";
+        return TRACK.toString() + " (" + getPlaytimeString() + ")";
     }
 
     public String getPlaytimeString() {
@@ -67,13 +55,8 @@ public class SpotifyPlayback extends DiaryEntry implements Audio, RemoteResource
     }
 
     @Override
-    public URL getURLOfResource() {
-        return SONG.getUrl();
-    }
-
-    @Override
     public boolean equals(Object o) {
-        return o instanceof SpotifyPlayback && SONG.equals(((SpotifyPlayback) o).SONG);
+        return o instanceof SpotifyPlayback && TRACK.equals(((SpotifyPlayback) o).TRACK);
     }
 
     public static enum StartReason {
@@ -88,7 +71,7 @@ public class SpotifyPlayback extends DiaryEntry implements Audio, RemoteResource
     public static SpotifyPlayback[] createAllFromJson(File streamingFile) throws IOException {
         ArrayList<SpotifyPlayback> output = new ArrayList<>();
 
-        JSONObject streamsO = Util.loadJsonFile(streamingFile, 1000000);
+        JSONObject streamsO = Util.readJsonFile(streamingFile, 1000000);
         JSONArray streams = new JSONArray(streamsO);
         for (Object stream : streams) {
             SpotifyPlayback p = createFromJson((JSONObject) stream);

@@ -44,6 +44,7 @@ public class Movement extends HealthData {
                 DiaryDateTime startDate = new DiaryDateTime(startDateS.substring(0, 20));
                 DiaryDateTime endDate = new DiaryDateTime(endDateS.substring(0, 20));
                 // ...
+                // harder since there's so many types that record movement differently🤔
             }
         }
     }
