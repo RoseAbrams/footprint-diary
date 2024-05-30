@@ -12,7 +12,6 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntrySource;
 import se.roseabrams.footprintdiary.Util;
-import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.interfaces.Audio;
 import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
