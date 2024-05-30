@@ -36,6 +36,7 @@ public class DiaryPage extends Diary {
                 .append(" different things.").append(newline).append(newline);
         for (DiaryEntrySource s : DiaryEntrySource.values()) {
             if (E.containsKey(s)) {
+                ArrayList<DiaryEntry> es = E.get(s);
                 // where to put the logic and stringspecs?
                 output.append(newline);
             }

@@ -28,7 +28,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
         ID = id;
         CONTENTS = contents;
         TYPE = type;
-        RECIPIENT = recipient;
+        RECIPIENT = recipient.intern();
     }
 
     @Override

@@ -10,6 +10,7 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
 
     public DiaryEntry(DiaryEntrySource source, DiaryDate dd) {
         assert source != null;
+        assert dd != null;
 
         SOURCE = source;
         DATE = dd;

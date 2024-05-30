@@ -1,5 +1,7 @@
 package se.roseabrams.footprintdiary;
 
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DiaryDateTime extends DiaryDate {
@@ -23,6 +25,16 @@ public class DiaryDateTime extends DiaryDate {
         this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 7)),
                 Byte.parseByte(dateString.substring(8, 10)), Byte.parseByte(dateString.substring(11, 13)),
                 Byte.parseByte(dateString.substring(14, 16)), Byte.parseByte(dateString.substring(17, 19)));
+    }
+
+    public DiaryDateTime(long unixMs) {
+        this(new Date(unixMs).toInstant().atZone(ZoneId.systemDefault()).toString());
+    }
+
+    public DiaryDateTime(GregorianCalendar c) {
+        this((short) c.get(GregorianCalendar.YEAR), (byte) c.get(GregorianCalendar.MONTH),
+                (byte) c.get(GregorianCalendar.DAY_OF_MONTH), (byte) c.get(GregorianCalendar.HOUR),
+                (byte) c.get(GregorianCalendar.MINUTE), (byte) c.get(GregorianCalendar.SECOND));
     }
 
     public GregorianCalendar getDetailedDate() {

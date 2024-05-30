@@ -25,6 +25,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
                 Byte.parseByte(dateString.substring(7, 8)));
     }
 
+    @Deprecated // probably always includes time, thus better for other class only
     public DiaryDate(GregorianCalendar c) {
         this((short) c.get(GregorianCalendar.YEAR), (byte) c.get(GregorianCalendar.MONTH),
                 (byte) c.get(GregorianCalendar.DAY_OF_MONTH));

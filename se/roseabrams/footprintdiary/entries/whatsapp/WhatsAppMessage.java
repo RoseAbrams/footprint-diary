@@ -19,8 +19,8 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
 
     public WhatsAppMessage(DiaryDate dd, String sender, String recipient, String text) {
         super(DiaryEntrySource.WHATSAPP, dd);
-        this.SENDER = sender;
-        this.RECIPIENT = recipient;
+        this.SENDER = sender.intern();
+        this.RECIPIENT = recipient.intern();
         this.TEXT = text;
     }
 
