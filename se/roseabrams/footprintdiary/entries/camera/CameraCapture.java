@@ -61,7 +61,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                     i = new ScreenRecording(date, file);
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unrecognized filename: " + filetype);
+                    throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
             }
             output.add(i);
         }

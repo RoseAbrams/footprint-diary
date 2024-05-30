@@ -1,8 +1,10 @@
 package se.roseabrams.footprintdiary.entries.discord;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -51,7 +53,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
         return true;
     }
 
-    public static DiscordMessage[] createAllFromCsv(File messagesDirectory) {
+    public static DiscordMessage[] createAllFromCsv(File messagesDirectory) throws IOException {
         ArrayList<DiscordMessage> output = new ArrayList<>();
         File f = new File(messagesDirectory, "index.json");
         JSONObject index = Util.readJsonFile(f, 20000);
@@ -81,15 +83,33 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 long id = s2.nextLong(10);
                 String timestamp = s2.next();
                 String contents = s2.next();
-                String attachmentsUrl = s2.hasNext() ? s2.next() : null;
+                String attachmentsUrlS = s2.hasNext() ? s2.next() : null;
                 s2.close();
-
-                DiaryDateTime d = new DiaryDateTime(timestamp.substring(0, 20));
-                if (attachmentsUrl == null) {
-                    output.add(new DiscordMessage(d, id, contents, recipient, type));
-                } else {
-                    output.add(new DiscordFileMessage(d, id, contents, recipient, type, attachmentsUrl)); // filetypes?
+                URL attachmentsUrl;
+                try {
+                    attachmentsUrl = new URL(attachmentsUrlS);
+                } catch (MalformedURLException e) {
+                    System.err.println("Invalid attachment URL for Discord message: " + attachmentsUrlS);
+                    attachmentsUrl = null;
                 }
+
+                DiaryDateTime dd = new DiaryDateTime(timestamp.substring(0, 20));
+                DiscordMessage d;
+                if (attachmentsUrl == null) {
+                    d = new DiscordMessage(dd, id, contents, recipient, type);
+                } else {
+                    String filetype = attachmentsUrlS.substring(attachmentsUrlS.substring(70).indexOf('.'),
+                            attachmentsUrlS.indexOf('?') - 1);
+                    switch (filetype.toLowerCase()) {
+                        case "jpg":
+                        case "png":
+                            d = new DiscordPictureMessage(dd, id, contents, recipient, type, attachmentsUrl);
+                            break;
+                        default:
+                            throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
+                    }
+                }
+                output.add(d);
             }
             s.close();
         }

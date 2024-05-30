@@ -1,9 +1,10 @@
 package se.roseabrams.footprintdiary;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DiaryPage extends Diary {
+public class DiaryPage extends Diary implements Serializable {
     private final HashMap<DiaryEntrySource, ArrayList<DiaryEntry>> E = new HashMap<>();
     public final DiaryDate DATE;
     private static final ArrayList<DiaryEntry> EMPTY_LIST = new ArrayList<>(0);

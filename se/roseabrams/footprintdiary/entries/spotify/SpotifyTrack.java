@@ -49,7 +49,7 @@ public class SpotifyTrack {
     public static SpotifyTrack create(String id, String name, String album, String artist) {
         if (id == null)
             return NULL_TRACK;
-        assert !name.isBlank() && id.length() == 62;
+        assert !id.isBlank() && id.length() == 62;
         assert name != null && !name.isBlank();
         assert album != null && !album.isBlank();
         assert artist != null && !artist.isBlank();

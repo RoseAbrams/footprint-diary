@@ -84,7 +84,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public static SpotifyPlayback createFromJson(JSONObject o) {
         DiaryDateTime dd = new DiaryDateTime(o.getString("ts"));
         int username = Integer.parseInt(o.getString("username"));
-        assert username == MY_USERNAME; // might as well ascertain
+        assert username == MY_USERNAME; // might as well be sure
         String platform = o.getString("platform");
         int playtime = o.getInt("ms_played");
         String country = o.getString("conn_country");

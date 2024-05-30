@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.Util;
 
 public class Movement extends HealthData {
 
@@ -21,11 +22,8 @@ public class Movement extends HealthData {
     public String getStringSummary() {
     }
 
-    public static Movement[] createDaysFromXml(File exportFile)
-            throws IOException, SAXException, ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document d = db.parse(exportFile);
+    public static Movement[] createDaysFromXml(File exportFile) throws IOException {
+        Document d = Util.readXmlFile(exportFile);
         NodeList allNodes = d.getDocumentElement().getChildNodes();
         for (int i = 0; i < allNodes.getLength(); i++) {
             Node node = allNodes.item(i);

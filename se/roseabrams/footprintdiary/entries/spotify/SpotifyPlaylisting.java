@@ -20,7 +20,7 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
 
     @Override
     public String getStringSummary() {
-        return TRACK + " -> " + PLAYLIST;
+        return TRACK + " -->> " + PLAYLIST;
     }
 
     public static SpotifyPlaylisting[] createFromJson(File playlistFile) throws IOException {
