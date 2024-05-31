@@ -46,4 +46,12 @@ public class DiaryBook extends Diary implements Serializable {
         }
         return blankZeroes ? output.toString().replace(",0,", ",,") : output.toString();
     }
+
+    public String[] prose() {
+        String[] output = new String[PAGES.length];
+        for (int i = 0; i < PAGES.length; i++) {
+            output[i] = PAGES[i].prose();
+        }
+        return output;
+    }
 }

@@ -31,7 +31,7 @@ public class SpotifyTrack {
 
     public URL getUrl() {
         try {
-            return new URL("https://open.spotify.com/track/" + ID);
+            return URI.create("https://open.spotify.com/track/" + ID).toURL();
         } catch (MalformedURLException e) {
             throw new Error(e);
         }

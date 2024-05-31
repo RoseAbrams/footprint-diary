@@ -67,7 +67,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // TODO leading zeroes for fixed length?
         return YEAR + "-" + MONTH + "-" + DAY;
     }
 

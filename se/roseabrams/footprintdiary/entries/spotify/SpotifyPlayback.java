@@ -71,7 +71,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public static SpotifyPlayback[] createAllFromJson(File streamingFile) throws IOException {
         ArrayList<SpotifyPlayback> output = new ArrayList<>();
 
-        JSONObject streamsO = Util.readJsonFile(streamingFile, 1000000);
+        JSONObject streamsO = Util.readJsonFile(streamingFile);
         JSONArray streams = new JSONArray(streamsO);
         for (Object stream : streams) {
             SpotifyPlayback p = createFromJson((JSONObject) stream);

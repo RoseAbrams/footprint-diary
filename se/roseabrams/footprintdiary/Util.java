@@ -1,10 +1,12 @@
 package se.roseabrams.footprintdiary;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,19 +19,27 @@ import org.xml.sax.SAXException;
 public class Util {
     private static DocumentBuilderFactory dbf = null;
     private static DocumentBuilder db = null;
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
     public static final char DELIM = ',';
     public static final char NEWLINE = '\n';
 
-    @Deprecated // figure out something simpler and more modern for simple text ingest
-    public static String readFile(File f, int maxLength) throws IOException {
-        char[] buffer = new char[maxLength];
-        new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8")).read(buffer);
-        return new String(buffer);
+    @Deprecated // you probably want to either have it as JSON or pre-splitted into lines
+    public static String readFile(File f) throws IOException {
+        return Files.readString(f.toPath(), CHARSET);
+        /*
+         * char[] buffer = new char[maxLength];
+         * new BufferedReader(new InputStreamReader(new FileInputStream(f),
+         * "UTF-8")).read(buffer);
+         * return new String(buffer);
+         */
     }
 
-    @Deprecated // figure out something simpler and more modern for simple text ingest
-    public static JSONObject readJsonFile(File f, int maxLength) throws IOException {
-        return new JSONObject(readFile(f, maxLength));
+    public static JSONObject readJsonFile(File f) throws IOException {
+        return new JSONObject(readFile(f));
+    }
+
+    public static List<String> readFileLines(File f) throws IOException {
+        return Files.readAllLines(f.toPath(), CHARSET);
     }
 
     public static Document readXmlFile(File f) throws IOException {
@@ -46,8 +56,9 @@ public class Util {
         }
     }
 
-    public static void writeFile(File f, String data) {
-        ...
+    public static void writeFile(File f, String data) throws IOException {
+        Files.deleteIfExists(f.toPath());
+        Files.writeString(f.toPath(), data, CHARSET, StandardOpenOption.CREATE_NEW);
     }
 
     public static <E extends Enum<E>> E findJsonInEnum(String input, E[] enumValues) {

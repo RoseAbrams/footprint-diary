@@ -72,7 +72,7 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // TODO leading zeroes for fixed length?
         return super.toString() + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
     }
 }

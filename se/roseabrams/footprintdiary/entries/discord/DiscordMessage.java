@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.discord;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     public static DiscordMessage[] createAllFromCsv(File messagesDirectory) throws IOException {
         ArrayList<DiscordMessage> output = new ArrayList<>();
         File f = new File(messagesDirectory, "index.json");
-        JSONObject index = Util.readJsonFile(f, 20000);
+        JSONObject index = Util.readJsonFile(f);
         Map<String, Object> indexMap = index.toMap();
         for (Entry<String, Object> i : indexMap.entrySet()) {
             String conversationCode = i.getKey();
@@ -88,7 +89,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 s2.close();
                 URL attachmentsUrl;
                 try {
-                    attachmentsUrl = new URL(attachmentsUrlS);
+                    attachmentsUrl = URI.create(attachmentsUrlS).toURL();
                 } catch (MalformedURLException e) {
                     System.err.println("Invalid attachment URL for Discord message: " + attachmentsUrlS);
                     attachmentsUrl = null;
