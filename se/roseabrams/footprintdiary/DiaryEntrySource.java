@@ -73,7 +73,8 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
     MEME_CREATED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I made " + filteredList.size() + " memes that I published online.";
+            return "I made " + filteredList.size() + " memes and published "
+                    + (filteredList.size() == 1 ? "it" : "them") + " online.";
         }
     },
     WALLPAPER_SAVED {
@@ -143,7 +144,7 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
     public int customOrder() {
         switch (this) {
             case MANUAL:
-                return values().length - 1;
+                return Integer.MAX_VALUE;
             default:
                 return ordinal();
         }
@@ -153,16 +154,6 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
         DiaryEntrySource[] output = values().clone();
         Arrays.sort(output, new CustomOrder());
         return output;
-        /*
-         * DiaryEntrySource[] output = new DiaryEntrySource[values().length];
-         * for (int i = 0; i < output.length; i++) {
-         * for (DiaryEntrySource s : values()) {
-         * if (s.getOrdering() == i)
-         * output[i] = s;
-         * }
-         * }
-         * return output;
-         */
     }
 
     private static class CustomOrder implements Comparator<DiaryEntrySource> {

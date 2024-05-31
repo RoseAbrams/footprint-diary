@@ -20,14 +20,14 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
 
     @Override
     public String getStringSummary() {
-        return TRACK + " -->> " + PLAYLIST;
+        return TRACK + " --> " + PLAYLIST;
     }
 
     public static SpotifyPlaylisting[] createFromJson(File playlistFile) throws IOException {
         ArrayList<SpotifyPlaylisting> output = new ArrayList<>();
 
         JSONObject playlistsO = Util.readJsonFile(playlistFile, 1000000);
-        JSONArray playlists = playlistsO.optJSONArray("playlists");
+        JSONArray playlists = playlistsO.getJSONArray("playlists");
 
         for (Object playlistO : playlists) {
             JSONObject playlist = (JSONObject) playlistO;

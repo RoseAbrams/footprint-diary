@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 
 public class SpotifyPlayback extends SpotifyTrackEvent {
@@ -25,7 +26,6 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public final boolean OFFLINE;
     public final DiaryDateTime OFFLINE_START;
     public final boolean INCOGNITO;
-    public static final int MY_USERNAME = 1144943067;
 
     public SpotifyPlayback(DiaryDateTime dd, SpotifyTrack track, String platform, int playtime,
             String country, String ip, String agent, StartReason startReason, EndReason endReason, boolean shuffle,
@@ -84,7 +84,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public static SpotifyPlayback createFromJson(JSONObject o) {
         DiaryDateTime dd = new DiaryDateTime(o.getString("ts"));
         int username = Integer.parseInt(o.getString("username"));
-        assert username == MY_USERNAME; // might as well be sure
+        assert username == PersonalConstants.SPOTIFY_USERNAME; // might as well be sure
         String platform = o.getString("platform");
         int playtime = o.getInt("ms_played");
         String country = o.getString("conn_country");

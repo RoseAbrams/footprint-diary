@@ -9,6 +9,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.interfaces.Message;
 import se.roseabrams.footprintdiary.interfaces.PlainText;
 
@@ -41,7 +42,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
 
     @Override
     public boolean isByMe() {
-        return SENDER == "Rosa";
+        return SENDER == PersonalConstants.WHATSAPP_NAME;
     }
 
     public static DiaryEntry[] createAllFromTxt(File chatsFolder) throws IOException {
