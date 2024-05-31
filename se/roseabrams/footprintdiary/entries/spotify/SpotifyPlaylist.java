@@ -6,6 +6,7 @@ public class SpotifyPlaylist {
     public final String NAME;
     public final String DESCRIPTION;
     public final DiaryDate LAST_MODIFIED;
+    // curiously no username with this data
 
     public SpotifyPlaylist(String name, String desc, DiaryDate modified) {
         NAME = name;

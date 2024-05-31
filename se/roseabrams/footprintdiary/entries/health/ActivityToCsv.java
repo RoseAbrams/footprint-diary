@@ -11,7 +11,7 @@ import org.w3c.dom.NodeList;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
 
-public class MovementToCsv {
+public class ActivityToCsv {
     public static void main(String[] args) throws IOException {
         StringBuilder output = new StringBuilder(1000000);
         Document d = Util.readXmlFile(
