@@ -26,11 +26,7 @@ public class DiaryWriter {
         try {
             d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.txt")));
             // d.add(CameraCapture.createFromLog(new File(D + "dir Kina.txt")));
-            /*
-             * exif tag "date taken" matches with modifieddate🤔
-             * added a library for exif anyway, instructions at
-             * "https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/MetadataExample.java"
-             */
+            // exif tag "date taken" matches with modifieddate🤔
             d.add(DiscordMessage.createAllFromCsv(new File(D + "discord\\messages.csv")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(D + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_0.json")));
