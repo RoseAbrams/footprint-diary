@@ -42,12 +42,13 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
 
     @Override
     public boolean isByMe() {
-        return SENDER == PersonalConstants.SKYPE_MY_USERNAME;
+        return SENDER == PersonalConstants.SKYPE_USERNAME;
     }
 
     public static SkypeMessage[] createFromTxt(File skypeTxt) throws IOException {
         ArrayList<SkypeMessage> output = new ArrayList<>();
         List<String> messages = Util.readFileLines(skypeTxt);
+        String channel = null;
         for (String message : messages) {
             String timestampS = message.substring(message.indexOf("["), message.indexOf("]"));
             DiaryDateTime timestamp = new DiaryDateTime(Short.parseShort("20" + timestampS.substring(6, 8)),
@@ -55,6 +56,9 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
                     Byte.parseByte(timestampS.substring(9, 11)), Byte.parseByte(timestampS.substring(12, 14)),
                     Byte.parseByte(timestampS.substring(15, 17)));
             String user = message.substring(message.indexOf("]") + 2, message.indexOf(":"));
+            if (channel == null && user != PersonalConstants.SKYPE_USERNAME) {
+                channel = user;
+            } // this still doesn't solve recipient field
             String messageBody = message.substring(message.indexOf(":") + 2);
 
             output.add(new SkypeMessage(timestamp, user, messageBody));
