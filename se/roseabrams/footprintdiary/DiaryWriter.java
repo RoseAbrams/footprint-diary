@@ -24,9 +24,9 @@ public class DiaryWriter {
                 new DiaryDate(END_YEAR, (byte) 12, (byte) 31));
 
         try {
-            d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.txt")));
-            // d.add(CameraCapture.createFromLog(new File(D + "dir Kina.txt")));
-            // exif tag "date taken" matches with modifieddate🤔
+            d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
+            d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
+            d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
             d.add(DiscordMessage.createAllFromCsv(new File(D + "discord\\messages.csv")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(D + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_0.json")));

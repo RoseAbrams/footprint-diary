@@ -83,6 +83,12 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
             return "I saved " + filteredList.size() + " wallpapers that I found online.";
         }
     },
+    ARTWORK_SAVED {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            return "I saved " + filteredList.size() + " pieces of arwork that I found online.";
+        }
+    },
     OTHER_MEMESQUE_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {

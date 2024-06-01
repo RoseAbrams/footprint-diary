@@ -16,8 +16,8 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
     public ResFile(DiaryEntrySource source, DiaryDateTime dd, File file) {
         super(source, dd);
         assert source == DiaryEntrySource.MEME_SAVED || source == DiaryEntrySource.MEME_CREATED
-                || source == DiaryEntrySource.WALLPAPER_SAVED || source == DiaryEntrySource.OTHER_MEMESQUE_SAVED
-                || source == DiaryEntrySource.TORRENT;
+                || source == DiaryEntrySource.WALLPAPER_SAVED || source == DiaryEntrySource.ARTWORK_SAVED
+                || source == DiaryEntrySource.OTHER_MEMESQUE_SAVED;
         FILE = file;
     }
 
@@ -36,58 +36,74 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
         return FILE;
     }
 
-    public static ResFile[] createFromLog(File logfile) throws IOException {
-        ArrayList<ResFile> output = new ArrayList<>();
+    public static DiaryEntry[] createFromLog(File logfile) throws IOException {
+        ArrayList<DiaryEntry> output = new ArrayList<>();
         Scanner s = new Scanner(logfile);
         while (s.hasNextLine()) {
-            // ...
-            DiaryEntrySource s;
+            Scanner sFile = new Scanner(s.nextLine());
+            sFile.useDelimiter(":");
+            String filename = sFile.next();
+            String filetype = filename.substring(filename.lastIndexOf('.') + 1);
+            long timestamp = sFile.nextLong();
+            DiaryDateTime dd = new DiaryDateTime(timestamp);
+            Scanner sPath = new Scanner(sFile.next());
+            sPath.useDelimiter("\\");
+            sPath.next(); // first is blank
+            String subfolderName = sPath.next();
+            if (subfolderName.equals("mus") || subfolderName.equals("snd") || subfolderName.equals("omgl")
+                    || subfolderName.equals("oo") || subfolderName.equals("fl") || subfolderName.equals("ai")) {
+                continue;
+            }
+
+            DiaryEntrySource subfolderSource;
             switch (subfolderName) {
                 case "lol":
-                    s = DiaryEntrySource.MEME_SAVED;
+                    subfolderSource = DiaryEntrySource.MEME_SAVED;
                     break;
                 case "oc":
-                    s = DiaryEntrySource.MEME_CREATED;
+                    subfolderSource = DiaryEntrySource.MEME_CREATED;
                     break;
                 case "wp":
-                    s = DiaryEntrySource.WALLPAPER_SAVED;
+                    subfolderSource = DiaryEntrySource.WALLPAPER_SAVED;
+                    break;
+                case "anart":
+                    subfolderSource = DiaryEntrySource.ARTWORK_SAVED;
                     break;
                 case "t":
-                    s = DiaryEntrySource.TORRENT;
+                    subfolderSource = DiaryEntrySource.TORRENT;
                     break;
                 default:
-                    s = DiaryEntrySource.OTHER_MEMESQUE_SAVED;
+                    subfolderSource = DiaryEntrySource.OTHER_MEMESQUE_SAVED;
                     break;
             }
-            // ...
-            ResFile r;
+
+            DiaryEntry r;
             switch (filetype.toLowerCase()) {
                 case "jpg":
                 case "jpeg":
                 case "png":
                 case "webp":
-                    r = new ResPicture();
+                    r = new ResPicture(subfolderSource, dd, file);
                     break;
                 case "mp4":
                 case "mov":
                 case "webm":
-                    r = new ResVideo();
+                    r = new ResVideo(subfolderSource, dd, file);
                     break;
                 case "gif":
-                    r = new ResGif();
+                    r = new ResGif(subfolderSource, dd, file);
                     break;
                 case "torrent":
-                    r = new Torrent();
+                    r = new Torrent(dd, file);
                     break;
                 default:
-                    // throw new UnsupportedOperationException("Unrecognized filename: " +
-                    // filetype);
                     System.err.println("Unrecognized filetype: " + filetype);
-                    break;
+                    continue;
             }
-            // ...
+
+            output.add(r);
         }
         s.close();
-        return output.toArray(new ResFile[output.size()]);
+        return output.toArray(new DiaryEntry[output.size()]);
     }
 }

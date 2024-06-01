@@ -39,9 +39,13 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
         ArrayList<CameraCapture> output = new ArrayList<>();
         Scanner s = new Scanner(logfile);
         while (s.hasNextLine()) {
-            String filename = s.nextLine();
-            File file = new File("D:\\Dropbox\\Camera Uploads", filename);
-            DiaryDateTime date = new DiaryDateTime(filename.substring(0, filename.lastIndexOf('.')));
+            Scanner s2 = new Scanner(s.nextLine());
+            s2.useDelimiter(":");
+            String filename = s2.next();
+            long lastModified = s2.nextLong();
+
+            File file = new File("D:\\Dropbox\\Camera Uploads", filename); // fix for Kina folder
+            DiaryDateTime date = new DiaryDateTime(lastModified);
             String filetype = filename.substring(filename.lastIndexOf('.') + 1);
 
             CameraCapture i;
