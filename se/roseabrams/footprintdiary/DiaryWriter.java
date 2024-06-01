@@ -7,6 +7,7 @@ import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 import se.roseabrams.footprintdiary.entries.health.HealthData;
 import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
+import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.entries.steam.SteamStore;
@@ -36,6 +37,7 @@ public class DiaryWriter {
             d.add(ResFile.createFromLog(new File(D + "dir res.txt")));
             d.add(SteamStore.createFromHtml(new File(D + "steam\\Purchase History.html")));
             d.add(HealthData.createFromXml(new File(D + "apple\\health.xml")));
+            d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));
             System.gc();
 
             String csv = d.csv(true);

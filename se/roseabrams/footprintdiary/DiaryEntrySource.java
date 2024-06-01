@@ -123,6 +123,20 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
             return "I sent " + nSent + " messages on WhatsApp, and received " + nRecieved + ".";
         }
     },
+    SKYPE {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            int nSent = 0;
+            int nRecieved = 0;
+            for (DiaryEntry e : filteredList) {
+                if (((Message) e).isByMe())
+                    nSent++;
+                else
+                    nRecieved++;
+            }
+            return "I sent " + nSent + " messages on Skype, and received " + nRecieved + ".";
+        }
+    },
     SPOTIFY {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {

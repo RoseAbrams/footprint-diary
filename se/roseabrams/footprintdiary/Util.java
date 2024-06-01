@@ -23,6 +23,9 @@ public class Util {
     public static final char DELIM = ',';
     public static final char NEWLINE = '\n';
 
+    private Util() {
+    }
+
     @Deprecated // you probably want to either have it as JSON or pre-splitted into lines
     public static String readFile(File f) throws IOException {
         return Files.readString(f.toPath(), CHARSET);
