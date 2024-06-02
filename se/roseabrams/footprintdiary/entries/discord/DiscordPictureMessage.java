@@ -22,7 +22,7 @@ public class DiscordPictureMessage extends DiscordMessage implements Picture, Re
     }
 
     @Override
-    public URL getURLOfResource() {
+    public URL getUrlOfResource() {
         return ATTACHMENT_URL;
     }
 }

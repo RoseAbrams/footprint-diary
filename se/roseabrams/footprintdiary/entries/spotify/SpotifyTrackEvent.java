@@ -4,7 +4,7 @@ import java.net.URL;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.interfaces.Audio;
 import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
@@ -12,7 +12,7 @@ public abstract class SpotifyTrackEvent extends DiaryEntry implements Audio, Rem
     public final SpotifyTrack TRACK;
 
     public SpotifyTrackEvent(DiaryDate dd, SpotifyTrack track) {
-        super(DiaryEntrySource.SPOTIFY, dd);
+        super(DiaryEntryCategory.SPOTIFY, dd);
         TRACK = track;
     }
 
@@ -22,7 +22,7 @@ public abstract class SpotifyTrackEvent extends DiaryEntry implements Audio, Rem
     }
 
     @Override
-    public URL getURLOfResource() {
+    public URL getUrlOfResource() {
         return TRACK.getUrl();
     }
 }

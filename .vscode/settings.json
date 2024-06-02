@@ -2,6 +2,7 @@
     "java.dependency.packagePresentation": "hierarchical",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "dependencies/json-20240303.jar"
+        "dependencies/json-20240303.jar",
+        "dependencies/jsoup-1.17.2.jar"
     ]
 }

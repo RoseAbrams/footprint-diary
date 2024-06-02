@@ -11,13 +11,13 @@ import org.w3c.dom.NodeList;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 
 public abstract class HealthData extends DiaryEntry {
 
     public HealthData(DiaryDate date) {
-        super(DiaryEntrySource.ACTIVITY, date);
+        super(DiaryEntryCategory.ACTIVITY, date);
     }
 
     public static enum Type {

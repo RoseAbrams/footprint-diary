@@ -8,7 +8,7 @@ import java.util.Scanner;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class CameraCapture extends DiaryEntry implements LocalResource {
@@ -16,7 +16,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
     public final File FILE;
 
     public CameraCapture(DiaryDate date, File file) {
-        super(DiaryEntrySource.CAMERA, date);
+        super(DiaryEntryCategory.CAMERA, date);
         FILE = file;
     }
 
@@ -53,18 +53,24 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                 case "jpg":
                 case "jpeg":
                 case "heic":
+                case "png":
+                case "webp":
                     i = new CameraPicture(date, file);
                     break;
                 case "mov":
+                case "mp4":
                     i = new CameraVideo(date, file);
                     break;
-                case "png":
-                case "webp":
-                    i = new Screenshot(date, file);
-                    break;
-                case "mp4":
-                    i = new ScreenRecording(date, file);
-                    break;
+                /*
+                 * // apparently not a reliable determiner
+                 * case "png":
+                 * case "webp":
+                 * i = new Screenshot(date, file);
+                 * break;
+                 * case "mp4":
+                 * i = new ScreenRecording(date, file);
+                 * break;
+                 */
                 default:
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
             }

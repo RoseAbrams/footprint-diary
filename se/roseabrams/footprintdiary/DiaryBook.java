@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 
 public class DiaryBook extends Diary implements Serializable {
     private final DiaryPage[] PAGES;
+    private int discardedOutsideDateRange;
 
     public DiaryBook(DiaryDate starDate, DiaryDate endDate) {
         PAGES = new DiaryPage[starDate.differenceDays(endDate)];
@@ -32,11 +33,12 @@ public class DiaryBook extends Diary implements Serializable {
         }
         System.out.println("Entry date (" + e.DATE + ") was outside of Diary date range (" + PAGES[0].DATE + " - "
                 + PAGES[PAGES.length - 1].DATE + ")");
+                discardedOutsideDateRange++;
     }
 
     public String csv(boolean blankZeroes) {
         StringBuilder output = new StringBuilder(1000000);
-        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
+        for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
             output.append(s).append(Util.DELIM);
         }
         output.deleteCharAt(output.length() - 1);

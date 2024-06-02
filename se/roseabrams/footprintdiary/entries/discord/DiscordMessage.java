@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.interfaces.Message;
@@ -28,7 +28,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     public final String CONTENTS;
 
     public DiscordMessage(DiaryDate date, long id, String contents, String recipient, Type type) {
-        super(DiaryEntrySource.DISCORD, date);
+        super(DiaryEntryCategory.DISCORD, date);
         ID = id;
         CONTENTS = contents;
         TYPE = type;

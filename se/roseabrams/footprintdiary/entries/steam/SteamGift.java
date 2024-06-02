@@ -1,4 +1,4 @@
 package se.roseabrams.footprintdiary.entries.steam;
 
-public class SteamGift extends SteamEvent {
+public class SteamGift /*extends SteamEvent*/ {
 }

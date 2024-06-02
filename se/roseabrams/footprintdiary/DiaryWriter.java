@@ -14,15 +14,13 @@ import se.roseabrams.footprintdiary.entries.steam.SteamStore;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 
 public class DiaryWriter {
-    public static final short START_YEAR = 2012;
-    public static final short END_YEAR = 2021;
     private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
     private static final File CSV_FILE = new File(
             "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\diaryTable.csv");
 
     public static void main(String[] args) {
-        DiaryBook d = new DiaryBook(new DiaryDate(START_YEAR, (byte) 1, (byte) 1),
-                new DiaryDate(END_YEAR, (byte) 12, (byte) 31));
+        DiaryBook d = new DiaryBook(new DiaryDate((short) 2010, (byte) 1, (byte) 1),
+                new DiaryDate((short) 2023, (byte) 3, (byte) 31));
 
         try {
             d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));

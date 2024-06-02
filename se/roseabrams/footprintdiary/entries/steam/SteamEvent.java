@@ -2,11 +2,11 @@ package se.roseabrams.footprintdiary.entries.steam;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 
 public abstract class SteamEvent extends DiaryEntry {
 
-    public SteamEvent(DiaryEntrySource source, DiaryDate dd) {
-        super(DiaryEntrySource.STEAM, dd);
+    public SteamEvent(DiaryEntryCategory source, DiaryDate dd) {
+        super(DiaryEntryCategory.STEAM, dd);
     }
 }

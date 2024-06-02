@@ -7,7 +7,7 @@ import java.util.List;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.interfaces.Message;
@@ -19,7 +19,7 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
     public final String MESSAGE;
 
     public SkypeMessage(DiaryDateTime dd, String user, String recipient, String message) {
-        super(DiaryEntrySource.SKYPE, dd);
+        super(DiaryEntryCategory.SKYPE, dd);
         SENDER = user.intern();
         RECIPIENT = recipient.intern();
         MESSAGE = message;
@@ -42,27 +42,42 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
 
     @Override
     public boolean isByMe() {
-        return SENDER == PersonalConstants.SKYPE_USERNAME;
+        return SENDER.equals(PersonalConstants.SKYPE_USERNAME);
     }
 
-    public static SkypeMessage[] createFromTxt(File skypeTxt) throws IOException {
+    public static DiaryEntry[] createAllFromTxt(File directory) throws IOException {
+        ArrayList<SkypeMessage> output = new ArrayList<>();
+        for (File convFile : directory.listFiles()) {
+            output.addAll(createFromTxt(convFile));
+        }
+        return output.toArray(new DiaryEntry[output.size()]);
+    }
+
+    public static ArrayList<SkypeMessage> createFromTxt(File skypeTxt) throws IOException {
         ArrayList<SkypeMessage> output = new ArrayList<>();
         List<String> messages = Util.readFileLines(skypeTxt);
-        String channel = null;
+
+        String recipient = null;
+        for (String message : messages) {
+            String sender = message.substring(message.indexOf("]") + 2, message.indexOf(": "));
+            if (!sender.equals(PersonalConstants.SKYPE_USERNAME)) {
+                recipient = sender;
+                break;
+            }
+        }
+        assert recipient != null;
+
         for (String message : messages) {
             String timestampS = message.substring(message.indexOf("["), message.indexOf("]"));
             DiaryDateTime timestamp = new DiaryDateTime(Short.parseShort("20" + timestampS.substring(6, 8)),
                     Byte.parseByte(timestampS.substring(3, 5)), Byte.parseByte(timestampS.substring(0, 2)),
                     Byte.parseByte(timestampS.substring(9, 11)), Byte.parseByte(timestampS.substring(12, 14)),
                     Byte.parseByte(timestampS.substring(15, 17)));
-            String user = message.substring(message.indexOf("]") + 2, message.indexOf(":"));
-            if (channel == null && user != PersonalConstants.SKYPE_USERNAME) {
-                channel = user;
-            } // this still doesn't solve recipient field
+            String sender = message.substring(message.indexOf("]") + 2, message.indexOf(": "));
             String messageBody = message.substring(message.indexOf(":") + 2);
 
-            output.add(new SkypeMessage(timestamp, user, messageBody));
+            output.add(new SkypeMessage(timestamp, sender, recipient, messageBody));
         }
-        return output.toArray(new SkypeMessage[output.size()]);
+        return output;
     }
 }

@@ -7,17 +7,17 @@ import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class ResFile extends DiaryEntry implements LocalResource {
     public final File FILE;
 
-    public ResFile(DiaryEntrySource source, DiaryDateTime dd, File file) {
+    public ResFile(DiaryEntryCategory source, DiaryDateTime dd, File file) {
         super(source, dd);
-        assert source == DiaryEntrySource.MEME_SAVED || source == DiaryEntrySource.MEME_CREATED
-                || source == DiaryEntrySource.WALLPAPER_SAVED || source == DiaryEntrySource.ARTWORK_SAVED
-                || source == DiaryEntrySource.OTHER_MEMESQUE_SAVED;
+        assert source == DiaryEntryCategory.MEME_SAVED || source == DiaryEntryCategory.MEME_CREATED
+                || source == DiaryEntryCategory.WALLPAPER_SAVED || source == DiaryEntryCategory.ARTWORK_SAVED
+                || source == DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
         FILE = file;
     }
 
@@ -55,25 +55,25 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                 continue;
             }
 
-            DiaryEntrySource subfolderSource;
+            DiaryEntryCategory subfolderSource;
             switch (subfolderName) {
                 case "lol":
-                    subfolderSource = DiaryEntrySource.MEME_SAVED;
+                    subfolderSource = DiaryEntryCategory.MEME_SAVED;
                     break;
                 case "oc":
-                    subfolderSource = DiaryEntrySource.MEME_CREATED;
+                    subfolderSource = DiaryEntryCategory.MEME_CREATED;
                     break;
                 case "wp":
-                    subfolderSource = DiaryEntrySource.WALLPAPER_SAVED;
+                    subfolderSource = DiaryEntryCategory.WALLPAPER_SAVED;
                     break;
                 case "anart":
-                    subfolderSource = DiaryEntrySource.ARTWORK_SAVED;
+                    subfolderSource = DiaryEntryCategory.ARTWORK_SAVED;
                     break;
                 case "t":
-                    subfolderSource = DiaryEntrySource.TORRENT;
+                    subfolderSource = DiaryEntryCategory.TORRENT;
                     break;
                 default:
-                    subfolderSource = DiaryEntrySource.OTHER_MEMESQUE_SAVED;
+                    subfolderSource = DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
                     break;
             }
 

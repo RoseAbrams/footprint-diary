@@ -9,21 +9,24 @@ import se.roseabrams.footprintdiary.entries.camera.CameraVideo;
 import se.roseabrams.footprintdiary.entries.camera.ScreenRecording;
 import se.roseabrams.footprintdiary.entries.camera.Screenshot;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
+import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
+import se.roseabrams.footprintdiary.entries.reddit.RedditEvent;
+import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.interfaces.Message;
 
-public enum DiaryEntrySource { // categorization intent is for human displaying
+public enum DiaryEntryCategory { // categorization intent is for human displaying
     DISCORD {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I sent " + filteredList.size() + " messages on Discord.";
+            return "I sent " + filteredList.size() + " message" + p(filteredList.size()) + " on Discord.";
         }
     },
     TORRENT {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I started downloading " + filteredList.size() + " torrents.";
+            return "I started downloading " + filteredList.size() + " torrent" + p(filteredList.size()) + ".";
         }
     },
     CAMERA {
@@ -48,16 +51,16 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
             output.append("I used my camera ").append(nPictures + nVideos + nScreenshots + nScreenRecordings)
                     .append(" times. I took ");
             if (nPictures != 0) {
-                output.append(nPictures).append(" photos, ");
+                output.append(nPictures).append(" photo" + p(nPictures) + ", ");
             }
             if (nVideos != 0) {
-                output.append(nVideos).append(" videos, ");
+                output.append(nVideos).append(" video" + p(nVideos) + ", ");
             }
             if (nScreenshots != 0) {
-                output.append(nScreenshots).append(" screenshots, ");
+                output.append(nScreenshots).append(" screenshot" + p(nScreenshots) + ", ");
             }
             if (nScreenRecordings != 0) {
-                output.append(nScreenRecordings).append(" screen recordings, ");
+                output.append(nScreenRecordings).append(" screen recording" + p(nScreenRecordings) + ", ");
             }
             output.substring(0, output.length() - 3);
             output.append('.');
@@ -67,39 +70,41 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
     MEME_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " memes that I found online.";
+            return "I saved " + filteredList.size() + " meme" + p(filteredList.size()) + " that I found online.";
         }
     },
     MEME_CREATED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I made " + filteredList.size() + " memes and published "
+            return "I made " + filteredList.size() + " meme" + p(filteredList.size()) + " and published "
                     + (filteredList.size() == 1 ? "it" : "them") + " online.";
         }
     },
     WALLPAPER_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " wallpapers that I found online.";
+            return "I saved " + filteredList.size() + " wallpaper" + p(filteredList.size()) + " that I found online.";
         }
     },
     ARTWORK_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " pieces of arwork that I found online.";
+            return "I saved " + filteredList.size() + " piece" + p(filteredList.size())
+                    + " of arwork that I found online.";
         }
     },
     OTHER_MEMESQUE_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size()
-                    + " other things that I found online and never managed to sort them.";
+            return "I saved " + filteredList.size() + " other thing" + p(filteredList.size())
+                    + " that I found online and never managed to sort.";
         }
     },
     ACTIVITY {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I walked " + ((DailyActivity) filteredList.get(0)).DISTANCE_WALKED + " kilometers.";
+            float km = ((DailyActivity) filteredList.get(0)).KILOMETERS_WALKED;
+            return "I walked " + km + " kilometer" + p(Math.round(km)) + ".";
             // TODO update when more classes are finished
         }
     },
@@ -120,7 +125,8 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " messages on WhatsApp, and received " + nRecieved + ".";
+            return "I sent " + nSent + " message" + p(filteredList.size()) + " on WhatsApp, and received " + nRecieved
+                    + ".";
         }
     },
     SKYPE {
@@ -134,7 +140,8 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " messages on Skype, and received " + nRecieved + ".";
+            return "I sent " + nSent + " message" + p(filteredList.size()) + " on Skype, and received " + nRecieved
+                    + ".";
         }
     },
     SPOTIFY {
@@ -148,16 +155,45 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
                 else if (e instanceof SpotifyPlaylisting)
                     nPlaylisted++;
             }
-            return "I listened to " + nPlayed + " songs on Spotify, adding " + nPlaylisted + " of them to playlists.";
+            return "I listened to " + nPlayed + " song" + p(filteredList.size()) + " on Spotify and added "
+                    + nPlaylisted + " song" + p(filteredList.size()) + " to my playlists.";
         }
     },
     STEAM {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I bought " + filteredList.size() + " games on Steam.";
+            return "I bought " + filteredList.size() + " game" + p(filteredList.size()) + " on Steam.";
             // TODO update when more classes are finished
         }
-    };
+    },
+    REDDIT {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            int nPosts = 0;
+            int nComments = 0;
+            for (DiaryEntry e : filteredList) {
+                if (e instanceof RedditPost)
+                    nPosts++;
+                else if (e instanceof RedditComment)
+                    nComments++;
+            }
+            StringBuilder output = new StringBuilder();
+            output.append("I posted ");
+            if (nPosts > 0)
+                output.append(nPosts).append(" post").append(p(nPosts));
+            if (nPosts > 0 && nComments > 0)
+                output.append(" and ");
+            if (nComments > 0)
+                output.append(nComments).append(" comment").append(p(nComments));
+            output.append(" on Reddit.");
+            return output.toString();
+        }
+    },
+    WIKIMEDIA_EDIT {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        }
+    },;
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
 
@@ -170,16 +206,20 @@ public enum DiaryEntrySource { // categorization intent is for human displaying
         }
     }
 
-    public static DiaryEntrySource[] valuesCustomOrder() {
-        DiaryEntrySource[] output = values().clone();
+    private static String p(int v) {
+        return Util.pluralSuffix(v);
+    }
+
+    public static DiaryEntryCategory[] valuesCustomOrder() {
+        DiaryEntryCategory[] output = values().clone();
         Arrays.sort(output, new CustomOrder());
         return output;
     }
 
-    private static class CustomOrder implements Comparator<DiaryEntrySource> {
+    private static class CustomOrder implements Comparator<DiaryEntryCategory> {
 
         @Override
-        public int compare(DiaryEntrySource o1, DiaryEntrySource o2) {
+        public int compare(DiaryEntryCategory o1, DiaryEntryCategory o2) {
             return Integer.compare(o1.customOrder(), o2.customOrder());
         }
     }

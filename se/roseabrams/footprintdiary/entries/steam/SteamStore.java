@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.DiaryEntrySource;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 
 public class SteamStore extends SteamEvent {
@@ -22,7 +22,7 @@ public class SteamStore extends SteamEvent {
 
     public SteamStore(DiaryDate dd, String[] items, Type type, String paymentMethod, float paymentTotal,
             float walletChange, float walletBalance) {
-        super(DiaryEntrySource.STEAM, dd);
+        super(DiaryEntryCategory.STEAM, dd);
         assert dd != null;
 
         assert items != null;

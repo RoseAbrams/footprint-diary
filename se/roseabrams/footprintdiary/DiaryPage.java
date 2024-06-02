@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import se.roseabrams.footprintdiary.interfaces.CustomCounted;
+
 public class DiaryPage extends Diary implements Serializable {
-    private final HashMap<DiaryEntrySource, ArrayList<DiaryEntry>> E = new HashMap<>();
+    private final HashMap<DiaryEntryCategory, ArrayList<DiaryEntry>> E = new HashMap<>();
     public final DiaryDate DATE;
-    private static final ArrayList<DiaryEntry> EMPTY_LIST = new ArrayList<>(0);
 
     public DiaryPage(DiaryDate date) {
         DATE = date;
@@ -24,8 +25,16 @@ public class DiaryPage extends Diary implements Serializable {
 
     public String csv() {
         StringBuilder output = new StringBuilder(DATE.toString());
-        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
-            output.append(Util.DELIM).append(E.getOrDefault(s, EMPTY_LIST).size());
+        for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
+            output.append(Util.DELIM);
+            ArrayList<DiaryEntry> d = E.get(s);
+            if (d == null) {
+                output.append(0);
+            } else if (d.get(0) instanceof CustomCounted) {
+                output.append(((CustomCounted) d.get(0)).getCustomCount());
+            } else {
+                output.append(d.size());
+            }
         }
         return output.toString();
     }
@@ -34,7 +43,7 @@ public class DiaryPage extends Diary implements Serializable {
         StringBuilder output = new StringBuilder(250);
         output.append("Dear diary,").append(Util.NEWLINE).append("today I did ").append(E.size())
                 .append(" different things.").append(Util.NEWLINE).append(Util.NEWLINE);
-        for (DiaryEntrySource s : DiaryEntrySource.valuesCustomOrder()) {
+        for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
             assert E.containsKey(s);
             ArrayList<DiaryEntry> es = E.get(s);
             output.append(s.describeInProse(es));

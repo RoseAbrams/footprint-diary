@@ -73,4 +73,8 @@ public class Util {
         }
         throw new IllegalArgumentException("No value " + input + " in enum " + enumValues.getClass());
     }
+
+    public static String pluralSuffix(int v) {
+        return v == 1 ? "" : "s";
+    }
 }
