@@ -12,6 +12,7 @@ import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.entries.steam.SteamStore;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
+import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 
 public class DiaryWriter {
     private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
@@ -36,6 +37,7 @@ public class DiaryWriter {
             d.add(SteamStore.createFromHtml(new File(D + "steam\\Purchase History.html")));
             d.add(HealthData.createFromXml(new File(D + "apple\\health.xml")));
             d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));
+            d.add(WikimediaEdit.createFromWebsites());
             System.gc();
 
             String csv = d.csv(true);

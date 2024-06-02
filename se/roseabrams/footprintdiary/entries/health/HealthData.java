@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary.entries.health;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -33,6 +34,11 @@ public abstract class HealthData extends DiaryEntry {
             return UNIT[ordinal()];
         }
 
+        @Override
+        public String toString() {
+            return fullName();
+        }
+
         private static final String[] FULL_NAME = { "HKCategoryTypeIdentifierMindfulSession",
                 "HKCategoryTypeIdentifierSexualActivity",
                 "HKCategoryTypeIdentifierSleepAnalysis",
@@ -55,13 +61,23 @@ public abstract class HealthData extends DiaryEntry {
     }
 
     public static HealthData[] createFromXml(File exportFile) throws IOException {
+        ArrayList<Activity> output = new ArrayList<>();
         Document d = Util.readXmlFile(exportFile);
         NodeList allNodes = d.getDocumentElement().getChildNodes();
+
         for (int i = 0; i < allNodes.getLength(); i++) {
             Node node = allNodes.item(i);
             NamedNodeMap attr = node.getAttributes();
             if (node.getNodeName() == "Record") {
-                String type = attr.getNamedItem("type").getTextContent();
+                String typeS = attr.getNamedItem("type").getTextContent();
+                Type type = null;
+                for (Type t : Type.values()) {
+                    if (typeS.equals(t.fullName())) {
+                        type = t;
+                        break;
+                    }
+                }
+                assert type != null;
                 String sourceName = attr.getNamedItem("sourceName").getTextContent();
                 Node sourceVersionN = attr.getNamedItem("sourceVersion");
                 String sourceVersion = null;
@@ -91,6 +107,21 @@ public abstract class HealthData extends DiaryEntry {
                 DiaryDateTime creationDate = new DiaryDateTime(creationDateS.substring(0, 20));
                 DiaryDateTime startDate = new DiaryDateTime(startDateS.substring(0, 20));
                 DiaryDateTime endDate = new DiaryDateTime(endDateS.substring(0, 20));
+
+                switch (type) {
+                    case DISTANCE_MOVED:
+                        output.add(new Activity());
+                        break;
+                    case STEP_COUNT:
+                    output.add(new Activity());
+                        break;
+                    case ENERGY_BURNED_ACTIVE:
+                    output.add(new Activity());
+                        break;
+                    default:
+                        System.out.println("Skipping unimplemented HealthData.Type: " + type);
+                        break;
+                }
                 // ...
             }
         }

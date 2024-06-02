@@ -72,9 +72,11 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                  * break;
                  */
                 default:
+                    s2.close();
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
             }
             output.add(i);
+            s2.close();
         }
         s.close();
         return output.toArray(new CameraCapture[output.size()]);
