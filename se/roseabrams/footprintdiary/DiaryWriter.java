@@ -18,8 +18,6 @@ import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 
 public class DiaryWriter {
     private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
-    private static final File CSV_FILE = new File(
-            "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\diaryTable.csv");
 
     public static void main(String[] args) {
         DiaryBook d = new DiaryBook(new DiaryDate((short) 2010, (byte) 1, (byte) 1),
@@ -45,11 +43,19 @@ public class DiaryWriter {
             System.gc();
 
             String csv = d.csv(true);
-            Util.writeFile(CSV_FILE, csv);
+            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
+                    + "\\footprint diary\\outputs\\diaryTable.csv"), csv);
             System.gc();
 
             String[] prose = d.prose();
-            ... // TODO divide into pages, some kind of document format
+            StringBuilder rtf = new StringBuilder(100000);
+            rtf.append("{\\rtf\\ansi\\deff0\\widoctrl\\ftnbj \\sectd\\linex0\\endnhere \\pard\\plain \\fs30 ");
+            for (String page : prose) {
+                rtf.append(page.replace("\n", "\\par ")).append("\\page ");
+            }
+            rtf.append("}");
+            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
+                    + "\\footprint diary\\outputs\\diaryProse.rtf"), rtf.toString());
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);
