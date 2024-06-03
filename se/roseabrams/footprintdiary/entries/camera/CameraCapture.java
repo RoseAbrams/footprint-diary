@@ -35,6 +35,47 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
         return FILE;
     }
 
+    public static CameraCapture[] createFromFiles(File folder) {
+        ArrayList<CameraCapture> output = createFromFilesRecursion(folder);
+        return output.toArray(new CameraCapture[output.size()]);
+    }
+
+    public static ArrayList<CameraCapture> createFromFilesRecursion(File folder) {
+        ArrayList<CameraCapture> output = new ArrayList<>(1000);
+        for (File file : folder.listFiles()) {
+            DiaryDateTime date = new DiaryDateTime(file.lastModified());
+            String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            CameraCapture c;
+            switch (filetype) {
+                case "jpg":
+                case "jpeg":
+                case "heic":
+                case "png":
+                case "webp":
+                    c = new CameraPicture(date, file);
+                    break;
+                case "mov":
+                case "mp4":
+                    c = new CameraVideo(date, file);
+                    break;
+                /*
+                 * // apparently not a reliable determiner
+                 * case "png":
+                 * case "webp":
+                 * i = new Screenshot(date, file);
+                 * break;
+                 * case "mp4":
+                 * i = new ScreenRecording(date, file);
+                 * break;
+                 */
+                default:
+                    throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
+            }
+            output.add(c);
+        }
+        return output;
+    }
+
     public static CameraCapture[] createFromLog(File logfile) throws IOException {
         ArrayList<CameraCapture> output = new ArrayList<>(10000);
         Scanner s = new Scanner(logfile);
@@ -44,7 +85,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             String filename = s2.next();
             long lastModified = s2.nextLong();
 
-            File file = new File("D:\\Dropbox\\Camera Uploads", filename); // fix for Kina folder
+            File file = new File("D:\\Dropbox\\Camera Uploads", filename); // won't work for Kina folder
             DiaryDateTime date = new DiaryDateTime(lastModified);
             String filetype = filename.substring(filename.lastIndexOf('.') + 1);
 

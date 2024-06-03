@@ -24,16 +24,18 @@ public class DiaryWriter {
                 new DiaryDate((short) 2023, (byte) 3, (byte) 31));
 
         try {
-            d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
-            d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
-            d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            //d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina")));
+            //d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
+            //d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
+            d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(D + "discord\\messages.csv")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(D + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_0.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_1.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_2.json")));
             d.add(SpotifyPlaylisting.createFromJson(new File(D + "spotify\\Playlist1.json")));
-            d.add(ResFile.createFromLog(new File(D + "dir res.txt")));
             d.add(SteamStore.createFromHtml(new File(D + "steam\\Purchase History.html")));
             d.add(HealthData.createFromXml(new File(D + "apple\\health.xml")));
             d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));

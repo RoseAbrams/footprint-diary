@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class DiaryBook extends Diary implements Serializable {
+
     private final DiaryPage[] PAGES;
     private int discardedOutsideDateRange;
 
@@ -33,7 +34,7 @@ public class DiaryBook extends Diary implements Serializable {
         }
         System.out.println("Entry date (" + e.DATE + ") was outside of Diary date range (" + PAGES[0].DATE + " - "
                 + PAGES[PAGES.length - 1].DATE + ")");
-                discardedOutsideDateRange++;
+        discardedOutsideDateRange++;
     }
 
     public String csv(boolean blankZeroes) {
