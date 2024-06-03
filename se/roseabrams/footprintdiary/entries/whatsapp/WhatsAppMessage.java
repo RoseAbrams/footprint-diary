@@ -42,7 +42,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
 
     @Override
     public boolean isByMe() {
-        return SENDER == PersonalConstants.WHATSAPP_NAME;
+        return SENDER.equals(PersonalConstants.WHATSAPP_NAME);
     }
 
     public static DiaryEntry[] createAllFromTxt(File chatsFolder) throws IOException {

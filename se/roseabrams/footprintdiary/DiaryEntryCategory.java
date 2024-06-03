@@ -10,7 +10,6 @@ import se.roseabrams.footprintdiary.entries.camera.ScreenRecording;
 import se.roseabrams.footprintdiary.entries.camera.Screenshot;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
-import se.roseabrams.footprintdiary.entries.reddit.RedditSubmission;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;

@@ -21,6 +21,6 @@ public abstract class RedditEvent extends DiaryEntry {
 
     public RedditEvent(DiaryDate dd, String id) {
         super(DiaryEntryCategory.REDDIT, dd);
-        ID = id;
+        ID = id.intern();
     }
 }

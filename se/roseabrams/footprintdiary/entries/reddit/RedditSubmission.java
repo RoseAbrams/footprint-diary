@@ -10,7 +10,7 @@ public abstract class RedditSubmission extends RedditEvent implements PlainText 
 
     public RedditSubmission(DiaryDate dd, String id, String subreddit, int gildings) {
         super(dd, id);
-        SUBREDDIT = subreddit;
+        SUBREDDIT = subreddit.intern();
         GILDINGS = gildings;
     }
 }

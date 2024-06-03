@@ -44,12 +44,12 @@ public class RedditPost extends RedditSubmission implements RichText {
             String title = s.next();
             String mediaS = s.next();
             if (mediaS.startsWith("/r/")) {
-                mediaS = null; // sometimes it points to itself for text posts
+                mediaS = ""; // sometimes it points to itself for text posts
             }
             String body = s.nextLine();
 
             URL media = null;
-            if (mediaS != null) {
+            if (!mediaS.isBlank()) {
                 try {
                     media = URI.create(mediaS).toURL();
                 } catch (MalformedURLException e) {

@@ -41,13 +41,22 @@ public class DiaryPage extends Diary implements Serializable {
 
     public String prose() {
         StringBuilder output = new StringBuilder(250);
-        output.append("Dear diary,").append(Util.NEWLINE).append("today I did ").append(E.size())
-                .append(" different things.").append(Util.NEWLINE).append(Util.NEWLINE);
-        for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
-            assert E.containsKey(s);
-            ArrayList<DiaryEntry> es = E.get(s);
-            output.append(s.describeInProse(es));
-            output.append(Util.NEWLINE);
+        output.append("Dear diary,").append(Util.NEWLINE);
+        if (E.isEmpty()) {
+            output.append("I have nothing to write today.").append(Util.NEWLINE);
+        } else {
+            output.append("today I did ");
+            if (E.size() == 1) {
+                output.append("just one thing.");
+            } else {
+                output.append(E.size()).append(" different things.");
+            }
+            output.append(Util.NEWLINE).append(Util.NEWLINE);
+            for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
+                if (E.containsKey(s)) {
+                    output.append(s.describeInProse(E.get(s))).append(Util.NEWLINE);
+                }
+            }
         }
         output.append(Util.NEWLINE).append("See you tomorrow.");
         return output.toString();

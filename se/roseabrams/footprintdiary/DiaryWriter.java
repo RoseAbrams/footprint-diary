@@ -21,7 +21,7 @@ public class DiaryWriter {
 
     public static void main(String[] args) {
         DiaryBook d = new DiaryBook(new DiaryDate((short) 2010, (byte) 1, (byte) 1),
-                new DiaryDate((short) 2023, (byte) 3, (byte) 31));
+                new DiaryDate((short) 2023, (byte) 6, (byte) 30));
 
         try {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));

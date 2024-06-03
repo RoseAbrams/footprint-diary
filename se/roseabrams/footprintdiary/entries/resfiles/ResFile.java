@@ -1,7 +1,6 @@
 package se.roseabrams.footprintdiary.entries.resfiles;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;

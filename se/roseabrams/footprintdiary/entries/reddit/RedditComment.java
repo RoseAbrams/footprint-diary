@@ -2,9 +2,6 @@ package se.roseabrams.footprintdiary.entries.reddit;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,8 +19,8 @@ public class RedditComment extends RedditSubmission {
             String parentCommentId) {
         super(dd, id, subreddit, gildings);
         BODY = body;
-        PARENT_POST_ID = parentPostId;
-        PARENT_COMMENT_ID = parentCommentId;
+        PARENT_POST_ID = parentPostId.intern();
+        PARENT_COMMENT_ID = parentCommentId.intern();
     }
 
     @Override
