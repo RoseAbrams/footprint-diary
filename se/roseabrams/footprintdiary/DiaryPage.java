@@ -23,8 +23,9 @@ public class DiaryPage extends Diary implements Serializable {
         E.get(e.CATEGORY).add(e);
     }
 
-    public String csv() {
-        StringBuilder output = new StringBuilder(DATE.toString());
+    public String csvSum() {
+        StringBuilder output = new StringBuilder(50);
+        output.append(DATE.toString());
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
             output.append(Util.DELIM);
             ArrayList<DiaryEntry> d = E.get(s);
@@ -34,6 +35,17 @@ public class DiaryPage extends Diary implements Serializable {
                 output.append(((CustomCounted) d.get(0)).getCustomCount());
             } else {
                 output.append(d.size());
+            }
+        }
+        return output.toString();
+    }
+
+    public String csvIndex() {
+        StringBuilder output = new StringBuilder(1000);
+        for (ArrayList<DiaryEntry> es : E.values()) {
+            for (DiaryEntry e : es) {
+                output.append(e.DATE).append(Util.DELIM).append(e.CATEGORY).append(Util.DELIM)
+                        .append(e.getStringSummary()).append(Util.NEWLINE);
             }
         }
         return output.toString();

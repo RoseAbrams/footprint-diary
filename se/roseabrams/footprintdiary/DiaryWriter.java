@@ -6,7 +6,6 @@ import java.io.IOException;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
-import se.roseabrams.footprintdiary.entries.health.HealthData;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
@@ -45,9 +44,14 @@ public class DiaryWriter {
             d.add(RedditComment.createFromCsv(new File(D + "reddit\\comments.csv")));
             System.gc();
 
-            String csv = d.csv(true);
+            String csvSum = d.csvSum(true);
             Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
-                    + "\\footprint diary\\outputs\\diaryTable.csv"), csv);
+                    + "\\footprint diary\\outputs\\diarySumTable.csv"), csvSum);
+            System.gc();
+
+            String csvIndex = d.csvIndex();
+            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
+                    + "\\footprint diary\\outputs\\diaryIndexTable.csv"), csvIndex);
             System.gc();
 
             String[] prose = d.prose();
