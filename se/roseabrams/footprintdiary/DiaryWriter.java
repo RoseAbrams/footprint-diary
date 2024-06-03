@@ -6,6 +6,8 @@ import java.io.IOException;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 import se.roseabrams.footprintdiary.entries.health.HealthData;
+import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
+import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
 import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
@@ -38,6 +40,8 @@ public class DiaryWriter {
             d.add(HealthData.createFromXml(new File(D + "apple\\health.xml")));
             d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));
             d.add(WikimediaEdit.createFromWebsites());
+            d.add(RedditPost.createFromCsv(new File(D + "reddit\\posts.csv")));
+            d.add(RedditComment.createFromCsv(new File(D + "reddit\\comments.csv")));
             System.gc();
 
             String csv = d.csv(true);

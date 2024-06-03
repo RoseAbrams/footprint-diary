@@ -1,6 +1,16 @@
 package se.roseabrams.footprintdiary.entries.reddit;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import se.roseabrams.footprintdiary.DiaryDate;
+import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.Util;
 
 public class RedditComment extends RedditSubmission {
 
@@ -19,5 +29,35 @@ public class RedditComment extends RedditSubmission {
     @Override
     public String getStringSummary() {
         return BODY;
+    }
+
+    public static RedditComment[] createFromCsv(File commentsFile) throws IOException {
+        ArrayList<RedditComment> output = new ArrayList<>(1000);
+        for (String post : Util.readFileLines(commentsFile)) {
+            Scanner s = new Scanner(post);
+            s.useDelimiter(",");
+            String id = s.next();
+            String linkFull = s.next();
+            String dateS = s.next();
+            DiaryDateTime date = new DiaryDateTime(dateS);
+            String ip = s.next();
+            String subreddit = s.next();
+            int gildings = Integer.parseInt(s.next());
+            String postLink = s.next();
+            String parentId = s.next();
+            if (parentId.isBlank())
+                parentId = null;
+            String body = s.next();
+            String media = s.nextLine();
+
+            int postIdIndex = postLink.indexOf("/comments/") + "/comments/".length();
+            String postId = postLink.substring(postIdIndex, postLink.indexOf("/", postIdIndex));
+
+            RedditComment r = new RedditComment(date, id, subreddit, gildings, body, postId, parentId);
+            output.add(r);
+            s.close();
+        }
+
+        return output.toArray(new RedditComment[output.size()]);
     }
 }

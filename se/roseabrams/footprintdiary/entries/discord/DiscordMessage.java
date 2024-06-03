@@ -57,8 +57,8 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
 
     public static DiscordMessage[] createAllFromCsv(File messagesDirectory) throws IOException {
         ArrayList<DiscordMessage> output = new ArrayList<>(10000);
-        File f = new File(messagesDirectory, "index.json");
-        JSONObject index = Util.readJsonFile(f);
+        File indexFile = new File(messagesDirectory, "index.json");
+        JSONObject index = Util.readJsonFile(indexFile);
         Map<String, Object> indexMap = index.toMap();
         for (Entry<String, Object> i : indexMap.entrySet()) {
             String conversationCode = i.getKey();
