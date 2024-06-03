@@ -36,7 +36,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
     }
 
     public static CameraCapture[] createFromLog(File logfile) throws IOException {
-        ArrayList<CameraCapture> output = new ArrayList<>();
+        ArrayList<CameraCapture> output = new ArrayList<>(10000);
         Scanner s = new Scanner(logfile);
         while (s.hasNextLine()) {
             Scanner s2 = new Scanner(s.nextLine());

@@ -48,7 +48,7 @@ public class SteamStore extends SteamEvent {
     }
 
     public static SteamStore[] createFromHtml(File purchaseHistory) throws IOException {
-        ArrayList<SteamStore> output = new ArrayList<>();
+        ArrayList<SteamStore> output = new ArrayList<>(1000);
         Document d = Util.readXmlFile(purchaseHistory);
         NodeList tableRows = d.getDocumentElement().getLastChild().getChildNodes();
         for (int i = 0; i < tableRows.getLength(); i++) {

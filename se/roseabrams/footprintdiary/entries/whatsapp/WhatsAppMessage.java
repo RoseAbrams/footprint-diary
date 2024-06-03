@@ -46,7 +46,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
     }
 
     public static DiaryEntry[] createAllFromTxt(File chatsFolder) throws IOException {
-        ArrayList<WhatsAppMessage> output = new ArrayList<>();
+        ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
 
         File[] chatFiles = chatsFolder.listFiles();
         for (File chatFile : chatFiles) {
@@ -57,7 +57,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
     }
 
     public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, String channelName) throws IOException {
-        ArrayList<WhatsAppMessage> output = new ArrayList<>();
+        ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
         Scanner s = new Scanner(chatFile);
         while (s.hasNextLine()) {
             String s2 = s.nextLine();

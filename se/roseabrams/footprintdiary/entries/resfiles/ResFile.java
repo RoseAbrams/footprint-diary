@@ -37,7 +37,7 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
     }
 
     public static DiaryEntry[] createFromLog(File logfile) throws IOException {
-        ArrayList<DiaryEntry> output = new ArrayList<>();
+        ArrayList<DiaryEntry> output = new ArrayList<>(50000);
         Scanner s = new Scanner(logfile);
         while (s.hasNextLine()) {
             Scanner sFile = new Scanner(s.nextLine());

@@ -10,7 +10,7 @@ import se.roseabrams.footprintdiary.entries.camera.ScreenRecording;
 import se.roseabrams.footprintdiary.entries.camera.Screenshot;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
-import se.roseabrams.footprintdiary.entries.reddit.RedditEvent;
+import se.roseabrams.footprintdiary.entries.reddit.RedditSubmission;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
@@ -192,6 +192,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     WIKIMEDIA_EDIT {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            return "I made " + filteredList.size() + " edit" + p(filteredList.size()) + " at Wikimedia.";
         }
     },;
 

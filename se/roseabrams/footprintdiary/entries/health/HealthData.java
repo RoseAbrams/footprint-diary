@@ -61,7 +61,7 @@ public abstract class HealthData extends DiaryEntry {
     }
 
     public static HealthData[] createFromXml(File exportFile) throws IOException {
-        ArrayList<Activity> output = new ArrayList<>();
+        ArrayList<Activity> output = new ArrayList<>(800000);
         Document d = Util.readXmlFile(exportFile);
         NodeList allNodes = d.getDocumentElement().getChildNodes();
 

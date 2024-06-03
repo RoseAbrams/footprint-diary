@@ -24,7 +24,7 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
     }
 
     public static SpotifyPlaylisting[] createFromJson(File playlistFile) throws IOException {
-        ArrayList<SpotifyPlaylisting> output = new ArrayList<>();
+        ArrayList<SpotifyPlaylisting> output = new ArrayList<>(5000);
 
         JSONObject playlistsO = Util.readJsonFile(playlistFile);
         JSONArray playlists = playlistsO.getJSONArray("playlists");

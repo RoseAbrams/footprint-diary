@@ -46,7 +46,7 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
     }
 
     public static DiaryEntry[] createAllFromTxt(File directory) throws IOException {
-        ArrayList<SkypeMessage> output = new ArrayList<>();
+        ArrayList<SkypeMessage> output = new ArrayList<>(50000);
         for (File convFile : directory.listFiles()) {
             output.addAll(createFromTxt(convFile));
         }
@@ -54,7 +54,7 @@ public class SkypeMessage extends DiaryEntry implements Message, PlainText {
     }
 
     public static ArrayList<SkypeMessage> createFromTxt(File skypeTxt) throws IOException {
-        ArrayList<SkypeMessage> output = new ArrayList<>();
+        ArrayList<SkypeMessage> output = new ArrayList<>(50000);
         List<String> messages = Util.readFileLines(skypeTxt);
 
         String recipient = null;

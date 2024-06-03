@@ -42,7 +42,7 @@ public class WikimediaEdit extends DiaryEntry implements RemoteResource {
             getArticleUrl();
             getArticlePermaUrl();
             getDiffUrl();
-        } catch (AssertionError e) {
+        } catch (AssertionError | RuntimeException e) {
             throw new IllegalArgumentException("Arguments would cause invalid URLs.", e);
         }
     }
@@ -109,7 +109,7 @@ public class WikimediaEdit extends DiaryEntry implements RemoteResource {
                 + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=10000");
         Document d = c.get();
 
-        ArrayList<WikimediaEdit> output = new ArrayList<>();
+        ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
         Elements edits = d.select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list");
         for (Element edit : edits) {
             int oldid = Integer.parseInt(edit.select("li").first().attr("data-mw-revid"));

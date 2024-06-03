@@ -18,9 +18,9 @@ public class DiaryPage extends Diary implements Serializable {
         if (!DATE.equals(e.DATE, false))
             throw new IllegalArgumentException(
                     "DiaryEntry don't belong on this DiaryPage - expected " + DATE + ", got " + e.DATE);
-        if (!E.containsKey(e.SOURCE))
-            E.putIfAbsent(e.SOURCE, new ArrayList<>());
-        E.get(e.SOURCE).add(e);
+        if (!E.containsKey(e.CATEGORY))
+            E.putIfAbsent(e.CATEGORY, new ArrayList<>());
+        E.get(e.CATEGORY).add(e);
     }
 
     public String csv() {

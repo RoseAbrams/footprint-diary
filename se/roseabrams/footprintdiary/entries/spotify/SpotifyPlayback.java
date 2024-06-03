@@ -69,7 +69,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     }
 
     public static SpotifyPlayback[] createAllFromJson(File streamingFile) throws IOException {
-        ArrayList<SpotifyPlayback> output = new ArrayList<>();
+        ArrayList<SpotifyPlayback> output = new ArrayList<>(50000);
 
         JSONObject streamsO = Util.readJsonFile(streamingFile);
         JSONArray streams = new JSONArray(streamsO);

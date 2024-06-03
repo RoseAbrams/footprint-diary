@@ -5,14 +5,14 @@ import java.io.Serializable;
 import se.roseabrams.footprintdiary.interfaces.DiaryEntryData;
 
 public abstract class DiaryEntry implements DiaryEntryData, Serializable {
-    public final DiaryEntryCategory SOURCE;
+    public final DiaryEntryCategory CATEGORY;
     public final DiaryDate DATE;
 
-    public DiaryEntry(DiaryEntryCategory source, DiaryDate dd) {
-        assert source != null;
+    public DiaryEntry(DiaryEntryCategory category, DiaryDate dd) {
+        assert category != null;
         assert dd != null;
 
-        SOURCE = source;
+        CATEGORY = category;
         DATE = dd;
     }
 

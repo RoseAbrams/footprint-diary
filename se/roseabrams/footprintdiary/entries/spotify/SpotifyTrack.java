@@ -11,7 +11,7 @@ public class SpotifyTrack {
     public final String NAME;
     public final String ALBUM;
     public final String ARTIST;
-    private static final ArrayList<SpotifyTrack> CACHE = new ArrayList<>(1000);
+    private static final ArrayList<SpotifyTrack> CACHE = new ArrayList<>(10000);
     private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
