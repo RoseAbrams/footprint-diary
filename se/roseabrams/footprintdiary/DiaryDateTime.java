@@ -44,6 +44,10 @@ public class DiaryDateTime extends DiaryDate {
         return detailedDate;
     }
 
+    public DiaryDate getReduced() {
+        return new DiaryDate(YEAR, MONTH, DAY);
+    }
+
     @Override
     public int compareTo(DiaryDate d2) {
         int comparedSuper = super.compareTo(d2);

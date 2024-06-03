@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
+import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.health.HealthData;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
@@ -37,7 +38,7 @@ public class DiaryWriter {
             d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_2.json")));
             d.add(SpotifyPlaylisting.createFromJson(new File(D + "spotify\\Playlist1.json")));
             d.add(SteamStore.createFromHtml(new File(D + "steam\\Purchase History.html")));
-            d.add(HealthData.createFromXml(new File(D + "apple\\health.xml")));
+            d.add(DailyActivity.createDays(new File(D + "apple\\health.xml")));
             d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));
             d.add(WikimediaEdit.createFromWebsites());
             d.add(RedditPost.createFromCsv(new File(D + "reddit\\posts.csv")));

@@ -96,15 +96,21 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
             return "I saved " + filteredList.size() + " other thing" + p(filteredList.size())
-                    + " that I found online and never managed to sort.";
+                    + " that I found online but never sorted.";
         }
     },
-    ACTIVITY {
+    HEALTH {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            float km = ((DailyActivity) filteredList.get(0)).KILOMETERS_WALKED;
+            return "I did " + filteredList.size() + " healthy thing" + p(filteredList.size())
+                    + ", but don't quite remember what. They're a bit of a mess.";
+        }
+    },
+    DAILY_HEALTH {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+            float km = ((DailyActivity) filteredList.get(0)).kmWalked();
             return "I walked " + km + " kilometer" + p(Math.round(km)) + ".";
-            // TODO update when more classes are finished
         }
     },
     MANUAL {

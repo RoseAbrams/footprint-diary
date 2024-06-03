@@ -2,39 +2,66 @@ package se.roseabrams.footprintdiary.entries.health;
 
 import java.io.File;
 import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.util.HashMap;
 
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.DiaryDateTime;
-import se.roseabrams.footprintdiary.Util;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.interfaces.CustomCounted;
 
-public class DailyActivity extends HealthData implements CustomCounted {
+public class DailyActivity extends DiaryEntry implements CustomCounted {
 
-    // TODO if all values are zero because of no data, an object should not exist
-    public final int STEPS_TAKEN;
-    public final float KILOMETERS_WALKED;
-    public final float CALORIES_BURNED;
+    private int stepsTaken = 0;
+    private float kmWalked = 0f;
+    private float kcalBurned = 0f;
+
+    public DailyActivity(DiaryDate dd) {
+        super(DiaryEntryCategory.DAILY_HEALTH, dd);
+    }
+
+    public int stepsTaken() {
+        return stepsTaken;
+    }
+
+    public float kmWalked() {
+        return kmWalked;
+    }
+
+    public float kcalBurned() {
+        return kcalBurned;
+    }
 
     @Override
     public String getStringSummary() {
-        return STEPS_TAKEN + " steps, " + KILOMETERS_WALKED + " km of distance, " + CALORIES_BURNED + " kcal expended";
+        return stepsTaken + " steps (" + kmWalked + " km, " + kcalBurned + " kcal)";
     }
 
     @Override
     public int getCustomCount() {
-        return Math.round(KILOMETERS_WALKED);
+        return Math.round(kmWalked);
     }
 
-    public static DailyActivity[] createDays(HealthData[] healthData) throws IOException {
+    public static DailyActivity[] createDays(File exportFile) throws IOException {
+        HashMap<DiaryDate, DailyActivity> output = new HashMap<>();
+        HealthData[] h = HealthData.createAllFromXml(exportFile);
+        for (HealthData d : h) {
+            output.putIfAbsent(d.DATE, new DailyActivity(d.DATE));
+            DailyActivity a = output.get(d.DATE);
+            switch (d.TYPE) {
+                case STEP_COUNT:
+                    a.stepsTaken += d.VALUE;
+                    break;
+                case DISTANCE_MOVED:
+                    a.kmWalked += d.VALUE;
+                    break;
+                case ENERGY_BURNED_ACTIVE:
+                case ENERGY_BURNED_BASAL:
+                    a.kcalBurned += d.VALUE;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return output.values().toArray(new DailyActivity[output.size()]);
     }
 }
