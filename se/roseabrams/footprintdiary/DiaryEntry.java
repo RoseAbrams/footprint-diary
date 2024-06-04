@@ -22,7 +22,7 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return getStringSummary();
     }
 }

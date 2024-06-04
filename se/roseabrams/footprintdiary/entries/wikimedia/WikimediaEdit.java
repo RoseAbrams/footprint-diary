@@ -110,7 +110,7 @@ public class WikimediaEdit extends DiaryEntry implements RemoteResource {
         Document d = c.get();
 
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
-        Elements edits = d.select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list");
+        Elements edits = d.body().select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list");
         for (Element edit : edits) {
             int oldid = Integer.parseInt(edit.select("li").first().attr("data-mw-revid"));
             int editSize = Integer.parseInt(edit.select("span.mw-diff-bytes").first().text());

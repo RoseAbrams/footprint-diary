@@ -15,6 +15,7 @@ import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.entries.steam.SteamStore;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
 
 public class DiaryWriter {
     private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
@@ -42,6 +43,7 @@ public class DiaryWriter {
             d.add(WikimediaEdit.createFromWebsites());
             d.add(RedditPost.createFromCsv(new File(D + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(D + "reddit\\comments.csv")));
+            d.add(YouTubePlayback.createFromHtml(new File(D + "google\\youtube watch.html")));
             System.gc();
 
             String csvSum = d.csvSum(true);

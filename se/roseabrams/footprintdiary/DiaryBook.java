@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 public class DiaryBook extends Diary implements Serializable {
 
     private final DiaryPage[] PAGES;
+    @SuppressWarnings("unused")
     private int discardedOutsideDateRange;
 
     public DiaryBook(DiaryDate starDate, DiaryDate endDate) {

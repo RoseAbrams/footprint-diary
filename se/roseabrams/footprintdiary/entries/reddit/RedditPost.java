@@ -29,6 +29,7 @@ public class RedditPost extends RedditSubmission implements RichText {
         return TITLE;
     }
 
+    @SuppressWarnings("unused")
     public static RedditPost[] createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
         for (String post : Util.readFileLines(postsFile)) {

@@ -19,13 +19,19 @@ public class SpotifyTrack {
         NAME = name;
         ALBUM = album.intern();
         ARTIST = artist.intern();
+        try {
+            getUri();
+            getUrl();
+        } catch (AssertionError | RuntimeException e) {
+            throw new IllegalArgumentException("Arguments would cause invalid URLs.", e);
+        }
     }
 
     public URI getUri() {
         try {
             return new URI("spotify:track:" + ID);
         } catch (URISyntaxException e) {
-            throw new Error(e);
+            throw new AssertionError(e);
         }
     }
 
@@ -33,7 +39,7 @@ public class SpotifyTrack {
         try {
             return URI.create("https://open.spotify.com/track/" + ID).toURL();
         } catch (MalformedURLException e) {
-            throw new Error(e);
+            throw new AssertionError(e);
         }
     }
 
@@ -48,7 +54,7 @@ public class SpotifyTrack {
 
     public static SpotifyTrack create(String id, String name, String album, String artist) {
         if (id == null)
-            return NULL_TRACK;
+            return NULL_TRACK; // TODO why not checking null before and getting a null object?
         assert !id.isBlank() && id.length() == 62;
         assert name != null && !name.isBlank();
         assert album != null && !album.isBlank();

@@ -28,6 +28,7 @@ public class RedditComment extends RedditSubmission {
         return BODY;
     }
 
+    @SuppressWarnings("unused")
     public static RedditComment[] createFromCsv(File commentsFile) throws IOException {
         ArrayList<RedditComment> output = new ArrayList<>(1000);
         for (String post : Util.readFileLines(commentsFile)) {

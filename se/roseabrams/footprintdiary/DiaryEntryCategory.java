@@ -18,24 +18,24 @@ import se.roseabrams.footprintdiary.interfaces.Message;
 public enum DiaryEntryCategory { // categorization intent is for human displaying
     DISCORD {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I sent " + filteredList.size() + " message" + p(filteredList.size()) + " on Discord.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I sent " + fl.size() + " message" + p(fl.size()) + " on Discord.";
         }
     },
     TORRENT {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I started downloading " + filteredList.size() + " torrent" + p(filteredList.size()) + ".";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I started downloading " + fl.size() + " torrent" + p(fl.size()) + ".";
         }
     },
     CAMERA {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nPictures = 0;
             int nVideos = 0;
             int nScreenshots = 0;
             int nScreenRecordings = 0;
-            for (DiaryEntry e : filteredList) {
+            for (DiaryEntry e : fl) {
                 if (e instanceof CameraPicture)
                     nPictures++;
                 else if (e instanceof CameraVideo)
@@ -68,115 +68,115 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     },
     MEME_SAVED {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " meme" + p(filteredList.size()) + " that I found online.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I saved " + fl.size() + " meme" + p(fl.size()) + " that I found online.";
         }
     },
     MEME_CREATED {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I made " + filteredList.size() + " meme" + p(filteredList.size()) + " and published "
-                    + (filteredList.size() == 1 ? "it" : "them") + " online.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I made " + fl.size() + " meme" + p(fl.size()) + " and published "
+                    + (fl.size() == 1 ? "it" : "them") + " online.";
         }
     },
     WALLPAPER_SAVED {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " wallpaper" + p(filteredList.size()) + " that I found online.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I saved " + fl.size() + " wallpaper" + p(fl.size()) + " that I found online.";
         }
     },
     ARTWORK_SAVED {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " piece" + p(filteredList.size())
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I saved " + fl.size() + " piece" + p(fl.size())
                     + " of arwork that I found online.";
         }
     },
     OTHER_MEMESQUE_SAVED {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I saved " + filteredList.size() + " other thing" + p(filteredList.size())
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I saved " + fl.size() + " other thing" + p(fl.size())
                     + " that I found online but never sorted.";
         }
     },
     HEALTH {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I did " + filteredList.size() + " healthy thing" + p(filteredList.size())
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I did " + fl.size() + " healthy thing" + p(fl.size())
                     + ", but don't quite remember what. They're a bit of a mess.";
         }
     },
     DAILY_HEALTH {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            float km = ((DailyActivity) filteredList.get(0)).kmWalked();
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            float km = ((DailyActivity) fl.get(0)).kmWalked();
             return "I walked " + km + " kilometer" + p(Math.round(km)) + ".";
         }
     },
     MANUAL {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "Finally, I wanna note this event today: " + filteredList.get(0);
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "Finally, I wanna note this event today: " + fl.get(0);
         }
     },
     WHATSAPP {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nSent = 0;
             int nRecieved = 0;
-            for (DiaryEntry e : filteredList) {
+            for (DiaryEntry e : fl) {
                 if (((Message) e).isByMe())
                     nSent++;
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " message" + p(filteredList.size()) + " on WhatsApp, and received " + nRecieved
+            return "I sent " + nSent + " message" + p(fl.size()) + " on WhatsApp, and received " + nRecieved
                     + ".";
         }
     },
     SKYPE {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nSent = 0;
             int nRecieved = 0;
-            for (DiaryEntry e : filteredList) {
+            for (DiaryEntry e : fl) {
                 if (((Message) e).isByMe())
                     nSent++;
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " message" + p(filteredList.size()) + " on Skype, and received " + nRecieved
+            return "I sent " + nSent + " message" + p(fl.size()) + " on Skype, and received " + nRecieved
                     + ".";
         }
     },
     SPOTIFY {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nPlayed = 0;
             int nPlaylisted = 0;
-            for (DiaryEntry e : filteredList) {
+            for (DiaryEntry e : fl) {
                 if (e instanceof SpotifyPlayback)
                     nPlayed++;
                 else if (e instanceof SpotifyPlaylisting)
                     nPlaylisted++;
             }
-            return "I listened to " + nPlayed + " song" + p(filteredList.size()) + " on Spotify and added "
-                    + nPlaylisted + " song" + p(filteredList.size()) + " to my playlists.";
+            return "I listened to " + nPlayed + " song" + p(fl.size()) + " on Spotify and added "
+                    + nPlaylisted + " song" + p(fl.size()) + " to my playlists.";
         }
     },
     STEAM {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I bought " + filteredList.size() + " game" + p(filteredList.size()) + " on Steam.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I bought " + fl.size() + " game" + p(fl.size()) + " on Steam.";
             // TODO update when more classes are finished
         }
     },
     REDDIT {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nPosts = 0;
             int nComments = 0;
-            for (DiaryEntry e : filteredList) {
+            for (DiaryEntry e : fl) {
                 if (e instanceof RedditPost)
                     nPosts++;
                 else if (e instanceof RedditComment)
@@ -196,10 +196,17 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     },
     WIKIMEDIA_EDIT {
         @Override
-        public String describeInProse(ArrayList<DiaryEntry> filteredList) {
-            return "I made " + filteredList.size() + " edit" + p(filteredList.size()) + " at Wikimedia.";
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I made " + fl.size() + " edit" + p(fl.size()) + " at Wikimedia.";
         }
-    },;
+    },
+    YOUTUBE {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I watched " + fl.size() + " video" + p(fl.size()) + " on YouTube.";
+            // TODO update when more classes are finished
+        }
+    };
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
 
