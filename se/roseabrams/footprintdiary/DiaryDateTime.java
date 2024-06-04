@@ -57,9 +57,9 @@ public class DiaryDateTime extends DiaryDate {
         if (!(d2 instanceof DiaryDateTime))
             return 0;
 
-        int comparedHour = Short.compare(HOUR, ((DiaryDateTime) d2).HOUR);
-        int comparedMinute = Short.compare(MINUTE, ((DiaryDateTime) d2).MINUTE);
-        int comparedSecond = Short.compare(SECOND, ((DiaryDateTime) d2).SECOND);
+        int comparedHour = Byte.compare(HOUR, ((DiaryDateTime) d2).HOUR);
+        int comparedMinute = Byte.compare(MINUTE, ((DiaryDateTime) d2).MINUTE);
+        int comparedSecond = Byte.compare(SECOND, ((DiaryDateTime) d2).SECOND);
 
         if (comparedHour != 0) {
             return comparedHour;
@@ -76,7 +76,12 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     @Override
-    public String toString() { // TODO leading zeroes for fixed length?
-        return super.toString() + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
+    public String toString(boolean leadingZeroes) {
+        if (leadingZeroes) {
+            return super.toString() + "T" + (HOUR < 10 ? "0" + HOUR : HOUR) + ":"
+                    + (MINUTE < 10 ? "0" + MINUTE : MINUTE) + ":" + (SECOND < 10 ? "0" + SECOND : SECOND);
+        } else {
+            return super.toString() + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
+        }
     }
 }

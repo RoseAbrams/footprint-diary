@@ -18,6 +18,7 @@ import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
 
 public class DiaryWriter {
+
     private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
 
     public static void main(String[] args) {
@@ -26,10 +27,10 @@ public class DiaryWriter {
 
         try {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            //d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
+            // d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina")));
-            //d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
-            //d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
+            // d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
+            // d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
             d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(D + "discord\\messages.csv")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(D + "whatsapp")));

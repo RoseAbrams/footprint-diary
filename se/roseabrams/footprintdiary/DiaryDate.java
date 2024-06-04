@@ -44,8 +44,8 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     @Override
     public int compareTo(DiaryDate d2) {
         int comparedYear = Short.compare(YEAR, d2.YEAR);
-        int comparedMonth = Short.compare(MONTH, d2.MONTH);
-        int comparedDay = Short.compare(DAY, d2.DAY);
+        int comparedMonth = Byte.compare(MONTH, d2.MONTH);
+        int comparedDay = Byte.compare(DAY, d2.DAY);
 
         if (comparedYear != 0) {
             return comparedYear;
@@ -67,8 +67,16 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     }
 
     @Override
-    public String toString() { // TODO leading zeroes for fixed length?
-        return YEAR + "-" + MONTH + "-" + DAY;
+    public final String toString() {
+        return toString(true);
+    }
+
+    public String toString(boolean leadingZeroes) {
+        if (leadingZeroes) {
+            return YEAR + "-" + (MONTH < 10 ? "0" + MONTH : MONTH) + "-" + (DAY < 10 ? "0" + DAY : DAY);
+        } else {
+            return YEAR + "-" + MONTH + "-" + DAY;
+        }
     }
 
     public static byte parseMonthName(String monthName) {

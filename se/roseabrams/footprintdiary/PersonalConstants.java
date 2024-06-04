@@ -8,7 +8,6 @@ public class PersonalConstants {
     /// https://meta.wikimedia.org/wiki/Special:CentralAuth/Rose_Abrams
     public static final String[] WIKIS_WITH_EDITS = { "en.wikipedia", "en.wiktionary", "commons.wikimedia",
             "www.wikidata", "sv.wikipedia", "sv.wiktionary", "en.wikiquote", "en.wikisource", "meta.wikimedia" };
-    // TODO dates on CentralAuth on first visit to each wiki
 
     private PersonalConstants() {
     }
