@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.io.File;
 import java.io.IOException;
 
+import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
@@ -45,6 +46,8 @@ public class DiaryWriter {
             d.add(RedditPost.createFromCsv(new File(D + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(D + "reddit\\comments.csv")));
             d.add(YouTubePlayback.createFromHtml(new File(D + "google\\youtube watch.html")));
+            // yotube comments? can't find them in export
+            d.add(BankEvent.createFromCsv(new File(D + "bank\\PERSONKONTO.csv")));
             System.gc();
 
             String csvSum = d.csvSum(true);
