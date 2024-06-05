@@ -16,6 +16,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
+import se.roseabrams.footprintdiary.Filetype;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.interfaces.Message;
@@ -116,9 +117,8 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 } else {
                     String urlFile = attachmentsUrlS.substring(0, attachmentsUrlS.indexOf("?"));
                     String urlFiletype = urlFile.substring(urlFile.lastIndexOf(".") + 1);
-                    switch (urlFiletype.toLowerCase()) {
-                        case "jpg":
-                        case "png":
+                    switch (Filetype.parseExtension(urlFiletype)) {
+                        case PICTURE:
                             d = new DiscordPictureMessage(dd, id, contents, recipient, type, attachmentsUrl);
                             break;
                         default:

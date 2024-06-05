@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
+import se.roseabrams.footprintdiary.Filetype;
 import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class ResFile extends DiaryEntry implements LocalResource {
@@ -93,57 +94,20 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                         break;
                 }
                 DiaryEntry r;
-                switch (filetype.toLowerCase()) {
-                    case "jpg":
-                    case "jpeg":
-                    case "png":
-                    case "webp":
-                    case "jfif":
-                    case "svg":
-                    case "psd":
-                    case "ai":
-                    case "bmp":
+                switch (Filetype.parseExtension(filetype)) {
+                    case PICTURE:
                         r = new ResPicture(c, dd, file);
                         break;
-                    case "mp4":
-                    case "mov":
-                    case "webm":
-                    case "ts":
-                    case "ogv":
-                    case "mkv":
-                    case "avi":
+                    case VIDEO:
                         r = new ResVideo(c, dd, file);
                         break;
-                    case "gif":
+                    case GIF:
                         r = new ResGif(c, dd, file);
                         break;
-                    case "torrent":
+                    case TORRENT:
                         r = new Torrent(dd, file);
                         break;
-                    case "ini":
-                    case "url":
-                    case "lnk":
-
-                    case "txt":
-                    case "pdf":
-                    case "epub":
-                    case "mobi":
-                    case "djvu":
-
-                    case "mp3":
-                    case "flac":
-                    case "ogg":
-                    case "m3u":
-                    case "wav":
-                    case "mid":
-                    case "oga":
-                    case "m3u8":
-
-                    case "cbr":
-                    case "cbz":
-                        continue;
                     default:
-                        System.err.println("Unrecognized filetype: " + filetype);
                         continue;
                 }
                 output.add(r);

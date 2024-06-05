@@ -9,6 +9,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
+import se.roseabrams.footprintdiary.Filetype;
 import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
 public abstract class CameraCapture extends DiaryEntry implements LocalResource {
@@ -46,30 +47,14 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             DiaryDateTime date = new DiaryDateTime(file.lastModified());
             String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
             CameraCapture c;
-            switch (filetype.toLowerCase()) {
-                case "jpg":
-                case "jpeg":
-                case "heic":
-                case "png":
-                case "webp":
+            switch (Filetype.parseExtension(filetype)) {
+                case PICTURE:
                     c = new CameraPicture(date, file);
                     break;
-                case "mov":
-                case "mp4":
-                case "avi":
+                case VIDEO:
                     c = new CameraVideo(date, file);
                     break;
-                /*
-                 * // apparently not a reliable determiner
-                 * case "png":
-                 * case "webp":
-                 * i = new Screenshot(date, file);
-                 * break;
-                 * case "mp4":
-                 * i = new ScreenRecording(date, file);
-                 * break;
-                 */
-                case "ini":
+                case SYSTEM:
                     continue;
                 default:
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
@@ -93,28 +78,15 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             String filetype = filename.substring(filename.lastIndexOf(".") + 1);
 
             CameraCapture i;
-            switch (filetype) {
-                case "jpg":
-                case "jpeg":
-                case "heic":
-                case "png":
-                case "webp":
+            switch (Filetype.parseExtension(filetype)) {
+                case PICTURE:
                     i = new CameraPicture(date, file);
                     break;
-                case "mov":
-                case "mp4":
+                case VIDEO:
                     i = new CameraVideo(date, file);
                     break;
-                /*
-                 * // apparently not a reliable determiner
-                 * case "png":
-                 * case "webp":
-                 * i = new Screenshot(date, file);
-                 * break;
-                 * case "mp4":
-                 * i = new ScreenRecording(date, file);
-                 * break;
-                 */
+                case SYSTEM:
+                    continue;
                 default:
                     s2.close();
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
