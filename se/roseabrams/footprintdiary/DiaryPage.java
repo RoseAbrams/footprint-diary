@@ -24,7 +24,7 @@ public class DiaryPage extends Diary implements Serializable {
     }
 
     public String csvSum() {
-        StringBuilder output = new StringBuilder(5000);
+        StringBuilder output = new StringBuilder(50);
         output.append(DATE.toString());
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
             output.append(Util.DELIM);
@@ -41,7 +41,7 @@ public class DiaryPage extends Diary implements Serializable {
     }
 
     public String csvIndex() {
-        StringBuilder output = new StringBuilder(100000);
+        StringBuilder output = new StringBuilder(1000);
         for (ArrayList<DiaryEntry> es : E.values()) {
             for (DiaryEntry e : es) {
                 e.csvIndex(output);
@@ -52,7 +52,7 @@ public class DiaryPage extends Diary implements Serializable {
     }
 
     public String prose() {
-        StringBuilder output = new StringBuilder(25000);
+        StringBuilder output = new StringBuilder(250);
         output.append("Dear diary,").append(Util.NEWLINE);
         if (E.isEmpty()) {
             output.append("I have nothing to write today.").append(Util.NEWLINE);

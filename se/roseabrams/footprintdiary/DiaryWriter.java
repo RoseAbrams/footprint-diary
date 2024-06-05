@@ -20,11 +20,14 @@ import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
 
 public class DiaryWriter {
 
-    private static final String D = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
-
     public static void main(String[] args) {
-        DiaryBook d = new DiaryBook(new DiaryDate((short) 2010, (byte) 1, (byte) 1),
-                new DiaryDate((short) 2023, (byte) 6, (byte) 30));
+        String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
+        String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
+        // DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
+        // DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
+        DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
+        DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+        DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
@@ -33,31 +36,28 @@ public class DiaryWriter {
             // d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
             // d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
             d.add(ResFile.createFromFiles());
-            d.add(DiscordMessage.createAllFromCsv(new File(D + "discord\\messages.csv")));
-            d.add(WhatsAppMessage.createAllFromTxt(new File(D + "whatsapp")));
-            d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_0.json")));
-            d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_1.json")));
-            d.add(SpotifyPlayback.createAllFromJson(new File(D + "spotify\\endsong_2.json")));
-            d.add(SpotifyPlaylisting.createFromJson(new File(D + "spotify\\Playlist1.json")));
-            d.add(SteamStore.createFromHtml(new File(D + "steam\\Purchase History.html")));
-            d.add(DailyActivity.createDays(new File(D + "apple\\health.xml")));
-            d.add(SkypeMessage.createAllFromTxt(new File(D + "skype")));
+            d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages.csv")));
+            d.add(WhatsAppMessage.createAllFromTxt(new File(I + "whatsapp")));
+            d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
+            d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
+            d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
+            d.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
+            d.add(SteamStore.createFromHtml(new File(I + "steam\\Purchase History.html")));
+            d.add(DailyActivity.createDays(new File(I + "apple\\health.xml")));
+            d.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
             d.add(WikimediaEdit.createFromWebsites());
-            d.add(RedditPost.createFromCsv(new File(D + "reddit\\posts.csv")));
-            d.add(RedditComment.createFromCsv(new File(D + "reddit\\comments.csv")));
-            d.add(YouTubePlayback.createFromHtml(new File(D + "google\\youtube watch.html")));
+            d.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
+            d.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
+            d.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
             // yotube comments? can't find them in export
-            d.add(BankEvent.createFromCsv(new File(D + "bank\\PERSONKONTO.csv")));
+            d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             System.gc();
 
             String csvSum = d.csvSum(true);
-            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
-                    + "\\footprint diary\\outputs\\diarySumTable.csv"), csvSum);
-            System.gc();
+            Util.writeFile(new File(O + "diarySumTable.csv"), csvSum);
 
             String csvIndex = d.csvIndex();
-            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
-                    + "\\footprint diary\\outputs\\diaryIndexTable.csv"), csvIndex);
+            Util.writeFile(new File(O + "diaryIndexTable.csv"), csvIndex);
             System.gc();
 
             String[] prose = d.prose();
@@ -67,8 +67,7 @@ public class DiaryWriter {
                 rtf.append(page.replace("\n", "\\par ")).append("\\page ");
             }
             rtf.append("}");
-            Util.writeFile(new File("D:\\Dropbox\\Privat\\postGym program"
-                    + "\\footprint diary\\outputs\\diaryProse.rtf"), rtf.toString());
+            Util.writeFile(new File(O + "diaryProse.rtf"), rtf.toString());
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);

@@ -17,7 +17,7 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     }
 
     public boolean equals(Object obj) {
-        return obj instanceof DiaryEntry && this.getClass().equals(obj.getClass())
+        return obj instanceof DiaryEntry && getClass().equals(obj.getClass())
                 && DATE.equals(((DiaryEntry) obj).DATE, true);
     }
 
@@ -32,6 +32,6 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
 
     public StringBuilder csvIndex(StringBuilder s) {
         return s.append(DATE.toString(true)).append(Util.DELIM).append(CATEGORY).append(Util.DELIM)
-                .append(getClass()).append(Util.DELIM).append('\"').append(getStringSummary()).append('\"');
+                .append(getClass().getName()).append(Util.DELIM).append('\"').append(getStringSummary()).append('\"');
     }
 }

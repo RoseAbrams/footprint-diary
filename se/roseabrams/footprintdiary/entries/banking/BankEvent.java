@@ -47,6 +47,11 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
         return CURRENCY;
     }
 
+    @Override
+    public boolean moneySent() {
+        return AMOUNT < 0;
+    }
+
     public static BankEvent[] createFromCsv(File transactionsFile) throws IOException {
         ArrayList<BankEvent> output = new ArrayList<>();
         List<String> transations = Util.readFileLines(transactionsFile);

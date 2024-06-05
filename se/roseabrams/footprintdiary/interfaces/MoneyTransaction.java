@@ -6,6 +6,8 @@ public interface MoneyTransaction { // banking, credit cards, purchases, etc...
 
     public Currency getCurrency();
 
+    public boolean moneySent(); // as opposed to received
+
     public static enum Currency {
         SEK, USD, EUR
     }

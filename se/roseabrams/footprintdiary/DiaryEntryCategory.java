@@ -14,6 +14,7 @@ import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.interfaces.Message;
+import se.roseabrams.footprintdiary.interfaces.MoneyTransaction;
 
 public enum DiaryEntryCategory { // categorization intent is for human displaying
     DISCORD {
@@ -75,8 +76,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     MEME_CREATED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            return "I made " + fl.size() + " meme" + p(fl.size()) + " and published "
-                    + (fl.size() == 1 ? "it" : "them") + " online.";
+            return "I made " + fl.size() + " meme" + p(fl.size()) + " and published " + (fl.size() == 1 ? "it" : "them")
+                    + " online.";
         }
     },
     WALLPAPER_SAVED {
@@ -88,15 +89,13 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     ARTWORK_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            return "I saved " + fl.size() + " piece" + p(fl.size())
-                    + " of arwork that I found online.";
+            return "I saved " + fl.size() + " piece" + p(fl.size()) + " of arwork that I found online.";
         }
     },
     OTHER_MEMESQUE_SAVED {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            return "I saved " + fl.size() + " other thing" + p(fl.size())
-                    + " that I found online but never sorted.";
+            return "I saved " + fl.size() + " other thing" + p(fl.size()) + " that I found online but never sorted.";
         }
     },
     HEALTH {
@@ -130,8 +129,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " message" + p(fl.size()) + " on WhatsApp, and received " + nRecieved
-                    + ".";
+            return "I sent " + nSent + " message" + p(fl.size()) + " on WhatsApp, and received " + nRecieved + ".";
         }
     },
     SKYPE {
@@ -145,8 +143,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 else
                     nRecieved++;
             }
-            return "I sent " + nSent + " message" + p(fl.size()) + " on Skype, and received " + nRecieved
-                    + ".";
+            return "I sent " + nSent + " message" + p(fl.size()) + " on Skype, and received " + nRecieved + ".";
         }
     },
     SPOTIFY {
@@ -160,8 +157,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 else if (e instanceof SpotifyPlaylisting)
                     nPlaylisted++;
             }
-            return "I listened to " + nPlayed + " song" + p(fl.size()) + " on Spotify and added "
-                    + nPlaylisted + " song" + p(fl.size()) + " to my playlists.";
+            return "I listened to " + nPlayed + " song" + p(fl.size()) + " on Spotify and added " + nPlaylisted
+                    + " song" + p(fl.size()) + " to my playlists.";
         }
     },
     STEAM {
@@ -207,10 +204,29 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             // TODO update when more classes are finished
         }
     },
-    METADATA { // 
+    METADATA {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
             throw new IllegalStateException("METADATA explicitly cannot be described in prose.");
+        }
+    },
+    FINANCE { //
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            int nSent = 0;
+            int nRecieved = 0;
+            for (DiaryEntry e : fl) {
+                if (((MoneyTransaction) e).moneySent())
+                    nSent++;
+                else
+                    nRecieved++;
+            }
+            String output = "";
+            if (nSent > 0)
+                output += "I bought and paid " + nSent + " thing" + p(nSent) + ". ";
+            if (nRecieved > 0)
+                output += "I received money " + nRecieved + " times" + p(nRecieved) + ".";
+            return output;
         }
     };
 
