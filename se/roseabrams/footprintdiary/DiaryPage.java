@@ -64,9 +64,9 @@ public class DiaryPage extends Diary implements Serializable {
                 output.append(E.size()).append(" different things.");
             }
             output.append(Util.NEWLINE).append(Util.NEWLINE);
-            for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
-                if (E.containsKey(s)) {
-                    output.append(s.describeInProse(E.get(s))).append(Util.NEWLINE);
+            for (DiaryEntryCategory c : DiaryEntryCategory.valuesCustomOrder()) {
+                if (E.containsKey(c) && c.enabled()) {
+                    output.append(c.describeInProse(E.get(c))).append(Util.NEWLINE);
                 }
             }
         }

@@ -208,19 +208,14 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
             StringBuilder output = new StringBuilder(50);
-            output.append("(Side note: ");
+            output.append("(Side note:");
             for (DiaryEntry e : fl) {
                 DiaryEntrySpanBoundary d = (DiaryEntrySpanBoundary) e;
-                output.append("Today is the " + (d.IS_START ? "first" : "last") + " day I have information about "
-                        + d.DESCRIPTION + ". ");
+                output.append(" Today is the " + (d.IS_START ? "first" : "last") + " day I have information about "
+                        + d.DESCRIPTION + ".");
             }
             output.append(")");
             return output.toString();
-        }
-
-        @Override
-        public boolean enabled() {
-            return false;
         }
     },
     FINANCE { //
@@ -245,12 +240,19 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
 
-    public boolean enabled() {
-        return true;
+    public final boolean enabled() {
+        switch (this) {
+            case SPAN_BOUNDARY:
+                return false;
+            default:
+                return true;
+        }
     }
 
-    public int customOrder() {
+    public final int customOrder() {
         switch (this) {
+            case SPAN_BOUNDARY:
+                return Integer.MAX_VALUE - 1;
             case MANUAL:
                 return Integer.MAX_VALUE;
             default:
