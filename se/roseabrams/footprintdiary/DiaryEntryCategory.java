@@ -206,6 +206,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return "I watched " + fl.size() + " video" + p(fl.size()) + " on YouTube.";
             // TODO update when more classes are finished
         }
+    },
+    METADATA { // 
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            throw new IllegalStateException("METADATA explicitly cannot be described in prose.");
+        }
     };
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);

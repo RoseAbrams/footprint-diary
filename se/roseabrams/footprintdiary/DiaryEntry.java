@@ -25,4 +25,13 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     public final String toString() {
         return getStringSummary();
     }
+
+    public String csvIndex() {
+        return csvIndex(new StringBuilder(50)).toString();
+    }
+
+    public StringBuilder csvIndex(StringBuilder s) {
+        return s.append(DATE.toString(true)).append(Util.DELIM).append(CATEGORY).append(Util.DELIM)
+                .append(getClass()).append(Util.DELIM).append('\"').append(getStringSummary()).append('\"');
+    }
 }

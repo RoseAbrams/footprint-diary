@@ -9,9 +9,11 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public final byte MONTH;
     public final byte DAY;
     public transient GregorianCalendar detailedDate = null;
+    public static final DiaryDate MIN = new DiaryDate((short) 2000, (byte) 1, (byte) 1);
+    public static final DiaryDate MAX = new DiaryDate((short) 2025, (byte) 12, (byte) 31);
 
     public DiaryDate(short year, byte month, byte day) {
-        assert year >= 2000 && year < 2025;
+        assert year >= MIN.YEAR && year < MAX.YEAR;
         assert month >= 1 && month <= 12;
         assert day >= 1 && month <= 31;
 
@@ -39,6 +41,15 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public static int differenceDays(DiaryDate d1, DiaryDate d2) {
         return (int) TimeUnit.MILLISECONDS
                 .toDays(d2.getDetailedDate().getTime().getTime() - d1.getDetailedDate().getTime().getTime());
+    }
+
+    public DiaryDate reduce() {
+        return this.clone();
+    }
+
+    @Override
+    public DiaryDate clone() {
+        return new DiaryDate(YEAR, MONTH, DAY);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class HealthData extends DiaryEntry {
 
     public HealthData(Type type, String sourceName, String sourceVersion, String device, String unit, float value,
             DiaryDateTime creationDate, DiaryDateTime startDate, DiaryDateTime endDate) {
-        super(DiaryEntryCategory.HEALTH, startDate.getReduced());
+        super(DiaryEntryCategory.HEALTH, startDate.reduce());
 
         // probably not true, but let's check
         assert creationDate.equals(startDate, false);

@@ -44,8 +44,14 @@ public class DiaryDateTime extends DiaryDate {
         return detailedDate;
     }
 
-    public DiaryDate getReduced() {
-        return new DiaryDate(YEAR, MONTH, DAY);
+    @Override
+    public DiaryDate reduce() {
+        return super.clone();
+    }
+
+    @Override
+    public DiaryDate clone() {
+        return new DiaryDateTime(YEAR, MONTH, DAY, HOUR, MINUTE, SECOND);
     }
 
     @Override
