@@ -9,6 +9,7 @@ import se.roseabrams.footprintdiary.interfaces.Audio;
 import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
 public abstract class SpotifyTrackEvent extends DiaryEntry implements Audio, RemoteResource {
+
     public final SpotifyTrack TRACK;
 
     public SpotifyTrackEvent(DiaryDate dd, SpotifyTrack track) {

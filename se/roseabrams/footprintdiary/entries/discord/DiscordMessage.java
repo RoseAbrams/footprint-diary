@@ -23,6 +23,7 @@ import se.roseabrams.footprintdiary.interfaces.Message;
 import se.roseabrams.footprintdiary.interfaces.PlainText;
 
 public class DiscordMessage extends DiaryEntry implements Message, PlainText {
+
     public final long ID;
     public final String RECIPIENT;
     public final Type TYPE;
@@ -91,7 +92,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 String s3 = s2.nextLine().substring(1);
                 String contents;
                 String attachmentsUrlS;
-                if (s3.charAt(0) == '\"') { /* advanced csv needed? this solves quoted but not multilines */
+                if (s3.charAt(0) == '\"') { .../* advanced csv needed? this solves quoted but not multilines */
                     contents = s3.substring(0, s3.indexOf("\","));
                     attachmentsUrlS = s3.substring(s3.indexOf("\",") + 2);
                 } else {

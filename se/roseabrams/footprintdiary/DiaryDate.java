@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 public class DiaryDate implements Serializable, Comparable<DiaryDate> {
+
     public final short YEAR;
     public final byte MONTH;
     public final byte DAY;

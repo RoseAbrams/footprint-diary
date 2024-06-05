@@ -11,6 +11,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.Util;
 
 public class SpotifyPlaylisting extends SpotifyTrackEvent {
+
     public final SpotifyPlaylist PLAYLIST;
 
     public SpotifyPlaylisting(DiaryDate dd, SpotifyTrack song, SpotifyPlaylist playlist) {

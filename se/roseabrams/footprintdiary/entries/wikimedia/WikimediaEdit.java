@@ -18,8 +18,9 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.interfaces.RemoteResource;
+import se.roseabrams.footprintdiary.interfaces.Webpage;
 
-public class WikimediaEdit extends DiaryEntry implements RemoteResource {
+public class WikimediaEdit extends DiaryEntry implements RemoteResource, Webpage {
 
     public final String SITE;
     public final String PAGE_TITLE;

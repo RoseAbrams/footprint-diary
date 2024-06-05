@@ -7,6 +7,7 @@ import java.util.HashMap;
 import se.roseabrams.footprintdiary.interfaces.CustomCounted;
 
 public class DiaryPage extends Diary implements Serializable {
+
     private final HashMap<DiaryEntryCategory, ArrayList<DiaryEntry>> E = new HashMap<>();
     public final DiaryDate DATE;
 

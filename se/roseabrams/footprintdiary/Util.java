@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class Util {
+
     private static DocumentBuilderFactory dbf = null;
     private static DocumentBuilder db = null;
     public static final Charset CHARSET = StandardCharsets.UTF_8;

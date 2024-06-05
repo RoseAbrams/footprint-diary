@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class SpotifyTrack {
+    
     public final String ID;
     public final String NAME;
     public final String ALBUM;

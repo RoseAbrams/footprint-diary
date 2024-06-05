@@ -17,6 +17,7 @@ import se.roseabrams.footprintdiary.interfaces.Message;
 import se.roseabrams.footprintdiary.interfaces.MoneyTransaction;
 
 public enum DiaryEntryCategory { // categorization intent is for human displaying
+
     DISCORD {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {

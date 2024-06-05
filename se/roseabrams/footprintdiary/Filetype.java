@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary;
 
 public enum Filetype {
 
-    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, DOCUMENT_A, DOCUMENT_B, TORRENT, COMICS;
+    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE;
 
     public static Filetype parseExtension(String ext) {
         switch (ext.toLowerCase()) {
@@ -38,14 +38,14 @@ public enum Filetype {
             case "epub":
             case "mobi":
             case "djvu":
-                return DOCUMENT_A;
+                return BOOK;
             case "doc":
             case "docx":
             case "xls":
             case "xlsx":
             case "ppt":
             case "pptx":
-                return DOCUMENT_B;
+                return DOCUMENT;
             case "mp3":
             case "flac":
             case "ogg":
@@ -58,8 +58,10 @@ public enum Filetype {
             case "cbr":
             case "cbz":
                 return COMICS;
+            case "html":
+                return WEBPAGE;
             default:
-                System.err.println("Unrecognized filetype extension: " + ext);
+                System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());
                 return null;
         }
     }

@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.spotify;
 import se.roseabrams.footprintdiary.DiaryDate;
 
 public class SpotifyPlaylist {
+
     public final String NAME;
     public final String DESCRIPTION;
     public final DiaryDate LAST_MODIFIED;

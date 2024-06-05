@@ -13,6 +13,7 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 
 public class SteamStore extends SteamEvent {
+
     private final String[] ITEMS;
     public final Type TYPE;
     public final String PAYMENT_METHOD;

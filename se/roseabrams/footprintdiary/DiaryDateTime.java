@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DiaryDateTime extends DiaryDate {
+
     public final byte HOUR;
     public final byte MINUTE;
     public final byte SECOND;

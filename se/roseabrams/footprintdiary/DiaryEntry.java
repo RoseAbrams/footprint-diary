@@ -5,6 +5,7 @@ import java.io.Serializable;
 import se.roseabrams.footprintdiary.interfaces.DiaryEntryData;
 
 public abstract class DiaryEntry implements DiaryEntryData, Serializable {
+
     public final DiaryEntryCategory CATEGORY;
     public final DiaryDate DATE;
 
