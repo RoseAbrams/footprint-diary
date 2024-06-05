@@ -204,10 +204,23 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             // TODO update when more classes are finished
         }
     },
-    METADATA {
+    SPAN_BOUNDARY {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            throw new IllegalStateException("METADATA explicitly cannot be described in prose.");
+            StringBuilder output = new StringBuilder(50);
+            output.append("(Side note: ");
+            for (DiaryEntry e : fl) {
+                DiaryEntrySpanBoundary d = (DiaryEntrySpanBoundary) e;
+                output.append("Today is the " + (d.IS_START ? "first" : "last") + " day I have information about "
+                        + d.DESCRIPTION + ". ");
+            }
+            output.append(")");
+            return output.toString();
+        }
+
+        @Override
+        public boolean enabled() {
+            return false;
         }
     },
     FINANCE { //
@@ -231,6 +244,10 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     };
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
+
+    public boolean enabled() {
+        return true;
+    }
 
     public int customOrder() {
         switch (this) {
