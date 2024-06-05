@@ -26,7 +26,7 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
     }
 
     public String getType() {
-        return FILE.getName().substring(FILE.getName().lastIndexOf(".")+1);
+        return FILE.getName().substring(FILE.getName().lastIndexOf(".") + 1);
     }
 
     public String getSubfolder() {
@@ -64,7 +64,7 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                 output.addAll(createFromFilesRecursion(file, depth + 1, subfolder));
             } else {
                 DiaryDateTime dd = new DiaryDateTime(file.lastModified());
-                String filetype = file.getName().substring(file.getName().lastIndexOf(".")+1);
+                String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
                 DiaryEntryCategory c;
                 switch (subfolder) {
                     case "lol":
@@ -98,11 +98,20 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                     case "jpeg":
                     case "png":
                     case "webp":
+                    case "jfif":
+                    case "svg":
+                    case "psd":
+                    case "ai":
+                    case "bmp":
                         r = new ResPicture(c, dd, file);
                         break;
                     case "mp4":
                     case "mov":
                     case "webm":
+                    case "ts":
+                    case "ogv":
+                    case "mkv":
+                    case "avi":
                         r = new ResVideo(c, dd, file);
                         break;
                     case "gif":
@@ -111,6 +120,28 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                     case "torrent":
                         r = new Torrent(dd, file);
                         break;
+                    case "ini":
+                    case "url":
+                    case "lnk":
+
+                    case "txt":
+                    case "pdf":
+                    case "epub":
+                    case "mobi":
+                    case "djvu":
+
+                    case "mp3":
+                    case "flac":
+                    case "ogg":
+                    case "m3u":
+                    case "wav":
+                    case "mid":
+                    case "oga":
+                    case "m3u8":
+
+                    case "cbr":
+                    case "cbz":
+                        continue;
                     default:
                         System.err.println("Unrecognized filetype: " + filetype);
                         continue;
@@ -129,7 +160,7 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
      * Scanner sFile = new Scanner(s.nextLine());
      * sFile.useDelimiter(":");
      * String filename = sFile.next();
-     * String filetype = filename.substring(filename.lastIndexOf('.') + 1);
+     * String filetype = filename.substring(filename.lastIndexOf(".") + 1);
      * long timestamp = sFile.nextLong();
      * DiaryDateTime dd = new DiaryDateTime(timestamp);
      * Scanner sPath = new Scanner(sFile.next());

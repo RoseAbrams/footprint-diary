@@ -10,13 +10,13 @@ public class DiaryBook extends Diary implements Serializable {
     @SuppressWarnings("unused")
     private int discardedOutsideDateRange;
 
-    public DiaryBook(DiaryDate starDate, DiaryDate endDate) {
+    public DiaryBook(DiaryDate starDate, DiaryDate endDate) { // exclusive enddate
         PAGES = new DiaryPage[starDate.differenceDays(endDate)];
         GregorianCalendar iDate = (GregorianCalendar) starDate.getDetailedDate().clone();
         for (int i = 0; i < PAGES.length; i++) {
-            iDate.add(Calendar.DAY_OF_MONTH, 1);
             PAGES[i] = new DiaryPage(new DiaryDate((short) iDate.get(GregorianCalendar.YEAR),
-                    (byte) iDate.get(GregorianCalendar.MONTH), (byte) iDate.get(GregorianCalendar.DAY_OF_MONTH)));
+                    (byte) (iDate.get(GregorianCalendar.MONTH) + 1), (byte) iDate.get(GregorianCalendar.DAY_OF_MONTH)));
+                    iDate.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
@@ -33,8 +33,8 @@ public class DiaryBook extends Diary implements Serializable {
                 return;
             }
         }
-        System.out.println("Entry date (" + e.DATE + ") was outside of Diary date range (" + PAGES[0].DATE + " - "
-                + PAGES[PAGES.length - 1].DATE + ")");
+        /*System.out.println("Entry date (" + e.DATE + ") was outside of Diary date range (" +
+                PAGES[0].DATE + " - " + PAGES[PAGES.length - 1].DATE + ")");*/
         discardedOutsideDateRange++;
     }
 

@@ -68,7 +68,7 @@ public class SteamStore extends SteamEvent {
                     case 0:
                         String dateS = cell.getTextContent();
                         date = new DiaryDate(Short.parseShort(dateS.substring(8)),
-                                DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(' ') + 1, dateS.indexOf(','))),
+                                DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(","))),
                                 Byte.parseByte(dateS.substring(0, 2)));
                         break;
                     case 1:
@@ -121,7 +121,7 @@ public class SteamStore extends SteamEvent {
     }
 
     public static float parseCurrency(String s) {
-        return Float.parseFloat(s.substring(0, s.indexOf(',' + 3)).replace(',', '.'));
+        return Float.parseFloat(s.substring(0, s.indexOf("," + 3)).replace(',', '.'));
     }
 
     public static enum Type {

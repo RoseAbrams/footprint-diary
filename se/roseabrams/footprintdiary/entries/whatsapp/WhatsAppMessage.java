@@ -61,9 +61,9 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
         Scanner s = new Scanner(chatFile);
         while (s.hasNextLine()) {
             String s2 = s.nextLine();
-            String timestamp1 = s2.substring(0, s2.indexOf(','));
-            String timestamp2 = s2.substring(s2.indexOf(',') + 1, s2.indexOf(']'));
-            String sender = s2.substring(s2.indexOf(']') + 2, s2.indexOf(": "));
+            String timestamp1 = s2.substring(0, s2.indexOf(","));
+            String timestamp2 = s2.substring(s2.indexOf(",") + 1, s2.indexOf("]"));
+            String sender = s2.substring(s2.indexOf("]") + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
 
             DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2);

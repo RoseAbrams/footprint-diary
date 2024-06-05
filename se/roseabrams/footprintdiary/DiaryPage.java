@@ -23,6 +23,11 @@ public class DiaryPage extends Diary implements Serializable {
         E.get(e.CATEGORY).add(e);
     }
 
+    @Override
+    public String toString() {
+        return DATE + " (" + E.size() + ")";
+    }
+
     public String csvSum() {
         StringBuilder output = new StringBuilder(50);
         output.append(DATE.toString());

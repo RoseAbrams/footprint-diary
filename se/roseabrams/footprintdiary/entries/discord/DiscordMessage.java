@@ -74,25 +74,39 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 recipient = null;
             } else if (conversationName.startsWith("Direct Message with ")) {
                 type = Type.DM;
-                recipient = conversationName.substring(20);
+                recipient = conversationName.substring("Direct Message with ".length());
             } else {
                 type = Type.SERVER_CHANNEL;
                 recipient = conversationName;
             }
 
+            s.nextLine(); // headings
             while (s.hasNextLine()) {
                 Scanner s2 = new Scanner(s.nextLine());
-                long id = s2.nextLong(10);
+                s2.useDelimiter(",");
+                String idS = s2.next();
+                long id = Long.parseLong(idS);
                 String timestamp = s2.next();
-                String contents = s2.next();
-                String attachmentsUrlS = s2.hasNext() ? s2.next() : null;
+                String s3 = s2.nextLine().substring(1);
+                String contents;
+                String attachmentsUrlS;
+                if (s3.charAt(0) == '\"') { /* advanced csv needed? this solves quoted but not multilines */
+                    contents = s3.substring(0, s3.indexOf("\","));
+                    attachmentsUrlS = s3.substring(s3.indexOf("\",") + 2);
+                } else {
+                    contents = s3.substring(0, s3.indexOf(","));
+                    attachmentsUrlS = s3.substring(s3.indexOf(",") + 1);
+                }
+                // String attachmentsUrlS = s2.hasNext() ? s2.next() : null;
                 s2.close();
-                URL attachmentsUrl;
-                try {
-                    attachmentsUrl = URI.create(attachmentsUrlS).toURL();
-                } catch (MalformedURLException e) {
-                    System.err.println("Invalid attachment URL for Discord message: " + attachmentsUrlS);
-                    attachmentsUrl = null;
+
+                URL attachmentsUrl = null;
+                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
+                    try {
+                        attachmentsUrl = URI.create(attachmentsUrlS).toURL();
+                    } catch (MalformedURLException e) {
+                        System.err.println("Invalid attachment URL for Discord message: " + attachmentsUrlS);
+                    }
                 }
 
                 DiaryDateTime dd = new DiaryDateTime(timestamp.substring(0, 20));
@@ -100,15 +114,15 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 if (attachmentsUrl == null) {
                     d = new DiscordMessage(dd, id, contents, recipient, type);
                 } else {
-                    String filetype = attachmentsUrlS.substring(attachmentsUrlS.substring(70).indexOf('.'),
-                            attachmentsUrlS.indexOf('?') - 1);
-                    switch (filetype.toLowerCase()) {
+                    String urlFile = attachmentsUrlS.substring(0, attachmentsUrlS.indexOf("?"));
+                    String urlFiletype = urlFile.substring(urlFile.lastIndexOf(".") + 1);
+                    switch (urlFiletype.toLowerCase()) {
                         case "jpg":
                         case "png":
                             d = new DiscordPictureMessage(dd, id, contents, recipient, type, attachmentsUrl);
                             break;
                         default:
-                            throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
+                            throw new UnsupportedOperationException("Unrecognized filetype: " + urlFiletype);
                     }
                 }
                 output.add(d);

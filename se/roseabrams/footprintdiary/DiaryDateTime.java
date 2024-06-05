@@ -84,10 +84,10 @@ public class DiaryDateTime extends DiaryDate {
     @Override
     public String toString(boolean leadingZeroes) {
         if (leadingZeroes) {
-            return super.toString() + "T" + (HOUR < 10 ? "0" + HOUR : HOUR) + ":"
+            return super.toString(leadingZeroes) + "T" + (HOUR < 10 ? "0" + HOUR : HOUR) + ":"
                     + (MINUTE < 10 ? "0" + MINUTE : MINUTE) + ":" + (SECOND < 10 ? "0" + SECOND : SECOND);
         } else {
-            return super.toString() + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
+            return super.toString(leadingZeroes) + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
         }
     }
 }

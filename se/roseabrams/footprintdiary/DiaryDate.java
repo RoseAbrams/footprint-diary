@@ -78,7 +78,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return toString(true);
     }
 

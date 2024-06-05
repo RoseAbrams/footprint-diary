@@ -23,20 +23,20 @@ public class DiaryWriter {
     public static void main(String[] args) {
         String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
         String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
+
         // DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
         // DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
         DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
         DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+
         DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            // d.add(CameraCapture.createFromLog(new File(D + "dir Camera Uploads.csv")));
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina")));
-            // d.add(CameraCapture.createFromLog(new File(D + "dir Kina.csv")));
-            // d.add(ResFile.createFromLog(new File(D + "dir res.csv")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
             d.add(ResFile.createFromFiles());
-            d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages.csv")));
+            d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(I + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));

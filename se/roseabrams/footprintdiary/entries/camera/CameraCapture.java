@@ -46,7 +46,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             DiaryDateTime date = new DiaryDateTime(file.lastModified());
             String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
             CameraCapture c;
-            switch (filetype) {
+            switch (filetype.toLowerCase()) {
                 case "jpg":
                 case "jpeg":
                 case "heic":
@@ -56,6 +56,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                     break;
                 case "mov":
                 case "mp4":
+                case "avi":
                     c = new CameraVideo(date, file);
                     break;
                 /*
@@ -68,6 +69,8 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
                  * i = new ScreenRecording(date, file);
                  * break;
                  */
+                case "ini":
+                    continue;
                 default:
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
             }
@@ -87,7 +90,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
 
             File file = new File("D:\\Dropbox\\Camera Uploads", filename); // won't work for Kina folder
             DiaryDateTime date = new DiaryDateTime(lastModified);
-            String filetype = filename.substring(filename.lastIndexOf('.') + 1);
+            String filetype = filename.substring(filename.lastIndexOf(".") + 1);
 
             CameraCapture i;
             switch (filetype) {
