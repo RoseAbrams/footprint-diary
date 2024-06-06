@@ -1,22 +1,22 @@
 DMs from all platforms
 posts from all platforms
-Skype DMs from my manual logs
-camera pictures and videos
+v Skype DMs from my manual logs
+v camera pictures and videos
     ... including the China ones
-res/ pictures and videos by modified date
+v res/ pictures and videos by modified date
     other folders?
     modified date only tells fraction of story
     created date? I think Windows and Dropbox has separate and then Dropbox would be better
     how to get that? API access?
-steps walked from Health
-emails sent and received on all accounts
+v steps walked from Health
+v emails sent and received on all accounts
 Steam?
     DMs, screenshots, achievements
-    games played by amount per date?
+    x games played by amount per date?
     harder to export, need to look through account reports
-Spotify listening?
-YouTube watching?
-torrents – res/t/nsr modified date
+v Spotify listening?
+v YouTube watching?
+v torrents – res/t/nsr modified date
 anime list
     run MALytics one final time?
 TinderDB
@@ -27,6 +27,6 @@ medical records😨
 IOEÅ😨
 ArbFörm😨
 purchase history (Wish, ...)
-banking history
-Wikimedia contribs
+v banking history
+v Wikimedia contribs
 work screenshots
