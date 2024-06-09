@@ -25,4 +25,9 @@ public class DiscordPictureMessage extends DiscordMessage implements Picture, Re
     public URL getUrlOfResource() {
         return ATTACHMENT_URL;
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return super.detailedCsv(s, delim).append(delim).append(ATTACHMENT_URL);
+    }*/
 }

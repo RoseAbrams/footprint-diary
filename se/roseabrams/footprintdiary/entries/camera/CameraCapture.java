@@ -65,6 +65,7 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
         return output;
     }
 
+    @Deprecated // old and unused
     public static CameraCapture[] createFromLog(File logfile) throws IOException {
         ArrayList<CameraCapture> output = new ArrayList<>(10000);
         Scanner s = new Scanner(logfile);
@@ -98,4 +99,9 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
         s.close();
         return output.toArray(new CameraCapture[output.size()]);
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return s.append(FILE.getName());
+    }*/
 }

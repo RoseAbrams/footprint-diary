@@ -8,10 +8,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import org.json.JSONObject;
 
+import se.roseabrams.footprintdiary.CSVParser;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
@@ -66,7 +66,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
             String conversationCode = i.getKey();
             String conversationName = (String) i.getValue();
 
-            Scanner s = new Scanner(new File(messagesDirectory + "\\c" + conversationCode, "messages.csv"));
+            CSVParser s = new CSVParser(new File(messagesDirectory + "\\c" + conversationCode, "messages.csv"));
             s.useDelimiter(",");
 
             Type type;
@@ -83,24 +83,14 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
             }
 
             s.nextLine(); // headings
-            while (s.hasNextLine()) {
-                Scanner s2 = new Scanner(s.nextLine());
-                s2.useDelimiter(",");
-                String idS = s2.next();
+            while (s.hasNext()) {
+                String[] l = s.nextLineTokens();
+                String idS = l[0];
                 long id = Long.parseLong(idS);
-                String timestamp = s2.next();
-                String s3 = s2.nextLine().substring(1);
-                String contents;
-                String attachmentsUrlS;
-                if (s3.charAt(0) == '\"') { .../* advanced csv needed? this solves quoted but not multilines */
-                    contents = s3.substring(0, s3.indexOf("\","));
-                    attachmentsUrlS = s3.substring(s3.indexOf("\",") + 2);
-                } else {
-                    contents = s3.substring(0, s3.indexOf(","));
-                    attachmentsUrlS = s3.substring(s3.indexOf(",") + 1);
-                }
+                String timestamp = l[1];
+                String contents = l[2];
+                String attachmentsUrlS = l[3];
                 // String attachmentsUrlS = s2.hasNext() ? s2.next() : null;
-                s2.close();
 
                 URL attachmentsUrl = null;
                 if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
@@ -136,4 +126,9 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     public static enum Type {
         DM, SERVER_CHANNEL
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return s.append(ID).append(delim).append(RECIPIENT).append(delim).append(TYPE).append(delim).append(CONTENTS);
+    }*/
 }

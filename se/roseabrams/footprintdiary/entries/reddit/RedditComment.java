@@ -58,4 +58,10 @@ public class RedditComment extends RedditSubmission {
 
         return output.toArray(new RedditComment[output.size()]);
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return s.append(ID).append(BODY).append(delim).append(PARENT_POST_ID).append(delim).append(PARENT_COMMENT_ID).append(delim)
+                .append(SUBREDDIT).append(delim).append(GILDINGS);
+    }*/
 }

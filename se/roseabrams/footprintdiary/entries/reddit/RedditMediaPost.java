@@ -23,4 +23,9 @@ public class RedditMediaPost extends RedditPost implements RemoteResource {
     public URL getUrlOfResource() {
         return MEDIA;
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return super.detailedCsv(s, delim).append(delim).append(MEDIA);
+    }*/
 }

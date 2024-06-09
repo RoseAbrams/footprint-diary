@@ -41,12 +41,12 @@ public class DiaryBook extends Diary implements Serializable {
     public String sumsCsv(boolean blankZeroes) {
         StringBuilder output = new StringBuilder(100000);
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
-            output.append(s).append(Util.DELIM);
+            output.append(s).append(",");
         }
         output.deleteCharAt(output.length() - 1);
-        output.append(Util.NEWLINE);
+        output.append("\n");
         for (DiaryPage page : PAGES) {
-            output.append(page.sumsCsv()).append(Util.NEWLINE);
+            output.append(page.sumsCsv()).append("\n");
         }
         return blankZeroes ? output.toString().replace(",0,", ",,") : output.toString();
     }
@@ -55,7 +55,7 @@ public class DiaryBook extends Diary implements Serializable {
         StringBuilder output = new StringBuilder(1000000);
         // headers?
         for (DiaryPage page : PAGES) {
-            output.append(page.indexCsv()).append(Util.NEWLINE);
+            output.append(page.indexCsv()).append("\n");
         }
         return output.toString();
     }

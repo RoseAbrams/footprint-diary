@@ -70,4 +70,9 @@ public class RedditPost extends RedditSubmission implements RichText {
 
         return output.toArray(new RedditPost[output.size()]);
     }
+/*
+    @Override
+    public StringBuilder detailedCsv(StringBuilder s, String delim) {
+        return s.append(ID).append(TITLE).append(delim).append(BODY).append(delim).append(SUBREDDIT).append(delim).append(GILDINGS);
+    }*/
 }

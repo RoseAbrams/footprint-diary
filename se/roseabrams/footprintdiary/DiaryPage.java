@@ -33,7 +33,7 @@ public class DiaryPage extends Diary implements Serializable {
         StringBuilder output = new StringBuilder(50);
         output.append(DATE.toString());
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
-            output.append(Util.DELIM);
+            output.append(",");
             ArrayList<DiaryEntry> d = E.get(s);
             if (d == null) {
                 output.append(0);
@@ -50,8 +50,8 @@ public class DiaryPage extends Diary implements Serializable {
         StringBuilder output = new StringBuilder(1000);
         for (ArrayList<DiaryEntry> es : E.values()) {
             for (DiaryEntry e : es) {
-                e.indexCsv(output);
-                output.append(Util.NEWLINE);
+                e.indexCsv(output, ",");
+                output.append("\n");
             }
         }
         return output.toString();
@@ -59,9 +59,9 @@ public class DiaryPage extends Diary implements Serializable {
 
     public String prose() {
         StringBuilder output = new StringBuilder(250);
-        output.append("Dear diary,").append(Util.NEWLINE);
+        output.append("Dear diary,").append("\n");
         if (E.isEmpty()) {
-            output.append("I have nothing to write today.").append(Util.NEWLINE);
+            output.append("I have nothing to write today.").append("\n");
         } else {
             output.append("today I did ");
             if (E.size() == 1) {
@@ -69,14 +69,14 @@ public class DiaryPage extends Diary implements Serializable {
             } else {
                 output.append(E.size()).append(" different things.");
             }
-            output.append(Util.NEWLINE).append(Util.NEWLINE);
+            output.append("\n").append("\n");
             for (DiaryEntryCategory c : DiaryEntryCategory.valuesCustomOrder()) {
                 if (E.containsKey(c) && c.enabled()) {
-                    output.append(c.describeInProse(E.get(c))).append(Util.NEWLINE);
+                    output.append(c.describeInProse(E.get(c))).append("\n");
                 }
             }
         }
-        output.append(Util.NEWLINE).append("See you tomorrow.");
+        output.append("\n").append("See you tomorrow.");
         return output.toString();
     }
 }

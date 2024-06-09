@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CSVParser implements Iterator<String>, Closeable {
@@ -19,6 +20,10 @@ public class CSVParser implements Iterator<String>, Closeable {
 
     public CSVParser(String input) {
         fBuffer = input;
+    }
+
+    public void useDelimiter(String s) {
+        fDelim = s.intern();
     }
 
     @Override
@@ -79,6 +84,23 @@ public class CSVParser implements Iterator<String>, Closeable {
         String output = fBuffer.substring(fPosition, endPosition);
         fPosition = newPosition;
         return output;
+    }
+
+    public String nextLine() {
+        StringBuilder output = new StringBuilder();
+        String[] tokens = nextLineTokens();
+        for (String s : tokens) {
+            output.append(s);
+        }
+        return output.toString();
+    }
+
+    public String[] nextLineTokens() {
+        ArrayList<String> output = new ArrayList<>();
+        do {
+            output.add(next());
+        } while (fBuffer.substring(fPosition - 1, fPosition).equals(fNewline));
+        return output.toArray(new String[output.size()]);
     }
 
     @Override
