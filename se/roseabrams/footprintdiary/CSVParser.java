@@ -28,8 +28,7 @@ public class CSVParser implements Iterator<String>, Closeable {
 
     @Override
     public String next() {
-        if (!hasNext())
-            throw new IllegalStateException("This object has no more tokens.");
+        expectHasNext();
         String nextChar = Character.toString(fBuffer.charAt(fPosition));
         TokenType t;
         if (nextChar.equals(fQuote)) {
@@ -58,6 +57,7 @@ public class CSVParser implements Iterator<String>, Closeable {
                 newPosition = endPosition + 1;
                 break;
             case ONE_QUOTE:
+                fPosition += 1;
                 int posQuoteDelim = fBuffer.indexOf(fQuote + fDelim, fPosition);
                 int posQuoteNewline = fBuffer.indexOf(fQuote + fNewline, fPosition);
                 if (posQuoteDelim == -1)
@@ -72,6 +72,7 @@ public class CSVParser implements Iterator<String>, Closeable {
                 newPosition = endPosition + 2;
                 break;
             case TWO_QUOTE:
+                fPosition += 2;
                 int posTwoQuote = fBuffer.indexOf(fQuote + fQuote, fPosition);
                 if (posTwoQuote == -1)
                     endPosition = fBuffer.length() - 1;
@@ -81,6 +82,12 @@ public class CSVParser implements Iterator<String>, Closeable {
             default:
                 throw new AssertionError();
         }
+        ... // issue-causing examples:
+        // 1165315126203785338,2023-10-21 15:46:16.595000+00:00,"""Vintergatan"", ISBN 9789189059870",
+        /* 1165680212659404851,2023-10-22 15:56:59.989000+00:00,"```Den drömmen, som aldrig besannats,
+som dröm var den vacker att få,
+för den, som ur Eden förbannats
+är Eden ett Eden ändå.``` – Gustaf Fröding", */
         String output = fBuffer.substring(fPosition, endPosition);
         fPosition = newPosition;
         return output;
@@ -99,13 +106,19 @@ public class CSVParser implements Iterator<String>, Closeable {
         ArrayList<String> output = new ArrayList<>();
         do {
             output.add(next());
-        } while (fBuffer.substring(fPosition - 1, fPosition).equals(fNewline));
+        } while (!fBuffer.substring(fPosition - 1, fPosition).equals(fNewline));
         return output.toArray(new String[output.size()]);
     }
 
     @Override
     public boolean hasNext() {
-        return fPosition < fBuffer.length() - 2;
+        return fPosition < fBuffer.length();
+    }
+
+    public void expectHasNext() {
+        if (!hasNext())
+            throw new IllegalStateException(
+                    "No more data (already read " + fPosition + " out of " + fBuffer.length() + "characters");
     }
 
     @Override

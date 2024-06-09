@@ -82,7 +82,7 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 recipient = conversationName;
             }
 
-            s.nextLine(); // headings
+            s.nextLine(); // skip past headings
             while (s.hasNext()) {
                 String[] l = s.nextLineTokens();
                 String idS = l[0];
@@ -90,7 +90,6 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 String timestamp = l[1];
                 String contents = l[2];
                 String attachmentsUrlS = l[3];
-                // String attachmentsUrlS = s2.hasNext() ? s2.next() : null;
 
                 URL attachmentsUrl = null;
                 if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
@@ -126,9 +125,12 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
     public static enum Type {
         DM, SERVER_CHANNEL
     }
-/*
-    @Override
-    public StringBuilder detailedCsv(StringBuilder s, String delim) {
-        return s.append(ID).append(delim).append(RECIPIENT).append(delim).append(TYPE).append(delim).append(CONTENTS);
-    }*/
+    /*
+     * @Override
+     * public StringBuilder detailedCsv(StringBuilder s, String delim) {
+     * return
+     * s.append(ID).append(delim).append(RECIPIENT).append(delim).append(TYPE).
+     * append(delim).append(CONTENTS);
+     * }
+     */
 }

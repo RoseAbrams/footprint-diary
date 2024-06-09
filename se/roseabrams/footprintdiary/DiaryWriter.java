@@ -32,10 +32,10 @@ public class DiaryWriter {
         DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-            d.add(ResFile.createFromFiles());
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+            //d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromTxt(new File(I + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
