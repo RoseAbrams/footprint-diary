@@ -83,7 +83,7 @@ public class CSVParser implements Iterator<String>, Closeable {
                 throw new AssertionError();
         }
         ... // issue-causing examples:
-        // 1165315126203785338,2023-10-21 15:46:16.595000+00:00,"""Vintergatan"", ISBN 9789189059870",
+        /* 1165315126203785338,2023-10-21 15:46:16.595000+00:00,"""Vintergatan"", ISBN 9789189059870", */
         /* 1165680212659404851,2023-10-22 15:56:59.989000+00:00,"```Den drömmen, som aldrig besannats,
 som dröm var den vacker att få,
 för den, som ur Eden förbannats
