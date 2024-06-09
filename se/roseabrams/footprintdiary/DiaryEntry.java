@@ -19,7 +19,7 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
 
     public boolean equals(Object obj) {
         return obj instanceof DiaryEntry && getClass().equals(obj.getClass())
-                && DATE.equals(((DiaryEntry) obj).DATE, true);
+                && DATE.equals(((DiaryEntry) obj).DATE, true) && getStringSummary().equals(((DiaryEntry) obj).getStringSummary());
     }
 
     @Override
@@ -27,12 +27,19 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
         return getStringSummary();
     }
 
-    public String csvIndex() {
+    public final String detailedCsv(String delim) {
+        return detailedCsv(new StringBuilder(50), delim);
+    }
+
+    public StringBuilder detailecCsv(StringBuilder s, String delim);
+
+    // TODO change naming convention (also elsewhere)
+    public final String csvIndex(String delim) {
         return csvIndex(new StringBuilder(50)).toString();
     }
 
-    public StringBuilder csvIndex(StringBuilder s) {
-        return s.append(DATE.toString(true)).append(Util.DELIM).append(CATEGORY).append(Util.DELIM)
-                .append(getClass().getName()).append(Util.DELIM).append('\"').append(getStringSummary()).append('\"');
+    public StringBuilder csvIndex(StringBuilder s, String delim) {
+        return s.append(DATE.toString(true)).append(delim).append(CATEGORY).append(delim)
+                .append(getClass().getName()).append(delim).append('\"').append(getStringSummary()).append('\"');
     }
 }
