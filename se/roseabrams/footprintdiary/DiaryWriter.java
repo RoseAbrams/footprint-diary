@@ -53,10 +53,10 @@ public class DiaryWriter {
             d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             System.gc();
 
-            String csvSum = d.csvSum(true);
+            String csvSum = d.sumsCsv(true);
             Util.writeFile(new File(O + "diarySumTable.csv"), csvSum);
 
-            String csvIndex = d.csvIndex();
+            String csvIndex = d.indexCsv();
             Util.writeFile(new File(O + "diaryIndexTable.csv"), csvIndex);
             System.gc();
 

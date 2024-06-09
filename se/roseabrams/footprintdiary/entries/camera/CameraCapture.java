@@ -12,6 +12,7 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Filetype;
 import se.roseabrams.footprintdiary.interfaces.LocalResource;
 
+// TODO add GeoLocation but only when available
 public abstract class CameraCapture extends DiaryEntry implements LocalResource {
 
     public final File FILE;

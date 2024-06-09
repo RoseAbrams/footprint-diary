@@ -19,7 +19,8 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
 
     public boolean equals(Object obj) {
         return obj instanceof DiaryEntry && getClass().equals(obj.getClass())
-                && DATE.equals(((DiaryEntry) obj).DATE, true) && getStringSummary().equals(((DiaryEntry) obj).getStringSummary());
+                && DATE.equals(((DiaryEntry) obj).DATE, true)
+                && getStringSummary().equals(((DiaryEntry) obj).getStringSummary());
     }
 
     @Override
@@ -28,18 +29,17 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     }
 
     public final String detailedCsv(String delim) {
-        return detailedCsv(new StringBuilder(50), delim);
+        return detailedCsv(new StringBuilder(50), delim).toString();
     }
 
-    public StringBuilder detailecCsv(StringBuilder s, String delim);
+    public abstract StringBuilder detailedCsv(StringBuilder s, String delim);
 
-    // TODO change naming convention (also elsewhere)
-    public final String csvIndex(String delim) {
-        return csvIndex(new StringBuilder(50)).toString();
+    public final String indexCsv(String delim) {
+        return indexCsv(new StringBuilder(50), delim).toString();
     }
 
-    public StringBuilder csvIndex(StringBuilder s, String delim) {
-        return s.append(DATE.toString(true)).append(delim).append(CATEGORY).append(delim)
-                .append(getClass().getName()).append(delim).append('\"').append(getStringSummary()).append('\"');
+    public StringBuilder indexCsv(StringBuilder s, String delim) {
+        return s.append(DATE.toString(true)).append(delim).append(CATEGORY).append(delim).append(getClass().getName())
+                .append(delim).append('\"').append(getStringSummary()).append('\"');
     }
 }

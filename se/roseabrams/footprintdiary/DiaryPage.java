@@ -29,7 +29,7 @@ public class DiaryPage extends Diary implements Serializable {
         return DATE + " (" + E.size() + ")";
     }
 
-    public String csvSum() {
+    public String sumsCsv() {
         StringBuilder output = new StringBuilder(50);
         output.append(DATE.toString());
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
@@ -46,11 +46,11 @@ public class DiaryPage extends Diary implements Serializable {
         return output.toString();
     }
 
-    public String csvIndex() {
+    public String indexCsv() {
         StringBuilder output = new StringBuilder(1000);
         for (ArrayList<DiaryEntry> es : E.values()) {
             for (DiaryEntry e : es) {
-                e.csvIndex(output);
+                e.indexCsv(output);
                 output.append(Util.NEWLINE);
             }
         }

@@ -38,7 +38,7 @@ public class DiaryBook extends Diary implements Serializable {
         discardedOutsideDateRange++;
     }
 
-    public String csvSum(boolean blankZeroes) {
+    public String sumsCsv(boolean blankZeroes) {
         StringBuilder output = new StringBuilder(100000);
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {
             output.append(s).append(Util.DELIM);
@@ -46,16 +46,16 @@ public class DiaryBook extends Diary implements Serializable {
         output.deleteCharAt(output.length() - 1);
         output.append(Util.NEWLINE);
         for (DiaryPage page : PAGES) {
-            output.append(page.csvSum()).append(Util.NEWLINE);
+            output.append(page.sumsCsv()).append(Util.NEWLINE);
         }
         return blankZeroes ? output.toString().replace(",0,", ",,") : output.toString();
     }
 
-    public String csvIndex() {
+    public String indexCsv() {
         StringBuilder output = new StringBuilder(1000000);
         // headers?
         for (DiaryPage page : PAGES) {
-            output.append(page.csvIndex()).append(Util.NEWLINE);
+            output.append(page.indexCsv()).append(Util.NEWLINE);
         }
         return output.toString();
     }

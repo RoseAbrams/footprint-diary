@@ -21,8 +21,8 @@ public class Util {
     private static DocumentBuilderFactory dbf = null;
     private static DocumentBuilder db = null;
     public static final Charset CHARSET = StandardCharsets.UTF_8;
-    public static final char DELIM = ',';
-    public static final char NEWLINE = '\n';
+    //public static final char DELIM = ',';
+    //public static final char NEWLINE = '\n';
 
     private Util() {
     }
