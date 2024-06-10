@@ -2,18 +2,14 @@ package se.roseabrams.footprintdiary.entries.reddit;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
-import se.roseabrams.footprintdiary.interfaces.RichText;
 
-public class RedditPost extends RedditSubmission implements RichText {
+public class RedditPost extends RedditSubmission {
 
     public final String TITLE;
     public final String BODY;
@@ -49,30 +45,23 @@ public class RedditPost extends RedditSubmission implements RichText {
             }
             String body = s.nextLine();
 
-            URL media = null;
-            if (!mediaS.isBlank()) {
-                try {
-                    media = URI.create(mediaS).toURL();
-                } catch (MalformedURLException e) {
-                    s.close();
-                    throw new IllegalArgumentException("Invalid URL given as media attachment: " + mediaS, e);
-                }
-            }
-
             RedditPost r;
-            if (media == null)
-                r = new RedditPost(date, id, subreddit, gildings, title, body);
+            if (!mediaS.isBlank())
+                r = new RedditMediaPost(date, id, subreddit, gildings, title, body, mediaS);
             else
-                r = new RedditMediaPost(date, id, subreddit, gildings, title, body, media);
+                r = new RedditPost(date, id, subreddit, gildings, title, body);
             output.add(r);
             s.close();
         }
 
         return output.toArray(new RedditPost[output.size()]);
     }
-/*
-    @Override
-    public StringBuilder detailedCsv(StringBuilder s, String delim) {
-        return s.append(ID).append(TITLE).append(delim).append(BODY).append(delim).append(SUBREDDIT).append(delim).append(GILDINGS);
-    }*/
+    /*
+     * @Override
+     * public StringBuilder detailedCsv(StringBuilder s, String delim) {
+     * return
+     * s.append(ID).append(TITLE).append(delim).append(BODY).append(delim).append(
+     * SUBREDDIT).append(delim).append(GILDINGS);
+     * }
+     */
 }

@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.Filetype;
-import se.roseabrams.footprintdiary.interfaces.LocalResource;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.content.LocalContent;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
-public abstract class ResFile extends DiaryEntry implements LocalResource {
+public class ResFile extends DiaryEntry implements ContentOwner {
 
-    public final File FILE;
+    public final LocalContent CONTENT;
     private static final String RES_PATH = "D:\\Dropbox\\Public\\res\\";
 
     public ResFile(DiaryEntryCategory source, DiaryDateTime dd, File file) {
@@ -19,35 +20,30 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
         assert source == DiaryEntryCategory.MEME_SAVED || source == DiaryEntryCategory.MEME_CREATED
                 || source == DiaryEntryCategory.WALLPAPER_SAVED || source == DiaryEntryCategory.ARTWORK_SAVED
                 || source == DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
-        FILE = file;
+        CONTENT = new LocalContent(file);
     }
 
     public String getName() {
-        return FILE.getName();
+        return CONTENT.getName();
     }
 
     public String getType() {
-        return FILE.getName().substring(FILE.getName().lastIndexOf(".") + 1);
+        return CONTENT.FILE_EXTENSION;
     }
 
     public String getSubfolder() {
-        return FILE.getAbsolutePath().substring(RES_PATH.length(),
-                FILE.getAbsolutePath().indexOf("\\", RES_PATH.length()));
+        return CONTENT.FILE.getAbsolutePath().substring(RES_PATH.length(),
+                CONTENT.FILE.getAbsolutePath().indexOf("\\", RES_PATH.length()));
     }
 
     @Override
     public String getStringSummary() {
-        return FILE.getName();
+        return getName();
     }
 
     @Override
-    public String getPathToResource() {
-        return FILE.getAbsolutePath();
-    }
-
-    @Override
-    public File getFileOfResource() {
-        return FILE;
+    public Content getContent() {
+        return CONTENT;
     }
 
     public static DiaryEntry[] createFromFiles() {
@@ -65,7 +61,6 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                 output.addAll(createFromFilesRecursion(file, depth + 1, subfolder));
             } else {
                 DiaryDateTime dd = new DiaryDateTime(file.lastModified());
-                String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
                 DiaryEntryCategory c;
                 switch (subfolder) {
                     case "lol":
@@ -93,23 +88,7 @@ public abstract class ResFile extends DiaryEntry implements LocalResource {
                         c = DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
                         break;
                 }
-                DiaryEntry r;
-                switch (Filetype.parseExtension(filetype)) {
-                    case PICTURE:
-                        r = new ResPicture(c, dd, file);
-                        break;
-                    case VIDEO:
-                        r = new ResVideo(c, dd, file);
-                        break;
-                    case GIF:
-                        r = new ResGif(c, dd, file);
-                        break;
-                    case TORRENT:
-                        r = new Torrent(dd, file);
-                        break;
-                    default:
-                        continue;
-                }
+                DiaryEntry r = new ResFile(c, dd, file);
                 output.add(r);
             }
         }

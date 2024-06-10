@@ -2,9 +2,6 @@ package se.roseabrams.footprintdiary.entries.discord;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,13 +13,11 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.Filetype;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.interfaces.Message;
-import se.roseabrams.footprintdiary.interfaces.PlainText;
 
-public class DiscordMessage extends DiaryEntry implements Message, PlainText {
+public class DiscordMessage extends DiaryEntry implements Message {
 
     public final long ID;
     public final String RECIPIENT;
@@ -90,33 +85,12 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                 String contents = l[2];
                 String attachmentsUrlS = l[3];
 
-                URL attachmentsUrl = null;
-                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
-                    try {
-                        attachmentsUrl = URI.create(attachmentsUrlS).toURL();
-                    } catch (MalformedURLException e) {
-                        System.err.println("Invalid attachment URL for Discord message: " + attachmentsUrlS);
-                    }
-                }
-
                 DiaryDateTime dd = new DiaryDateTime(timestamp.substring(0, 20));
                 DiscordMessage d;
-                if (attachmentsUrl == null) {
-                    d = new DiscordMessage(dd, id, contents, recipient, type);
+                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
+                    d = new DiscordFileMessage(dd, id, contents, recipient, type, attachmentsUrlS);
                 } else {
-                    String urlFile = attachmentsUrlS.substring(0, attachmentsUrlS.indexOf("?"));
-                    String urlFiletype = urlFile.substring(urlFile.lastIndexOf(".") + 1);
-                    switch (Filetype.parseExtension(urlFiletype)) {
-                        case PICTURE:
-                            d = new DiscordPictureMessage(dd, id, contents, recipient, type, attachmentsUrl);
-                            break;
-                        case VIDEO:
-                            d = new DiscordVideoMessage(dd, id, contents, recipient, type, attachmentsUrl);
-                            break;
-                        default:
-                            d = new DiscordFileMessage(dd, id, contents, recipient, type, attachmentsUrl);
-                            break;
-                    }
+                    d = new DiscordMessage(dd, id, contents, recipient, type);
                 }
                 output.add(d);
             }

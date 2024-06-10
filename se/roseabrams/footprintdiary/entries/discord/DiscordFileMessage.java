@@ -1,28 +1,23 @@
 package se.roseabrams.footprintdiary.entries.discord;
 
-import java.net.URL;
-
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
-public class DiscordFileMessage extends DiscordMessage implements RemoteResource {
+public class DiscordFileMessage extends DiscordMessage implements ContentOwner {
 
-    public final URL ATTACHMENT_URL;
+    public final RemoteContent ATTACHMENT;
 
     public DiscordFileMessage(DiaryDate date, long id, String contents, String recipient, Type type,
-            URL attachmentUrl) {
+            String attachmentUrl) {
         super(date, id, contents, recipient, type);
-        ATTACHMENT_URL = attachmentUrl;
+        ATTACHMENT = new RemoteContent(attachmentUrl);
     }
 
     @Override
-    public String getPathToResource() {
-        return ATTACHMENT_URL.toString();
-    }
-
-    @Override
-    public URL getUrlOfResource() {
-        return ATTACHMENT_URL;
+    public Content getContent() {
+        return ATTACHMENT;
     }
 /*
     @Override

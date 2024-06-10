@@ -9,32 +9,29 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.Filetype;
-import se.roseabrams.footprintdiary.interfaces.LocalResource;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.content.ContentType;
+import se.roseabrams.footprintdiary.content.LocalContent;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
 // TODO add GeoLocation but only when available
-public abstract class CameraCapture extends DiaryEntry implements LocalResource {
+public class CameraCapture extends DiaryEntry implements ContentOwner {
 
-    public final File FILE;
+    public final LocalContent C;
 
     public CameraCapture(DiaryDate date, File file) {
         super(DiaryEntryCategory.CAMERA, date);
-        FILE = file;
+        C = new LocalContent(file);
     }
 
     @Override
     public String getStringSummary() {
-        return FILE.getName();
+        return C.getName();
     }
 
     @Override
-    public String getPathToResource() {
-        return FILE.getAbsolutePath();
-    }
-
-    @Override
-    public File getFileOfResource() {
-        return FILE;
+    public Content getContent() {
+        return C;
     }
 
     public static CameraCapture[] createFromFiles(File folder) {
@@ -48,12 +45,10 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             DiaryDateTime date = new DiaryDateTime(file.lastModified());
             String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
             CameraCapture c;
-            switch (Filetype.parseExtension(filetype)) {
+            switch (ContentType.parseExtension(filetype)) {
                 case PICTURE:
-                    c = new CameraPicture(date, file);
-                    break;
                 case VIDEO:
-                    c = new CameraVideo(date, file);
+                    c = new CameraCapture(date, file);
                     break;
                 case SYSTEM:
                     continue;
@@ -80,12 +75,10 @@ public abstract class CameraCapture extends DiaryEntry implements LocalResource 
             String filetype = filename.substring(filename.lastIndexOf(".") + 1);
 
             CameraCapture i;
-            switch (Filetype.parseExtension(filetype)) {
+            switch (ContentType.parseExtension(filetype)) {
                 case PICTURE:
-                    i = new CameraPicture(date, file);
-                    break;
                 case VIDEO:
-                    i = new CameraVideo(date, file);
+                    i = new CameraCapture(date, file);
                     break;
                 case SYSTEM:
                     continue;

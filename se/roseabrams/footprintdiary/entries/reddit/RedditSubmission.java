@@ -1,9 +1,8 @@
 package se.roseabrams.footprintdiary.entries.reddit;
 
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.interfaces.PlainText;
 
-public abstract class RedditSubmission extends RedditEvent implements PlainText {
+public abstract class RedditSubmission extends RedditEvent {
 
     public final String SUBREDDIT;
     public final int GILDINGS;

@@ -1,11 +1,10 @@
 package se.roseabrams.footprintdiary.entries.youtube;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class YouTubeVideo {
+import se.roseabrams.footprintdiary.content.RemoteContent;
+
+public class YouTubeVideo extends RemoteContent {
 
     public final String ID;
     public String title;
@@ -14,6 +13,7 @@ public class YouTubeVideo {
     private static final ArrayList<YouTubeVideo> CACHE = new ArrayList<>(10000);
 
     public YouTubeVideo(String id, String title, String channelId, String channelName) {
+        super("https://youtube.com/watch?v=" + id);
         ID = id;
         this.title = title;
         if (channelId == null) {
@@ -22,19 +22,6 @@ public class YouTubeVideo {
         } else {
             this.channelId = channelId.intern();
             this.channelName = channelName.intern();
-        }
-        try {
-            getUrl();
-        } catch (AssertionError | RuntimeException e) {
-            throw new IllegalArgumentException("Arguments would cause invalid URLs.", e);
-        }
-    }
-
-    public URL getUrl() {
-        try {
-            return URI.create("https://youtube.com/watch?v=" + ID).toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
         }
     }
 

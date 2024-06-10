@@ -1,9 +1,6 @@
 package se.roseabrams.footprintdiary.entries.wikimedia;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.jsoup.Connection;
@@ -17,10 +14,11 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
-import se.roseabrams.footprintdiary.interfaces.Webpage;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
-public class WikimediaEdit extends DiaryEntry implements RemoteResource, Webpage {
+public class WikimediaEdit extends DiaryEntry implements ContentOwner {
 
     public final String SITE;
     public final String PAGE_TITLE;
@@ -39,62 +37,42 @@ public class WikimediaEdit extends DiaryEntry implements RemoteResource, Webpage
         EDIT_SUMMARY = editSummary;
         TAGS = tags;
         try {
-            getSiteUrl();
-            getArticleUrl();
-            getArticlePermaUrl();
-            getDiffUrl();
-        } catch (AssertionError | RuntimeException e) {
-            throw new IllegalArgumentException("Arguments would cause invalid URLs.", e);
+            getSite();
+            getArticle();
+            getArticlePermalink();
+            getDiff();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Arguments would cause invalid URLs.",
+                    e.getCause() != null ? e.getCause() : e);
         }
     }
 
-    public URL getSiteUrl() {
-        try {
-            return URI.create("https://" + SITE + ".org/").toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
-        }
+    public RemoteContent getSite() {
+        return new RemoteContent("https://" + SITE + ".org/");
     }
 
-    public URL getArticleUrl() {
-        try {
-            return URI.create(getSiteUrl().getPath() + "wiki/" + PAGE_TITLE).toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
-        }
+    public RemoteContent getArticle() {
+        return new RemoteContent(getSite().getPath() + "wiki/" + PAGE_TITLE);
     }
 
-    public URL getArticlePermaUrl() {
-        try {
-            return URI.create(getSiteUrl().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID).toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
-        }
+    public RemoteContent getArticlePermalink() {
+        return new RemoteContent(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID);
     }
 
-    public URL getDiffUrl() {
-        try {
-            StringBuilder s = new StringBuilder(getArticlePermaUrl().getPath());
-            return URI.create(s.insert(s.lastIndexOf("&"), "&diff=prev").toString()).toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
-        }
+    public RemoteContent getDiff() {
+        StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
+        return new RemoteContent(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
+    }
+
+    @Override
+    public Content getContent() {
+        return getDiff();
     }
 
     @Override
     public String getStringSummary() {
         return PAGE_TITLE + " (" + (EDIT_SUMMARY.length() > 10 ? EDIT_SUMMARY.substring(0, 10) + "..." : EDIT_SUMMARY)
                 + ")";
-    }
-
-    @Override
-    public String getPathToResource() {
-        return getDiffUrl().getPath();
-    }
-
-    @Override
-    public URL getUrlOfResource() {
-        return getDiffUrl();
     }
 
     public static WikimediaEdit[] createFromWebsites() throws IOException {

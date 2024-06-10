@@ -1,31 +1,28 @@
 package se.roseabrams.footprintdiary.entries.reddit;
 
-import java.net.URL;
-
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
-public class RedditMediaPost extends RedditPost implements RemoteResource {
+public class RedditMediaPost extends RedditPost implements ContentOwner {
 
-    public final URL MEDIA;
+    public final RemoteContent MEDIA;
 
-    public RedditMediaPost(DiaryDate dd, String id, String subreddit, int gildings, String title, String body, URL media) {
+    public RedditMediaPost(DiaryDate dd, String id, String subreddit, int gildings, String title, String body,
+            String mediaS) {
         super(dd, id, subreddit, gildings, title, body);
-        MEDIA = media;
+        MEDIA = new RemoteContent(mediaS);
     }
 
     @Override
-    public String getPathToResource() {
-        return MEDIA.getPath();
-    }
-
-    @Override
-    public URL getUrlOfResource() {
+    public Content getContent() {
         return MEDIA;
     }
-/*
-    @Override
-    public StringBuilder detailedCsv(StringBuilder s, String delim) {
-        return super.detailedCsv(s, delim).append(delim).append(MEDIA);
-    }*/
+    /*
+     * @Override
+     * public StringBuilder detailedCsv(StringBuilder s, String delim) {
+     * return super.detailedCsv(s, delim).append(delim).append(MEDIA);
+     * }
+     */
 }

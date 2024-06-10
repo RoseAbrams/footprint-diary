@@ -11,9 +11,8 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.interfaces.Message;
-import se.roseabrams.footprintdiary.interfaces.PlainText;
 
-public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
+public class WhatsAppMessage extends DiaryEntry implements Message {
 
     public final String SENDER;
     public final String RECIPIENT;
@@ -71,7 +70,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message, PlainText {
             // because ", " has two chars and this is for one char
 
             if (text.startsWith("<attached")) {
-                // TODO
+                ... // TODO
             } else {
                 output.add(new WhatsAppMessage(date, sender, channelName, text));
             }

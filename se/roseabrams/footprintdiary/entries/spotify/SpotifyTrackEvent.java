@@ -1,14 +1,12 @@
 package se.roseabrams.footprintdiary.entries.spotify;
 
-import java.net.URL;
-
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.interfaces.Audio;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
+import se.roseabrams.footprintdiary.content.Content;
+import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
-public abstract class SpotifyTrackEvent extends DiaryEntry implements Audio, RemoteResource {
+public abstract class SpotifyTrackEvent extends DiaryEntry implements ContentOwner {
 
     public final SpotifyTrack TRACK;
 
@@ -18,12 +16,7 @@ public abstract class SpotifyTrackEvent extends DiaryEntry implements Audio, Rem
     }
 
     @Override
-    public String getPathToResource() {
-        return TRACK.getUri().toString();
-    }
-
-    @Override
-    public URL getUrlOfResource() {
-        return TRACK.getUrl();
+    public Content getContent() {
+        return TRACK;
     }
 }

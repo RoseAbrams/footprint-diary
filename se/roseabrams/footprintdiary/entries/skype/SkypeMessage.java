@@ -11,9 +11,8 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.interfaces.Message;
-import se.roseabrams.footprintdiary.interfaces.PlainText;
 
-public class SkypeMessage extends DiaryEntry implements Message, PlainText {
+public class SkypeMessage extends DiaryEntry implements Message {
 
     public final String SENDER;
     public final String RECIPIENT;

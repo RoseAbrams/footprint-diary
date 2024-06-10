@@ -1,13 +1,13 @@
 package se.roseabrams.footprintdiary.entries.spotify;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class SpotifyTrack {
-    
+import se.roseabrams.footprintdiary.content.RemoteContent;
+
+public class SpotifyTrack extends RemoteContent {
+
     public final String ID;
     public final String NAME;
     public final String ALBUM;
@@ -16,31 +16,18 @@ public class SpotifyTrack {
     private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
+        super("https://open.spotify.com/track/" + id);
         ID = id;
         NAME = name;
         ALBUM = album.intern();
         ARTIST = artist.intern();
-        try {
-            getUri();
-            getUrl();
-        } catch (AssertionError | RuntimeException e) {
-            throw new IllegalArgumentException("Arguments would cause invalid URLs.", e);
-        }
     }
 
     public URI getUri() {
         try {
             return new URI("spotify:track:" + ID);
         } catch (URISyntaxException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    public URL getUrl() {
-        try {
-            return URI.create("https://open.spotify.com/track/" + ID).toURL();
-        } catch (MalformedURLException e) {
-            throw new AssertionError(e);
+            throw new AssertionError(e); // data checked at superconstructor so should never happen
         }
     }
 

@@ -1,10 +1,10 @@
-package se.roseabrams.footprintdiary;
+package se.roseabrams.footprintdiary.content;
 
-public enum Filetype {
+public enum ContentType {
 
     PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE;
 
-    public static Filetype parseExtension(String ext) {
+    public static ContentType parseExtension(String ext) {
         switch (ext.toLowerCase()) {
             case "jpg":
             case "jpeg":

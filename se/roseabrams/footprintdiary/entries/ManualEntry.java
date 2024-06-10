@@ -4,9 +4,8 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.interfaces.Metainfo;
-import se.roseabrams.footprintdiary.interfaces.PlainText;
 
-public class ManualEntry extends DiaryEntry implements Metainfo, PlainText {
+public class ManualEntry extends DiaryEntry implements Metainfo {
 
     public final String TEXT;
 
