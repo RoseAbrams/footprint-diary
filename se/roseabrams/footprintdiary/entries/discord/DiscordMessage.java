@@ -110,8 +110,12 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
                         case PICTURE:
                             d = new DiscordPictureMessage(dd, id, contents, recipient, type, attachmentsUrl);
                             break;
+                        case VIDEO:
+                            d = new DiscordVideoMessage(dd, id, contents, recipient, type, attachmentsUrl);
+                            break;
                         default:
-                            throw new UnsupportedOperationException("Unrecognized filetype: " + urlFiletype);
+                            d = new DiscordFileMessage(dd, id, contents, recipient, type, attachmentsUrl);
+                            break;
                     }
                 }
                 output.add(d);

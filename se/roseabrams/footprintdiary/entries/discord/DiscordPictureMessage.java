@@ -4,30 +4,11 @@ import java.net.URL;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.interfaces.Picture;
-import se.roseabrams.footprintdiary.interfaces.RemoteResource;
 
-public class DiscordPictureMessage extends DiscordMessage implements Picture, RemoteResource {
-
-    public final URL ATTACHMENT_URL;
+public class DiscordPictureMessage extends DiscordFileMessage implements Picture {
 
     public DiscordPictureMessage(DiaryDate date, long id, String contents, String recipient, Type type,
             URL attachmentUrl) {
-        super(date, id, contents, recipient, type);
-        ATTACHMENT_URL = attachmentUrl;
+        super(date, id, contents, recipient, type, attachmentUrl);
     }
-
-    @Override
-    public String getPathToResource() {
-        return ATTACHMENT_URL.toString();
-    }
-
-    @Override
-    public URL getUrlOfResource() {
-        return ATTACHMENT_URL;
-    }
-/*
-    @Override
-    public StringBuilder detailedCsv(StringBuilder s, String delim) {
-        return super.detailedCsv(s, delim).append(delim).append(ATTACHMENT_URL);
-    }*/
 }
