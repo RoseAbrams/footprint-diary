@@ -23,7 +23,7 @@ public abstract class Content {
         return getName();
     }
 
-    protected static String getExtFromPath(String p) {
+    static String getExtFromPath(String p) {
         return p.substring(p.lastIndexOf(".") + 1);
     }
 }

@@ -65,12 +65,16 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
             String timestamp2 = s2.substring(s2.indexOf(",") + 1, s2.indexOf("]"));
             String sender = s2.substring(s2.indexOf("]") + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
+            String attachmentS = null;
+            if (text.startsWith("<attached")) {
+                attachmentS = s2.substring(s2.lastIndexOf(": "), s2.lastIndexOf(">"));
+            }
 
             DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2);
             // because ", " has two chars and this is for one char
 
-            if (text.startsWith("<attached")) {
-                ... // TODO
+            if (attachmentS != null) {
+                output.add(new WhatsAppMediaMessage(date, sender, channelName, text, attachmentS));
             } else {
                 output.add(new WhatsAppMessage(date, sender, channelName, text));
             }

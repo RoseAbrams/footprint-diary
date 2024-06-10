@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import se.roseabrams.footprintdiary.interfaces.CustomCounted;
+import se.roseabrams.footprintdiary.interfaces.CustomCountable;
 
 public class DiaryPage extends Diary implements Serializable {
 
@@ -37,8 +37,8 @@ public class DiaryPage extends Diary implements Serializable {
             ArrayList<DiaryEntry> d = E.get(s);
             if (d == null) {
                 output.append(0);
-            } else if (d.get(0) instanceof CustomCounted) {
-                output.append(((CustomCounted) d.get(0)).getCustomCount());
+            } else if (d.get(0) instanceof CustomCountable) {
+                output.append(((CustomCountable) d.get(0)).getCustomCount());
             } else {
                 output.append(d.size());
             }

@@ -28,7 +28,7 @@ public class SteamStore extends SteamEvent {
 
         assert items != null;
         assert type != null;
-        assert paymentTotal != Float.NaN;
+        assert !Float.isNaN(paymentTotal);
         assert paymentMethod != null;
 
         ITEMS = items;

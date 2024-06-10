@@ -5,10 +5,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.common.ImageMetadata;
+import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
+import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
+import org.apache.commons.imaging.formats.tiff.TiffImageMetadata.GpsInfo;
+import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
+import se.roseabrams.footprintdiary.GeoLocation;
 import se.roseabrams.footprintdiary.content.Content;
 import se.roseabrams.footprintdiary.content.ContentType;
 import se.roseabrams.footprintdiary.content.LocalContent;
@@ -34,26 +41,44 @@ public class CameraCapture extends DiaryEntry implements ContentOwner {
         return C;
     }
 
-    public static CameraCapture[] createFromFiles(File folder) {
+    public static CameraCapture[] createFromFiles(File folder) throws IOException {
         ArrayList<CameraCapture> output = createFromFilesRecursion(folder);
         return output.toArray(new CameraCapture[output.size()]);
     }
 
-    public static ArrayList<CameraCapture> createFromFilesRecursion(File folder) {
+    public static ArrayList<CameraCapture> createFromFilesRecursion(File folder) throws IOException {
         ArrayList<CameraCapture> output = new ArrayList<>(1000);
         for (File file : folder.listFiles()) {
-            DiaryDateTime date = new DiaryDateTime(file.lastModified());
-            String filetype = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-            CameraCapture c;
-            switch (ContentType.parseExtension(filetype)) {
-                case PICTURE:
-                case VIDEO:
-                    c = new CameraCapture(date, file);
-                    break;
-                case SYSTEM:
+            DiaryDateTime date = new DiaryDateTime(file.lastModified()); // TODO prefer exif date if available
+            String filetypeS = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+
+            GeoLocation location = null;
+            ImageMetadata metadata = Imaging.getMetadata(file);
+            if (metadata instanceof JpegImageMetadata) {
+                TiffImageMetadata exif = ((JpegImageMetadata) metadata).getExif();
+                GpsInfo coords = exif.getGpsInfo();
+                if (coords != null) {
+                    double latitude = coords.getLatitudeAsDegreesNorth();
+                    double longitude = coords.getLongitudeAsDegreesEast();
+                    Object altitudeO = exif.getFieldValue(GpsTagConstants.GPS_TAG_GPS_ALTITUDE);
+                    double altitude = (double) altitudeO;
+                    location = new GeoLocation(latitude, longitude, altitude);
+                }
+            }
+
+            ContentType filetype = ContentType.parseExtension(filetypeS);
+            if (filetype != ContentType.PICTURE || filetype != ContentType.VIDEO) {
+                if (filetype == ContentType.SYSTEM)
                     continue;
-                default:
+                else
                     throw new UnsupportedOperationException("Unrecognized filetype: " + filetype);
+            }
+
+            CameraCapture c;
+            if (location == null) {
+                c = new CameraCapture(date, file);
+            } else {
+                c = new CameraCaptureWithLocation(date, file, location);
             }
             output.add(c);
         }
@@ -92,9 +117,10 @@ public class CameraCapture extends DiaryEntry implements ContentOwner {
         s.close();
         return output.toArray(new CameraCapture[output.size()]);
     }
-/*
-    @Override
-    public StringBuilder detailedCsv(StringBuilder s, String delim) {
-        return s.append(FILE.getName());
-    }*/
+    /*
+     * @Override
+     * public StringBuilder detailedCsv(StringBuilder s, String delim) {
+     * return s.append(FILE.getName());
+     * }
+     */
 }

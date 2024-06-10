@@ -7,9 +7,9 @@ import java.util.HashMap;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.interfaces.CustomCounted;
+import se.roseabrams.footprintdiary.interfaces.CustomCountable;
 
-public class DailyActivity extends DiaryEntry implements CustomCounted {
+public class DailyActivity extends DiaryEntry implements CustomCountable {
 
     private int stepsTaken = 0;
     private float kmWalked = 0f;
