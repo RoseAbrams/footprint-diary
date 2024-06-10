@@ -67,7 +67,6 @@ public class DiscordMessage extends DiaryEntry implements Message, PlainText {
             String conversationName = (String) i.getValue();
 
             CSVParser s = new CSVParser(new File(messagesDirectory + "\\c" + conversationCode, "messages.csv"));
-            s.useDelimiter(",");
 
             Type type;
             String recipient;

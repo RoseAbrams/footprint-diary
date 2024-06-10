@@ -10,56 +10,54 @@ public class CSVParser implements Iterator<String>, Closeable {
 
     private String fBuffer;
     private int fPosition = 0;
-    private String fDelim = ",";
-    private String fNewline = "\n";
-    private String fQuote = "\"";
+    private final String delim;
+    private final String newline = "\n";
+    private final String quote = "\"";
+    private static final String DELIM = ",";
+    private static final String BACKTICKS = "```";
 
     public CSVParser(File input) throws IOException {
-        this(Util.readFile(input));
+        this(input, DELIM);
     }
 
     public CSVParser(String input) {
-        fBuffer = input;
+        this(input, DELIM);
     }
 
-    public void useDelimiter(String s) {
-        fDelim = s.intern();
+    public CSVParser(File input, String delim) throws IOException {
+        this(Util.readFile(input), delim);
+    }
+
+    public CSVParser(String input, String delim) {
+        fBuffer = input;
+        this.delim = delim;
     }
 
     @Override
     public String next() {
         expectHasNext();
         String nextChar = Character.toString(fBuffer.charAt(fPosition));
-        TokenType t;
-        if (nextChar.equals(fQuote)) {
-            String nextNextChar = Character.toString(fBuffer.charAt(fPosition + 1));
-            if (nextNextChar.equals(fQuote))
-                t = TokenType.TWO_QUOTE;
-            else
-                t = TokenType.ONE_QUOTE;
-        } else
-            t = TokenType.NO_QUOTE;
         int endPosition;
         int newPosition;
-        switch (t) {
-            case NO_QUOTE:
-                int posDelim = fBuffer.indexOf(fDelim, fPosition);
-                int posNewline = fBuffer.indexOf(fNewline, fPosition);
-                if (posDelim == -1)
-                    if (posNewline == -1)
-                        endPosition = fBuffer.length() - 1;
-                    else
-                        endPosition = posNewline;
-                else if (posNewline == -1)
-                    endPosition = posDelim;
+        if (nextChar.equals(quote)) {
+            String nextChar2 = Character.toString(fBuffer.charAt(fPosition + 1));
+            String nextChar3 = Character.toString(fBuffer.charAt(fPosition + 2));
+            if (nextChar2.equals(quote) && !nextChar3.equals(quote)) {
+                // two quotes, multiline
+                endPosition = closeToken(quote + quote, null);
+                /*fPosition += 2;
+                int posTwoQuote = fBuffer.indexOf(quote + quote, fPosition);
+                if (posTwoQuote == -1)
+                    endPosition = fBuffer.length() - 1;
                 else
-                    endPosition = posDelim < posNewline ? posDelim : posNewline;
-                newPosition = endPosition + 1;
-                break;
-            case ONE_QUOTE:
-                fPosition += 1;
-                int posQuoteDelim = fBuffer.indexOf(fQuote + fDelim, fPosition);
-                int posQuoteNewline = fBuffer.indexOf(fQuote + fNewline, fPosition);
+                    endPosition = posTwoQuote;*/
+                newPosition = endPosition + 2;
+            } else {
+                // one quote, close before delim
+                endPosition = closeToken(quote + delim, quote + newline);
+                /*fPosition += 1;
+                int posQuoteDelim = fBuffer.indexOf(quote + delim, fPosition);
+                int posQuoteNewline = fBuffer.indexOf(quote + newline, fPosition);
                 if (posQuoteDelim == -1)
                     if (posQuoteNewline == -1)
                         endPosition = fBuffer.length() - 1;
@@ -68,29 +66,54 @@ public class CSVParser implements Iterator<String>, Closeable {
                 else if (posQuoteNewline == -1)
                     endPosition = posQuoteDelim;
                 else
-                    endPosition = posQuoteDelim < posQuoteNewline ? posQuoteDelim : posQuoteNewline;
+                    endPosition = posQuoteDelim < posQuoteNewline ? posQuoteDelim : posQuoteNewline;*/
                 newPosition = endPosition + 2;
-                break;
-            case TWO_QUOTE:
-                fPosition += 2;
-                int posTwoQuote = fBuffer.indexOf(fQuote + fQuote, fPosition);
-                if (posTwoQuote == -1)
+            }
+        } else {
+            // no quote, simple delim
+            endPosition = closeToken(delim, newline);
+            /*int posDelim = fBuffer.indexOf(delim, fPosition);
+            int posNewline = fBuffer.indexOf(newline, fPosition);
+            if (posDelim == -1)
+                if (posNewline == -1)
                     endPosition = fBuffer.length() - 1;
                 else
-                    endPosition = posTwoQuote;
-                newPosition = endPosition + 2;
-            default:
-                throw new AssertionError();
+                    endPosition = posNewline;
+            else if (posNewline == -1)
+                endPosition = posDelim;
+            else
+                endPosition = posDelim < posNewline ? posDelim : posNewline;*/
+            newPosition = endPosition + 1;
         }
-        ... // issue-causing examples:
-        /* 1165315126203785338,2023-10-21 15:46:16.595000+00:00,"""Vintergatan"", ISBN 9789189059870", */
-        /* 1165680212659404851,2023-10-22 15:56:59.989000+00:00,"```Den drömmen, som aldrig besannats,
-som dröm var den vacker att få,
-för den, som ur Eden förbannats
-är Eden ett Eden ändå.``` – Gustaf Fröding", */
         String output = fBuffer.substring(fPosition, endPosition);
         fPosition = newPosition;
         return output;
+    }
+
+    private int closeToken(String closer1, String closer2) {
+        return closeToken(closer1, closer2, fPosition);
+    }
+
+    private int closeToken(String closer1, String closer2, int startPos) {
+        assert closer1 != null && !closer1.isBlank();
+        int endPosition;
+        int pos1 = fBuffer.indexOf(closer1, startPos);
+        int pos2 = closer2 != null ? fBuffer.indexOf(closer2, startPos) : -1;
+        int posBackticksOpen = fBuffer.indexOf(BACKTICKS, startPos);
+        if (pos1 == -1)
+            if (pos2 == -1)
+                endPosition = fBuffer.length() - 1;
+            else
+                endPosition = pos2;
+        else if (pos2 == -1)
+            endPosition = pos1;
+        else
+            endPosition = pos1 < pos2 ? pos1 : pos2;
+        if (posBackticksOpen != -1 && posBackticksOpen < endPosition) {
+            int posBackticksClose = closeToken(BACKTICKS, null, posBackticksOpen + BACKTICKS.length());
+            endPosition = closeToken(closer1, closer2, posBackticksClose);
+        }
+        return endPosition;
     }
 
     public String nextLine() {
@@ -106,7 +129,7 @@ för den, som ur Eden förbannats
         ArrayList<String> output = new ArrayList<>();
         do {
             output.add(next());
-        } while (!fBuffer.substring(fPosition - 1, fPosition).equals(fNewline));
+        } while (!fBuffer.substring(fPosition - 1, fPosition).equals(newline));
         return output.toArray(new String[output.size()]);
     }
 
@@ -117,16 +140,12 @@ för den, som ur Eden förbannats
 
     public void expectHasNext() {
         if (!hasNext())
-            throw new IllegalStateException(
-                    "No more data (already read " + fPosition + " out of " + fBuffer.length() + "characters");
+            throw new IllegalStateException("No more data (already read "
+                    + fPosition + " out of " + fBuffer.length() + "characters)");
     }
 
     @Override
     public void close() {
         fBuffer = null;
-    }
-
-    private static enum TokenType {
-        NO_QUOTE, ONE_QUOTE, TWO_QUOTE;
     }
 }
