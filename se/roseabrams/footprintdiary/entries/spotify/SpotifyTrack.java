@@ -4,9 +4,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.content.ContentType;
+import se.roseabrams.footprintdiary.content.Webpage;
 
-public class SpotifyTrack extends RemoteContent {
+public class SpotifyTrack extends Webpage {
 
     public final String ID;
     public final String NAME;
@@ -16,7 +17,7 @@ public class SpotifyTrack extends RemoteContent {
     private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
-        super("https://open.spotify.com/track/" + id);
+        super("https://open.spotify.com/track/" + id, ContentType.AUDIO);
         ID = id;
         NAME = name;
         ALBUM = album.intern();

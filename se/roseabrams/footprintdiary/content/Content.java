@@ -19,6 +19,7 @@ public abstract class Content {
 
     public abstract String getPath();
 
+    @Override
     public String toString() {
         return getName();
     }

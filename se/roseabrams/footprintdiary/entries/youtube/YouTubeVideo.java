@@ -2,9 +2,10 @@ package se.roseabrams.footprintdiary.entries.youtube;
 
 import java.util.ArrayList;
 
-import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.content.ContentType;
+import se.roseabrams.footprintdiary.content.Webpage;
 
-public class YouTubeVideo extends RemoteContent {
+public class YouTubeVideo extends Webpage {
 
     public final String ID;
     public String title;
@@ -13,7 +14,7 @@ public class YouTubeVideo extends RemoteContent {
     private static final ArrayList<YouTubeVideo> CACHE = new ArrayList<>(10000);
 
     public YouTubeVideo(String id, String title, String channelId, String channelName) {
-        super("https://youtube.com/watch?v=" + id);
+        super("https://youtube.com/watch?v=" + id, ContentType.VIDEO);
         ID = id;
         this.title = title;
         if (channelId == null) {
