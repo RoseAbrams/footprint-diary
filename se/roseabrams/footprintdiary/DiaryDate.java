@@ -28,7 +28,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
                 Byte.parseByte(dateString.substring(7, 8)));
     }
 
-    public GregorianCalendar getDetailedDate() {
+    GregorianCalendar getDetailedDate() {
         if (detailedDate != null)
             return detailedDate;
         detailedDate = new GregorianCalendar(YEAR, MONTH - 1, DAY);

@@ -42,7 +42,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                         nVideos++;
                         break;
                     default:
-                    throw new AssertionError(); // should never happen under current setup
+                        throw new AssertionError(); // should never happen under current setup
                 }
             }
 
@@ -201,13 +201,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
             StringBuilder output = new StringBuilder(50);
-            output.append("(Side note:");
+            output.append("By the way...");
             for (DiaryEntry e : fl) {
                 DiaryEntrySpanBoundary d = (DiaryEntrySpanBoundary) e;
                 output.append(" Today is the " + (d.IS_START ? "first" : "last") + " day I have information about "
                         + d.DESCRIPTION + ".");
             }
-            output.append(")");
             return output.toString();
         }
     },
@@ -226,8 +225,14 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             if (nSent > 0)
                 output += "I bought and paid " + nSent + " thing" + p(nSent) + ". ";
             if (nRecieved > 0)
-                output += "I received money " + nRecieved + " times" + p(nRecieved) + ".";
+                output += "I received money " + nRecieved + " time" + p(nRecieved) + ".";
             return output;
+        }
+    },
+    PHONE_CALENDAR {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            return "I went through " + fl.size() + " item" + p(fl) + " on my calendar.";
         }
     };
 
@@ -259,7 +264,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     }
 
     private static String p(int v) {
-        return Util.pluralSuffix(v);
+        return v == 1 ? "" : "s";
     }
 
     public static DiaryEntryCategory[] valuesCustomOrder() {

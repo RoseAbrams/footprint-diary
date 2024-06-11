@@ -15,7 +15,7 @@
             "name": "DiaryWriter",
             "request": "launch",
             "mainClass": "se.roseabrams.footprintdiary.DiaryWriter",
-            "projectName": "footprint-diary_1f65c634"
+            "vmArgs": "-ea" // enables checking assertions
         }
     ]
 }

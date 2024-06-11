@@ -38,11 +38,15 @@ public class DiaryDateTime extends DiaryDate {
                 (byte) c.get(GregorianCalendar.MINUTE), (byte) c.get(GregorianCalendar.SECOND));
     }
 
-    public GregorianCalendar getDetailedDate() {
+    GregorianCalendar getDetailedDate() {
         if (detailedDate != null)
             return detailedDate;
         detailedDate = new GregorianCalendar(YEAR, MONTH - 1, DAY, HOUR, MINUTE, SECOND);
         return detailedDate;
+    }
+
+    public boolean shouldReduce() {
+        return HOUR == 0 && MINUTE == 0 && SECOND == 0;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     @Override
-    public DiaryDate clone() {
+    public DiaryDateTime clone() {
         return new DiaryDateTime(YEAR, MONTH, DAY, HOUR, MINUTE, SECOND);
     }
 

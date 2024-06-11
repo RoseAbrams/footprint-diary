@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.io.File;
 import java.io.IOException;
 
+import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
@@ -21,15 +22,15 @@ import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
 public class DiaryWriter {
 
     public static void main(String[] args) {
-        String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
-        String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
+        final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
+        final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
         // DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
         // DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-        DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
-        DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+        final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
+        final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
 
-        DiaryBook d = new DiaryBook(dd1, dd2);
+        final DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
@@ -49,8 +50,12 @@ public class DiaryWriter {
             d.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
             d.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
-            // yotube comments? can't find them in export
+            // yotube comments
             d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
+            d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
+            d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
+            d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
+            d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
             System.gc();
 
             String csvSum = d.sumsCsv(true);

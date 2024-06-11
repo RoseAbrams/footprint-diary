@@ -61,16 +61,27 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
     public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, File parent) throws IOException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
         Scanner s = new Scanner(chatFile);
-        while (s.hasNextLine()) { // TODO multiline messages
-            String s2 = s.nextLine();
+        ArrayList<String> chatFileLines = new ArrayList<>();
+        while (s.hasNextLine()) {
+            chatFileLines.add(s.nextLine());
+        }
+        for (int i = 0; i < chatFileLines.size(); i++) {
+            String s2 = chatFileLines.get(i);
+            assert s2.charAt(0) == '['; // if not, multiline solution failed
             String timestamp1 = s2.substring(0, s2.indexOf(","));
             String timestamp2 = s2.substring(s2.indexOf(",") + 1, s2.indexOf("]"));
             String sender = s2.substring(s2.indexOf("]") + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
+
+            while (chatFileLines.get(i + 1).charAt(0) != '[') {
+                text += "\n" + chatFileLines.get(i + 1);
+                i++;
+            }
+
             String attachmentS = null;
             File attachment = null;
-            if (text.startsWith("<attached")) {
-                attachmentS = s2.substring(s2.lastIndexOf(": "), s2.lastIndexOf(">"));
+            if (text.startsWith("<attached:")) {
+                attachmentS = text.substring(text.lastIndexOf(": ") + 2, text.lastIndexOf(">"));
                 attachment = new File(parent.getAbsolutePath(), attachmentS);
             }
 

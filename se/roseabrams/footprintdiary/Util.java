@@ -30,12 +30,6 @@ public class Util {
     @Deprecated // you probably want to either have it as JSON or pre-splitted into lines
     public static String readFile(File f) throws IOException {
         return Files.readString(f.toPath(), CHARSET);
-        /*
-         * char[] buffer = new char[maxLength];
-         * new BufferedReader(new InputStreamReader(new FileInputStream(f),
-         * "UTF-8")).read(buffer);
-         * return new String(buffer);
-         */
     }
 
     public static JSONObject readJsonFile(File f) throws IOException {
@@ -73,9 +67,5 @@ public class Util {
             }
         }
         throw new IllegalArgumentException("No value " + input + " in enum " + enumValues.getClass());
-    }
-
-    public static String pluralSuffix(int v) {
-        return v == 1 ? "" : "s";
     }
 }
