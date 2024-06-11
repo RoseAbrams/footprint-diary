@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.content;
 
 public enum ContentType {
 
-    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE;
+    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION;
 
     public static ContentType parseExtension(String ext) {
         switch (ext.toLowerCase()) {
@@ -60,6 +60,8 @@ public enum ContentType {
                 return COMICS;
             case "html":
                 return WEBPAGE;
+            case "exe":
+                return APPLICATION;
             default:
                 System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());
                 return null;

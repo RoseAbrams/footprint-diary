@@ -17,7 +17,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public final String PLATFORM;
     public final int PLAYTIME;
     public final String COUNTRY;
-    public final String IP; // TODO make better type
+    public final String IP; // better type?
     public final String AGENT;
     public final StartReason START_REASON;
     public final EndReason END_REASON;
@@ -105,6 +105,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         boolean incognito_mode = o.getBoolean("incognito_mode");
 
         SpotifyTrack t = SpotifyTrack.create(id.substring(14), track, album, artist);
+        assert t != null;
         SpotifyPlayback p = new SpotifyPlayback(dd, t, platform, playtime, country, ip, agent, sr, er, shuffle, skipped,
                 offline, offlineStart, incognito_mode);
         return p;

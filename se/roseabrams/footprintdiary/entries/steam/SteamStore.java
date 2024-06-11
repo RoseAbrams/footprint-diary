@@ -85,7 +85,7 @@ public class SteamStore extends SteamEvent {
                         if (typeS.contains("Market Transaction"))
                             type = Type.MARKET_TRANSACTION;
                         else if (typeS.equals("Purchase"))
-                            type = Type.PURCHASE;
+                            type = Type.STORE_PURCHASE;
                         else if (typeS.contains("In-Game"))
                             type = Type.IN_GAME_PURCHASE;
                         else if (typeS.equals("Gift Purchase"))
@@ -126,6 +126,6 @@ public class SteamStore extends SteamEvent {
     }
 
     public static enum Type {
-        PURCHASE, MARKET_TRANSACTION, IN_GAME_PURCHASE, GIFT_PURCHASE
+        STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME_PURCHASE, GIFT_PURCHASE
     }
 }

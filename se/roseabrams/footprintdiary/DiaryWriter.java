@@ -37,7 +37,7 @@ public class DiaryWriter {
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
             d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
-            d.add(WhatsAppMessage.createAllFromTxt(new File(I + "whatsapp")));
+            d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));

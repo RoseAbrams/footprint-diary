@@ -45,38 +45,42 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.WHATSAPP_NAME);
     }
 
-    public static DiaryEntry[] createAllFromTxt(File chatsFolder) throws IOException {
+    public static DiaryEntry[] createAllFromFolder(File chatsFolder) throws IOException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
 
-        File[] chatFiles = chatsFolder.listFiles();
-        for (File chatFile : chatFiles) {
-            output.addAll(createFromTxt(chatFile, chatFile.getName()));
+        File[] chatFolders = chatsFolder.listFiles();
+        for (File chatFolder : chatFolders) {
+            assert chatFolder.isDirectory();
+            File chatFile = new File(chatFolder.getAbsolutePath(), "_chat.txt");
+            output.addAll(createFromTxt(chatFile, chatFolder));
         }
 
         return output.toArray(new WhatsAppMessage[output.size()]);
     }
 
-    public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, String channelName) throws IOException {
+    public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, File parent) throws IOException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
         Scanner s = new Scanner(chatFile);
-        while (s.hasNextLine()) {
+        while (s.hasNextLine()) { // TODO multiline messages
             String s2 = s.nextLine();
             String timestamp1 = s2.substring(0, s2.indexOf(","));
             String timestamp2 = s2.substring(s2.indexOf(",") + 1, s2.indexOf("]"));
             String sender = s2.substring(s2.indexOf("]") + 2, s2.indexOf(": "));
             String text = s2.substring(s2.indexOf(": ") + 2);
             String attachmentS = null;
+            File attachment = null;
             if (text.startsWith("<attached")) {
                 attachmentS = s2.substring(s2.lastIndexOf(": "), s2.lastIndexOf(">"));
+                attachment = new File(parent.getAbsolutePath(), attachmentS);
             }
 
             DiaryDateTime date = new DiaryDateTime(timestamp1 + timestamp2);
             // because ", " has two chars and this is for one char
 
             if (attachmentS != null) {
-                output.add(new WhatsAppMediaMessage(date, sender, channelName, text, attachmentS));
+                output.add(new WhatsAppMediaMessage(date, sender, parent.getName(), text, attachment));
             } else {
-                output.add(new WhatsAppMessage(date, sender, channelName, text));
+                output.add(new WhatsAppMessage(date, sender, parent.getName(), text));
             }
         }
         s.close();

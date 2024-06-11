@@ -17,6 +17,6 @@ public class SpotifyPlaylist {
 
     @Override
     public boolean equals(Object o) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return o instanceof SpotifyPlaylist && NAME.equals(((SpotifyPlaylist) o).NAME);
     }
 }

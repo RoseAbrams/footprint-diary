@@ -21,7 +21,7 @@ public class RemoteContent extends Content {
         this(ContentType.parseExtension(ext), url);
     }
 
-    @Deprecated // better to pre-determine type and use above constructor
+    @Deprecated // better to pre-determine type and use above constructors
     public RemoteContent(String url) {
         this(getExtFromPath(url), url);
     }

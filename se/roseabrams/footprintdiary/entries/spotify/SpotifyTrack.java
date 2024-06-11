@@ -14,7 +14,6 @@ public class SpotifyTrack extends Webpage {
     public final String ALBUM;
     public final String ARTIST;
     private static final ArrayList<SpotifyTrack> CACHE = new ArrayList<>(10000);
-    private static final SpotifyTrack NULL_TRACK = new SpotifyTrack(null, null, null, null);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
         super("https://open.spotify.com/track/" + id, ContentType.AUDIO);
@@ -43,7 +42,7 @@ public class SpotifyTrack extends Webpage {
 
     public static SpotifyTrack create(String id, String name, String album, String artist) {
         if (id == null)
-            return NULL_TRACK; // TODO why not checking null before and getting a null object?
+            return null; // should not occur under current setup
         assert !id.isBlank() && id.length() == 62;
         assert name != null && !name.isBlank();
         assert album != null && !album.isBlank();

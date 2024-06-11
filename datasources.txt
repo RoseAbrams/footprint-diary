@@ -13,7 +13,7 @@ v emails sent and received on all accounts
 Steam?
     DMs, screenshots, achievements
     x games played by amount per date?
-    harder to export, need to look through account reports
+        harder to export, need to look through account reports
 v Spotify listening?
 v YouTube watching?
 v torrents – res/t/nsr modified date
