@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary;
+package se.roseabrams.footprintdiary.common;
 
 public class GeoLocation {
 

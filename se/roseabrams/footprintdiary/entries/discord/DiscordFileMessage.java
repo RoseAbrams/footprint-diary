@@ -1,8 +1,8 @@
 package se.roseabrams.footprintdiary.entries.discord;
 
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.content.Content;
-import se.roseabrams.footprintdiary.content.RemoteContent;
+import se.roseabrams.footprintdiary.common.Content;
+import se.roseabrams.footprintdiary.common.RemoteContent;
 import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
 public class DiscordFileMessage extends DiscordMessage implements ContentOwner {

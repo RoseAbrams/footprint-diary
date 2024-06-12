@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.content;
+package se.roseabrams.footprintdiary.common;
 
 import java.io.File;
 

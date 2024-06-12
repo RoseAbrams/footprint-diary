@@ -10,7 +10,7 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
-import se.roseabrams.footprintdiary.content.Webpage;
+import se.roseabrams.footprintdiary.common.Webpage;
 
 public class CalendarEvent extends DiaryEntry {
 

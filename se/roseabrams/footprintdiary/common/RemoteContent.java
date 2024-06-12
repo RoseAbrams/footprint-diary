@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.content;
+package se.roseabrams.footprintdiary.common;
 
 import java.net.MalformedURLException;
 import java.net.URI;

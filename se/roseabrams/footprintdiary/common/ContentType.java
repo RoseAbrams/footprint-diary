@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.content;
+package se.roseabrams.footprintdiary.common;
 
 public enum ContentType {
 

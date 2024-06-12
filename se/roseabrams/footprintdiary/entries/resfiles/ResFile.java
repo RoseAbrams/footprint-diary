@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.content.Content;
-import se.roseabrams.footprintdiary.content.LocalContent;
+import se.roseabrams.footprintdiary.common.Content;
+import se.roseabrams.footprintdiary.common.LocalContent;
 import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
 public class ResFile extends DiaryEntry implements ContentOwner {

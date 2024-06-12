@@ -4,8 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import se.roseabrams.footprintdiary.content.ContentType;
-import se.roseabrams.footprintdiary.content.Webpage;
+import se.roseabrams.footprintdiary.common.ContentType;
+import se.roseabrams.footprintdiary.common.Webpage;
 
 public class SpotifyTrack extends Webpage {
 

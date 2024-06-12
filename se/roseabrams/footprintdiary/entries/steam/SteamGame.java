@@ -1,7 +1,7 @@
 package se.roseabrams.footprintdiary.entries.steam;
 
-import se.roseabrams.footprintdiary.content.ContentType;
-import se.roseabrams.footprintdiary.content.Webpage;
+import se.roseabrams.footprintdiary.common.ContentType;
+import se.roseabrams.footprintdiary.common.Webpage;
 
 public class SteamGame extends Webpage {
 

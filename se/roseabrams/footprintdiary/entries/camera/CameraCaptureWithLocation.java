@@ -3,7 +3,7 @@ package se.roseabrams.footprintdiary.entries.camera;
 import java.io.File;
 
 import se.roseabrams.footprintdiary.DiaryDate;
-import se.roseabrams.footprintdiary.GeoLocation;
+import se.roseabrams.footprintdiary.common.GeoLocation;
 import se.roseabrams.footprintdiary.interfaces.GeoLocatable;
 
 public class CameraCaptureWithLocation extends CameraCapture implements GeoLocatable {

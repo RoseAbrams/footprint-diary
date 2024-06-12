@@ -17,10 +17,10 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.GeoLocation;
-import se.roseabrams.footprintdiary.content.Content;
-import se.roseabrams.footprintdiary.content.ContentType;
-import se.roseabrams.footprintdiary.content.LocalContent;
+import se.roseabrams.footprintdiary.common.GeoLocation;
+import se.roseabrams.footprintdiary.common.Content;
+import se.roseabrams.footprintdiary.common.ContentType;
+import se.roseabrams.footprintdiary.common.LocalContent;
 import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
 public class CameraCapture extends DiaryEntry implements ContentOwner {
