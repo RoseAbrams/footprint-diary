@@ -12,7 +12,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 
-public class SteamStore extends SteamEvent {
+public class SteamStoreEvent extends SteamEvent {
 
     private final String[] ITEMS;
     public final Type TYPE;
@@ -21,7 +21,7 @@ public class SteamStore extends SteamEvent {
     public final float WALLET_CHANGE;
     public final float WALLET_BALANCE;
 
-    public SteamStore(DiaryDate dd, String[] items, Type type, String paymentMethod, float paymentTotal,
+    public SteamStoreEvent(DiaryDate dd, String[] items, Type type, String paymentMethod, float paymentTotal,
             float walletChange, float walletBalance) {
         super(DiaryEntryCategory.STEAM, dd);
         assert dd != null;
@@ -48,8 +48,8 @@ public class SteamStore extends SteamEvent {
         return output.substring(0, output.length() - 3);
     }
 
-    public static SteamStore[] createFromHtml(File purchaseHistory) throws IOException {
-        ArrayList<SteamStore> output = new ArrayList<>(1000);
+    public static SteamStoreEvent[] createFromHtml(File purchaseHistory) throws IOException {
+        ArrayList<SteamStoreEvent> output = new ArrayList<>(1000);
         Document d = Util.readXmlFile(purchaseHistory);
         NodeList tableRows = d.getDocumentElement().getLastChild().getChildNodes();
         for (int i = 0; i < tableRows.getLength(); i++) {
@@ -115,10 +115,10 @@ public class SteamStore extends SteamEvent {
                         throw new AssertionError();
                 }
             }
-            output.add(new SteamStore(date, items, type, paymentMethod, total, walletChange, walletBalance));
+            output.add(new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange, walletBalance));
         }
 
-        return output.toArray(new SteamStore[output.size()]);
+        return output.toArray(new SteamStoreEvent[output.size()]);
     }
 
     public static float parseCurrency(String s) {

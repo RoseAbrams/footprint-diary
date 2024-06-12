@@ -14,7 +14,7 @@ import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
 import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
-import se.roseabrams.footprintdiary.entries.steam.SteamStore;
+import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
@@ -43,7 +43,7 @@ public class DiaryWriter {
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
             d.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            d.add(SteamStore.createFromHtml(new File(I + "steam\\Purchase History.html")));
+            d.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
             d.add(DailyActivity.createDays(new File(I + "apple\\health.xml")));
             d.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
             d.add(WikimediaEdit.createFromWebsites());
