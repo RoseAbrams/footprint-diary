@@ -2,10 +2,10 @@ package se.roseabrams.footprintdiary.entries.facebook;
 
 public class FacebookReaction extends FacebookWallEvent {
 
-    public final ReactionType TYPE;
+    public final Type TYPE;
     public final String PARENT_OP;
 
-    public static enum ReactionType {
+    public static enum Type {
 
         LIKE {
             @Override

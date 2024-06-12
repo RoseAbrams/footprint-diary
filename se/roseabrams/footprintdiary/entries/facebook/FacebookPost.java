@@ -4,7 +4,9 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 
 public class FacebookPost extends FacebookWallEvent {
 
-    public static enum PostType {
+    public final String TEXT;
+
+    public static enum Type {
         POST, PHOTO, VIDEO, LINK
     }
 }
