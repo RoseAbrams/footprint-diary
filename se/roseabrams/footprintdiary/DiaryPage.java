@@ -39,6 +39,8 @@ public class DiaryPage extends Diary implements Serializable {
                 output.append(0);
             } else if (d.get(0) instanceof CustomCountable) {
                 output.append(((CustomCountable) d.get(0)).getCustomCount());
+                // } else if (d.get(0) instanceof Message) {
+                // TODO count of all messages or just isByMe()?
             } else {
                 output.append(d.size());
             }

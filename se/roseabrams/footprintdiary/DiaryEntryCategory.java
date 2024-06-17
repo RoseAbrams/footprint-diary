@@ -114,29 +114,15 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     WHATSAPP {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            int nSent = 0;
-            int nRecieved = 0;
-            for (DiaryEntry e : fl) {
-                if (((Message) e).isByMe())
-                    nSent++;
-                else
-                    nRecieved++;
-            }
-            return "I sent " + nSent + " message" + p(nSent) + " on WhatsApp, and received " + nRecieved + ".";
+            int[] n = countMessages(fl);
+            return "I sent " + n[0] + " message" + p(n[0]) + " on WhatsApp, and received " + n[1] + ".";
         }
     },
     SKYPE {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
-            int nSent = 0;
-            int nRecieved = 0;
-            for (DiaryEntry e : fl) {
-                if (((Message) e).isByMe())
-                    nSent++;
-                else
-                    nRecieved++;
-            }
-            return "I sent " + nSent + " message" + p(nSent) + " on Skype, and received " + nRecieved + ".";
+            int[] n = countMessages(fl);
+            return "I sent " + n[0] + " message" + p(n[0]) + " on Skype, and received " + n[1] + ".";
         }
     },
     SPOTIFY {
@@ -210,7 +196,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return output.toString();
         }
     },
-    FINANCE { //
+    FINANCE {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
             int nSent = 0;
@@ -234,10 +220,23 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         public String describeInProse(ArrayList<DiaryEntry> fl) {
             return "I went through " + fl.size() + " item" + p(fl) + " on my calendar.";
         }
+    },
+    FACEBOOK_WALL {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+        }
+    },
+    FACEBOOK_MESSAGE {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            int[] n = countMessages(fl);
+            return "I sent " + n[0] + " message" + p(n[0]) + " on Facebook, and received " + n[1] + ".";
+        }
     };
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);
 
+    /// quick debug swapping of what's being printed
     public final boolean enabled() {
         switch (this) {
             case SPAN_BOUNDARY:
@@ -258,11 +257,24 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         }
     }
 
+    public static int[] countMessages(ArrayList<DiaryEntry> l) {
+        int[] output = { 0, 0 };
+        for (DiaryEntry e : l) {
+            assert e instanceof Message;
+            if (((Message) e).isByMe())
+                output[0]++;
+            else
+                output[1]++;
+        }
+        return output;
+    }
+
     @SuppressWarnings("rawtypes")
     private static String p(ArrayList v) {
         return p(v.size());
     }
 
+    /// plural ending of nouns
     private static String p(int v) {
         return v == 1 ? "" : "s";
     }
