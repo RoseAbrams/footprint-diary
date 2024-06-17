@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.common;
 
 import se.roseabrams.footprintdiary.interfaces.Connectable;
 
-public class Connection<C1 extends Connectable<C1>, C2 extends Connectable<C2>> {
+public class Connection<C1 extends Connectable<C1, C2>, C2 extends Connectable<C2, C1>> {
 
     private final C1 O1;
     private final C2 O2;
