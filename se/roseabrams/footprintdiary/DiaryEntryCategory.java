@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
@@ -47,12 +50,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             }
 
             StringBuilder output = new StringBuilder(40);
-            output.append("I used my camera ").append(nPictures + nVideos)
-                    .append(" times. I took ");
-            if (nPictures != 0) {
+            output.append("I used my camera ").append(nPictures + nVideos).append(" time").append(p(fl))
+                    .append(". I took ");
+            if (nPictures > 0) {
                 output.append(nPictures).append(" photo" + p(nPictures) + ", ");
             }
-            if (nVideos != 0) {
+            if (nVideos > 0) {
                 output.append(nVideos).append(" video" + p(nVideos) + ", ");
             }
             output.substring(0, output.length() - 3);
@@ -224,6 +227,34 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     FACEBOOK_WALL {
         @Override
         public String describeInProse(ArrayList<DiaryEntry> fl) {
+            int nPosts = 0;
+            int nComments = 0;
+            int nReactions = 0;
+            for (DiaryEntry e : fl) {
+                if (e instanceof FacebookPost) {
+                    nPosts++;
+                } else if (e instanceof FacebookComment) {
+                    nComments++;
+                } else if (e instanceof FacebookReaction) {
+                    nReactions++;
+                }
+            }
+
+            StringBuilder output = new StringBuilder(40);
+            output.append("I performed ").append(fl.size()).append(" interaction").append(p(fl))
+                    .append(" on Facebook. I made ");
+            if (nPosts > 0) {
+                output.append(nPosts).append(" post" + p(nPosts) + ", ");
+            }
+            if (nComments > 0) {
+                output.append(nComments).append(" comments" + p(nComments) + ", ");
+            }
+            if (nReactions > 0) {
+                output.append(nReactions).append(" reactions" + p(nReactions) + ", ");
+            }
+            output.substring(0, output.length() - 3);
+            output.append('.');
+            return output.toString();
         }
     },
     FACEBOOK_MESSAGE {
