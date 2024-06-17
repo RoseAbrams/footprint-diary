@@ -16,6 +16,10 @@ import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.interfaces.Message;
 
 public class FacebookMessage extends DiaryEntry implements Message {
+    /*
+     * "inbox/",
+     * "archived_threads/"
+     */
 
     public final String TEXT;
     public final String CHANNEL;
@@ -48,9 +52,9 @@ public class FacebookMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.FACEBOOK_NAME);
     }
 
-    public static FacebookMessage[] createFromHtml(File messenger) throws IOException {
+    public static FacebookMessage[] createFromHtml(File messengerFile) throws IOException {
         ArrayList<FacebookMessage> output = new ArrayList<>();
-        Document d = Jsoup.parse(messenger);
+        Document d = Jsoup.parse(messengerFile);
         String channel = d.title();
         Elements messagesE = d.select("div._a706 > div._3-95._a6-g");
         for (Element messageE : messagesE) {

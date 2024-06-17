@@ -27,6 +27,11 @@ public class FacebookReaction extends FacebookWallEvent {
         TYPE = type;
     }
 
+    @Override
+    public String getStringSummary() {
+        return TYPE.emoji();
+    }
+
     public static enum Type {
 
         LIKE {
