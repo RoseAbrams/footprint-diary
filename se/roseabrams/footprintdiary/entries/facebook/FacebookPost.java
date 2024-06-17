@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.PersonalConstants;
 
 public class FacebookPost extends FacebookWallEvent {
     /*
@@ -19,11 +20,14 @@ public class FacebookPost extends FacebookWallEvent {
 
     public final String TEXT;
     public final Type TYPE;
+    public final String TIMELINE;
 
-    public FacebookPost(DiaryDateTime dd, String text, Type type) {
+    public FacebookPost(DiaryDateTime dd, String text, Type type, String timeline) {
         super(dd);
+        assert text != null && !text.isBlank() && type != null && timeline != null && !timeline.isBlank();
         TEXT = text;
         TYPE = type;
+        TIMELINE = timeline.intern();
     }
 
     @Override
@@ -32,7 +36,16 @@ public class FacebookPost extends FacebookWallEvent {
     }
 
     public static enum Type {
-        POST, PHOTO, VIDEO, LINK
+        TEXT, PHOTO, VIDEO, LINK;
+
+        public static Type parse(String s) {
+            switch (s.toUpperCase()) {
+                case "POST":
+                    return TEXT;
+                default:
+                    return valueOf(s);
+            }
+        }
     }
 
     public static FacebookPost[] createFromHtml(File postFile) throws IOException {
@@ -40,13 +53,39 @@ public class FacebookPost extends FacebookWallEvent {
         Document d = Jsoup.parse(postFile);
         Elements postsE = d.select("div._a706 > div._3-95._a6-g");
         for (Element postE : postsE) {
-            String typeES = postE.selectFirst("div._a6-h._a6-i").text();
-            String typeS = typeES.substring(typeES.lastIndexOf(" ") + 1);
+            String description = postE.selectFirst("div._a6-h._a6-i").text();
+            String mediaS = null;
+            String typeS;
+            Type type;
+            String timeline;
+            if (description.endsWith("timeline.")) {
+                // other timeline
+                int opIndexStart;
+                if (description.contains("wrote on ")) {
+                    opIndexStart = description.indexOf("wrote on ") + "wrote on ".length();
+                    typeS = "POST";
+                } else {
+                    opIndexStart = description.indexOf(" to ") + " to ".length();
+                    typeS = description.substring(description.indexOf("shared a ") + "shared a ".length(),
+                            opIndexStart - " to ".length());
+                }
+                timeline = description.substring(opIndexStart, description.lastIndexOf("'s'"));
+            } else {
+                // own timeline
+                timeline = PersonalConstants.FACEBOOK_NAME;
+                typeS = description.substring(description.lastIndexOf(" ") + 1);
+            }
             String text = postE.selectFirst("div._2ph_._a6-p").text();
             text = text.substring(0, text.lastIndexOf("Updated "));
             String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
-            ...// media handling
-            output.add(new FacebookPost(parseDate(dateS), text, Type.valueOf(typeS.toUpperCase())));
+            if (postE.selectFirst("img") != null) {
+                .
+            } else if (postE.selectFirst("video") != null) {
+                .
+            }
+            type = Type.parse(typeS);
+            assert type == Type.TEXT || mediaS != null;
+            output.add(new FacebookPost(parseDate(dateS), text, type, timeline));
         }
         return output.toArray(new FacebookPost[output.size()]);
     }

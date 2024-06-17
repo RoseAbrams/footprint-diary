@@ -19,6 +19,7 @@ public class FacebookComment extends FacebookWallEvent {
 
     public FacebookComment(DiaryDateTime date, String text, String op) {
         super(date);
+        assert text != null && !text.isBlank() && op != null && !op.isBlank();
         TEXT = text;
         PARENT_OP = op.intern();
     }

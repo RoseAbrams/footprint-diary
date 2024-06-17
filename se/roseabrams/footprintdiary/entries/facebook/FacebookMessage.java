@@ -27,6 +27,7 @@ public class FacebookMessage extends DiaryEntry implements Message {
 
     public FacebookMessage(DiaryDate dd, String text, String channel, String sender) {
         super(DiaryEntryCategory.FACEBOOK_MESSAGE, dd);
+        assert text != null && !text.isBlank();
         TEXT = text;
         CHANNEL = channel.intern();
         SENDER = sender.intern();
@@ -61,6 +62,9 @@ public class FacebookMessage extends DiaryEntry implements Message {
             String sender = messageE.selectFirst("div._a6-h._a6-i").text();
             String text = messageE.selectFirst("div._2ph_._a6-p").text();
             String dateS = messageE.selectFirst("div._3-94._a6-o > div._a72d").text();
+            if (messageE.selectFirst("img") != null) {
+                ...// media handling
+            }
             output.add(new FacebookMessage(FacebookWallEvent.parseDate(dateS), text, channel, sender));
         }
         return output.toArray(new FacebookMessage[output.size()]);

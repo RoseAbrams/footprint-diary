@@ -23,6 +23,7 @@ public class FacebookReaction extends FacebookWallEvent {
 
     public FacebookReaction(DiaryDateTime date, String op, Type type) {
         super(date);
+        assert op != null && !op.isBlank() && type != null;
         PARENT_OP = op.intern();
         TYPE = type;
     }
