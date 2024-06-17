@@ -7,7 +7,7 @@ import java.util.HashMap;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.interfaces.CustomCountable;
+import se.roseabrams.footprintdiary.common.CustomCountable;
 
 public class DailyActivity extends DiaryEntry implements CustomCountable {
 

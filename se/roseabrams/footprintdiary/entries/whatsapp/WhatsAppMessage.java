@@ -10,7 +10,7 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
-import se.roseabrams.footprintdiary.interfaces.Message;
+import se.roseabrams.footprintdiary.common.Message;
 
 public class WhatsAppMessage extends DiaryEntry implements Message {
 

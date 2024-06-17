@@ -15,9 +15,9 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.common.Content;
+import se.roseabrams.footprintdiary.common.ContentOwner;
 import se.roseabrams.footprintdiary.common.RemoteContent;
 import se.roseabrams.footprintdiary.common.Webpage;
-import se.roseabrams.footprintdiary.interfaces.ContentOwner;
 
 public class WikimediaEdit extends DiaryEntry implements ContentOwner {
 

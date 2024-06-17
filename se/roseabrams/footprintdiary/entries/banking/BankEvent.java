@@ -10,7 +10,7 @@ import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
-import se.roseabrams.footprintdiary.interfaces.MoneyTransaction;
+import se.roseabrams.footprintdiary.common.MoneyTransaction;
 
 public class BankEvent extends DiaryEntry implements MoneyTransaction {
 

@@ -3,7 +3,7 @@ package se.roseabrams.footprintdiary.entries;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
-import se.roseabrams.footprintdiary.interfaces.Metainfo;
+import se.roseabrams.footprintdiary.common.Metainfo;
 
 public class ManualEntry extends DiaryEntry implements Metainfo {
 

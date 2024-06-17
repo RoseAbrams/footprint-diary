@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.Message;
+import se.roseabrams.footprintdiary.common.MoneyTransaction;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
@@ -12,9 +15,6 @@ import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
-import se.roseabrams.footprintdiary.interfaces.ContentOwner;
-import se.roseabrams.footprintdiary.interfaces.Message;
-import se.roseabrams.footprintdiary.interfaces.MoneyTransaction;
 
 public enum DiaryEntryCategory { // categorization intent is for human displaying
 

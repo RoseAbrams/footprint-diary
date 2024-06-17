@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.interfaces;
+package se.roseabrams.footprintdiary.common;
 
 public interface DiaryEntryData {
 

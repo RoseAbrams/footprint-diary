@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import se.roseabrams.footprintdiary.interfaces.CustomCountable;
+import se.roseabrams.footprintdiary.common.CustomCountable;
 
 public class DiaryPage extends Diary implements Serializable {
 

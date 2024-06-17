@@ -1,6 +1,6 @@
 package se.roseabrams.footprintdiary;
 
-import se.roseabrams.footprintdiary.interfaces.Metainfo;
+import se.roseabrams.footprintdiary.common.Metainfo;
 
 public class DiaryEntrySpanBoundary extends DiaryEntry implements Metainfo {
 
