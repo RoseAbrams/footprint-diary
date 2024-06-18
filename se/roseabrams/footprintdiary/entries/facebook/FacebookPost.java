@@ -54,7 +54,7 @@ public class FacebookPost extends FacebookWallEvent {
         Elements postsE = d.select("div._a706 > div._3-95._a6-g");
         for (Element postE : postsE) {
             String description = postE.selectFirst("div._a6-h._a6-i").text();
-            String mediaS = null;
+            File media = null;
             String typeS;
             Type type;
             String timeline;
@@ -78,14 +78,24 @@ public class FacebookPost extends FacebookWallEvent {
             String text = postE.selectFirst("div._2ph_._a6-p").text();
             text = text.substring(0, text.lastIndexOf("Updated "));
             String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
-            if (postE.selectFirst("img") != null) {
-                .
-            } else if (postE.selectFirst("video") != null) {
-                .
-            }
+
+            /*
+             * if (postE.selectFirst("img") != null) {
+             * //...
+             * } else if (postE.selectFirst("video") != null) {
+             * //...
+             * }
+             */
+            // guard until media handling is implemented
+            assert postE.selectFirst("img") == null && postE.selectFirst("video") == null;
+
             type = Type.parse(typeS);
-            assert type == Type.TEXT || mediaS != null;
-            output.add(new FacebookPost(parseDate(dateS), text, type, timeline));
+            assert type == Type.TEXT || media != null;
+            if (media == null) {
+                output.add(new FacebookPost(parseDate(dateS), text, type, timeline));
+            } else {
+                output.add(new FacebookMediaPost(parseDate(dateS), text, type, timeline, media));
+            }
         }
         return output.toArray(new FacebookPost[output.size()]);
     }
