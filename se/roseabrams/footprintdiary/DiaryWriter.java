@@ -25,18 +25,18 @@ public class DiaryWriter {
         final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
         final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
-        // DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
-        // DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-        final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
-        final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+        final DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
+        final DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
+        //final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
+        //final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
 
         final DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-            d.add(ResFile.createFromFiles());
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+            //d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));

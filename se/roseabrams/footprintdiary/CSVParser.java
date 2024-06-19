@@ -36,56 +36,31 @@ public class CSVParser implements Iterator<String>, Closeable {
     @Override
     public String next() {
         expectHasNext();
-        String nextChar = Character.toString(fBuffer.charAt(fPosition));
+        int startPosition;
         int endPosition;
         int newPosition;
+        String nextChar = Character.toString(fBuffer.charAt(fPosition));
         if (nextChar.equals(quote)) {
             String nextChar2 = Character.toString(fBuffer.charAt(fPosition + 1));
             String nextChar3 = Character.toString(fBuffer.charAt(fPosition + 2));
             if (nextChar2.equals(quote) && !nextChar3.equals(quote)) {
                 // two quotes, multiline
+                startPosition = fPosition + 2;
                 endPosition = closeToken(quote + quote, null);
-                /*fPosition += 2;
-                int posTwoQuote = fBuffer.indexOf(quote + quote, fPosition);
-                if (posTwoQuote == -1)
-                    endPosition = fBuffer.length() - 1;
-                else
-                    endPosition = posTwoQuote;*/
                 newPosition = endPosition + 2;
             } else {
                 // one quote, close before delim
+                startPosition = fPosition + 1;
                 endPosition = closeToken(quote + delim, quote + newline);
-                /*fPosition += 1;
-                int posQuoteDelim = fBuffer.indexOf(quote + delim, fPosition);
-                int posQuoteNewline = fBuffer.indexOf(quote + newline, fPosition);
-                if (posQuoteDelim == -1)
-                    if (posQuoteNewline == -1)
-                        endPosition = fBuffer.length() - 1;
-                    else
-                        endPosition = posQuoteNewline;
-                else if (posQuoteNewline == -1)
-                    endPosition = posQuoteDelim;
-                else
-                    endPosition = posQuoteDelim < posQuoteNewline ? posQuoteDelim : posQuoteNewline;*/
                 newPosition = endPosition + 2;
             }
         } else {
             // no quote, simple delim
+            startPosition = fPosition;
             endPosition = closeToken(delim, newline);
-            /*int posDelim = fBuffer.indexOf(delim, fPosition);
-            int posNewline = fBuffer.indexOf(newline, fPosition);
-            if (posDelim == -1)
-                if (posNewline == -1)
-                    endPosition = fBuffer.length() - 1;
-                else
-                    endPosition = posNewline;
-            else if (posNewline == -1)
-                endPosition = posDelim;
-            else
-                endPosition = posDelim < posNewline ? posDelim : posNewline;*/
             newPosition = endPosition + 1;
         }
-        String output = fBuffer.substring(fPosition, endPosition);
+        String output = fBuffer.substring(startPosition, endPosition);
         fPosition = newPosition;
         return output;
     }

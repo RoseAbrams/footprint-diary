@@ -81,17 +81,16 @@ public class DiscordMessage extends DiaryEntry implements Message {
                 String[] l = s.nextLineTokens();
                 String idS = l[0];
                 long id = Long.parseLong(idS);
-                String timestamp = l[1];
+                String dateS = l[1];
                 String contents = l[2];
                 String attachmentsUrlS = l[3];
 
-                DiaryDateTime dd = new DiaryDateTime(timestamp.substring(0, 20));
+                DiaryDateTime date = new DiaryDateTime(dateS.substring(0, 20));
                 DiscordMessage d;
-                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank()) {
-                    d = new DiscordFileMessage(dd, id, contents, recipient, type, attachmentsUrlS);
-                } else {
-                    d = new DiscordMessage(dd, id, contents, recipient, type);
-                }
+                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank())
+                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentsUrlS);
+                else
+                    d = new DiscordMessage(date, id, contents, recipient, type);
                 output.add(d);
             }
             s.close();

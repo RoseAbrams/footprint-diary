@@ -4,6 +4,7 @@
         "lib/**/*.jar",
         "dependencies/json-20240303.jar",
         "dependencies/jsoup-1.17.2.jar",
-        "dependencies/commons-imaging-1.0.0-alpha5.jar"
+        "dependencies/commons-imaging-1.0.0-alpha5.jar",
+        "dependencies/commons-io-2.16.1.jar"
     ]
 }

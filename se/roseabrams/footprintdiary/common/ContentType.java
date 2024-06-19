@@ -15,6 +15,7 @@ public enum ContentType {
             case "psd":
             case "ai":
             case "bmp":
+            case "heic":
                 return PICTURE;
             case "mp4":
             case "mov":
@@ -59,6 +60,7 @@ public enum ContentType {
             case "cbz":
                 return COMICS;
             case "html":
+            case "htm":
                 return WEBPAGE;
             case "exe":
                 return APPLICATION;
