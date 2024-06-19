@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
 import org.json.JSONObject;
@@ -84,12 +85,26 @@ public class DiscordMessage extends DiaryEntry implements Message {
                 long id = Long.parseLong(idS);
                 String dateS = l[1];
                 String contents = l[2];
-                String attachmentsUrlS = l[3];
+                String attachments = l[3];
+
+                String[] attachmentsUrls;
+                if (attachments.contains(" ")) {
+                    ArrayList<String> attachmentsUrlsL = new ArrayList<>();
+                    Scanner s2 = new Scanner(attachments);
+                    s2.delimiter();
+                    while (s2.hasNext()) {
+                        attachmentsUrlsL.add(s2.next());
+                    }
+                    attachmentsUrls = attachmentsUrlsL.toArray(new String[attachmentsUrlsL.size()]);
+                } else {
+                    attachmentsUrls = new String[1];
+                    attachmentsUrls[0] = attachments;
+                }
 
                 DiaryDateTime date = new DiaryDateTime(dateS.substring(0, 20));
                 DiscordMessage d;
-                if (attachmentsUrlS != null && !attachmentsUrlS.isBlank())
-                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentsUrlS);
+                if (attachments != null && !attachments.isBlank())
+                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentsUrls);
                 else
                     d = new DiscordMessage(date, id, contents, recipient, type);
                 output.add(d);
