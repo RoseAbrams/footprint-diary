@@ -61,7 +61,8 @@ public class DiscordMessage extends DiaryEntry implements Message {
             String conversationCode = i.getKey();
             String conversationName = (String) i.getValue();
 
-            CSVParser s = new CSVParser(new File(messagesDirectory + "\\c" + conversationCode, "messages.csv"));
+            File conversationFile = new File(messagesDirectory + "\\c" + conversationCode, "messages.csv");
+            CSVParser s = new CSVParser(conversationFile);
 
             Type type;
             String recipient;

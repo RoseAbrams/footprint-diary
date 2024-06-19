@@ -15,6 +15,7 @@ public class CSVParser implements Iterator<String>, Closeable {
     private final String quote = "\"";
     private static final String DELIM = ",";
     private static final String BACKTICKS = "```";
+    private static final String INTR_QUOTE = "\"\"";
 
     public CSVParser(File input) throws IOException {
         this(input, DELIM);
@@ -43,6 +44,9 @@ public class CSVParser implements Iterator<String>, Closeable {
         if (nextChar.equals(quote)) {
             String nextChar2 = Character.toString(fBuffer.charAt(fPosition + 1));
             String nextChar3 = Character.toString(fBuffer.charAt(fPosition + 2));
+            if (nextChar2.equals(quote) && nextChar3.equals(quote)) {
+                System.out.println();
+            }
             if (nextChar2.equals(quote) && !nextChar3.equals(quote)) {
                 // two quotes, multiline
                 startPosition = fPosition + 2;
@@ -62,6 +66,8 @@ public class CSVParser implements Iterator<String>, Closeable {
         }
         String output = fBuffer.substring(startPosition, endPosition);
         fPosition = newPosition;
+        if (output.contains(INTR_QUOTE)) 
+            output = output.replace(INTR_QUOTE, "\"");
         return output;
     }
 
@@ -75,6 +81,7 @@ public class CSVParser implements Iterator<String>, Closeable {
         int pos1 = fBuffer.indexOf(closer1, startPos);
         int pos2 = closer2 != null ? fBuffer.indexOf(closer2, startPos) : -1;
         int posBackticksOpen = fBuffer.indexOf(BACKTICKS, startPos);
+        int posInternalQuoteOpen = fBuffer.indexOf(INTR_QUOTE, startPos);
         if (pos1 == -1)
             if (pos2 == -1)
                 endPosition = fBuffer.length() - 1;
@@ -86,7 +93,11 @@ public class CSVParser implements Iterator<String>, Closeable {
             endPosition = pos1 < pos2 ? pos1 : pos2;
         if (posBackticksOpen != -1 && posBackticksOpen < endPosition) {
             int posBackticksClose = closeToken(BACKTICKS, null, posBackticksOpen + BACKTICKS.length());
-            endPosition = closeToken(closer1, closer2, posBackticksClose);
+            endPosition = closeToken(closer1, closer2, posBackticksClose + BACKTICKS.length());
+        }
+        if (posInternalQuoteOpen != -1 && posInternalQuoteOpen < endPosition) {
+            int posInternalQuoteClose = closeToken(INTR_QUOTE, null, posInternalQuoteOpen + INTR_QUOTE.length());
+            endPosition = closeToken(closer1, closer2, posInternalQuoteClose + INTR_QUOTE.length());
         }
         return endPosition;
     }
