@@ -33,10 +33,10 @@ public class DiaryWriter {
         final DiaryBook d = new DiaryBook(dd1, dd2);
 
         try {
-            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            //d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-            //d.add(ResFile.createFromFiles());
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+            d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
@@ -50,7 +50,7 @@ public class DiaryWriter {
             d.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
             d.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
-            // yotube comments
+            // TODO: yotube comments
             d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));

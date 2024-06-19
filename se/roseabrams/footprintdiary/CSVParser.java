@@ -44,9 +44,6 @@ public class CSVParser implements Iterator<String>, Closeable {
         if (nextChar.equals(quote)) {
             String nextChar2 = Character.toString(fBuffer.charAt(fPosition + 1));
             String nextChar3 = Character.toString(fBuffer.charAt(fPosition + 2));
-            if (nextChar2.equals(quote) && nextChar3.equals(quote)) {
-                System.out.println();
-            }
             if (nextChar2.equals(quote) && !nextChar3.equals(quote)) {
                 // two quotes, multiline
                 startPosition = fPosition + 2;
