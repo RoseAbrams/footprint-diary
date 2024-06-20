@@ -72,7 +72,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
 
     @Override
     public String getStringSummary() {
-        return PAGE_TITLE + " (" + (EDIT_SUMMARY.length() > 10 ? EDIT_SUMMARY.substring(0, 10) + "..." : EDIT_SUMMARY)
+        return PAGE_TITLE + " (" + (EDIT_SUMMARY.length() > 20 ? EDIT_SUMMARY.substring(0, 17) + "..." : EDIT_SUMMARY)
                 + ")";
     }
 

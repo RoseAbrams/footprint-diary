@@ -38,6 +38,7 @@ public class DiaryDateTime extends DiaryDate {
                 (byte) c.get(GregorianCalendar.MINUTE), (byte) c.get(GregorianCalendar.SECOND));
     }
 
+    @Override
     GregorianCalendar getDetailedDate() {
         if (detailedDate != null)
             return detailedDate;
@@ -72,12 +73,11 @@ public class DiaryDateTime extends DiaryDate {
         int comparedMinute = Byte.compare(MINUTE, ((DiaryDateTime) d2).MINUTE);
         int comparedSecond = Byte.compare(SECOND, ((DiaryDateTime) d2).SECOND);
 
-        if (comparedHour != 0) {
+        if (comparedHour != 0)
             return comparedHour;
-        }
-        if (comparedMinute != 0) {
+        if (comparedMinute != 0)
             return comparedMinute;
-        }
+
         return comparedSecond;
     }
 
@@ -88,11 +88,10 @@ public class DiaryDateTime extends DiaryDate {
 
     @Override
     public String toString(boolean leadingZeroes) {
-        if (leadingZeroes) {
+        if (leadingZeroes)
             return super.toString(leadingZeroes) + "T" + (HOUR < 10 ? "0" + HOUR : HOUR) + ":"
                     + (MINUTE < 10 ? "0" + MINUTE : MINUTE) + ":" + (SECOND < 10 ? "0" + SECOND : SECOND);
-        } else {
+        else
             return super.toString(leadingZeroes) + "T" + HOUR + ":" + MINUTE + ":" + SECOND;
-        }
     }
 }

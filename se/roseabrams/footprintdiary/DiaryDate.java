@@ -59,19 +59,17 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         int comparedMonth = Byte.compare(MONTH, d2.MONTH);
         int comparedDay = Byte.compare(DAY, d2.DAY);
 
-        if (comparedYear != 0) {
+        if (comparedYear != 0)
             return comparedYear;
-        }
-        if (comparedMonth != 0) {
+        if (comparedMonth != 0)
             return comparedMonth;
-        }
         return comparedDay;
     }
 
     @Override
     @Deprecated // Use below method to explicitly specify strictness
     public boolean equals(Object obj) {
-        return equals((DiaryDate) obj, true);
+        return obj instanceof DiaryDate && equals((DiaryDate) obj, true);
     }
 
     public boolean equals(DiaryDate obj, boolean strict) {
@@ -84,11 +82,10 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     }
 
     public String toString(boolean leadingZeroes) {
-        if (leadingZeroes) {
+        if (leadingZeroes)
             return YEAR + "-" + (MONTH < 10 ? "0" + MONTH : MONTH) + "-" + (DAY < 10 ? "0" + DAY : DAY);
-        } else {
+        else
             return YEAR + "-" + MONTH + "-" + DAY;
-        }
     }
 
     public static byte parseMonthName(String monthName) {

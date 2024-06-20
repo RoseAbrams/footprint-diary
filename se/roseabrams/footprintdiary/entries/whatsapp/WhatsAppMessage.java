@@ -27,7 +27,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
 
     @Override
     public String getStringSummary() {
-        return TEXT;
+        return SENDER + ": " + TEXT;
     }
 
     @Override

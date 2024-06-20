@@ -15,9 +15,9 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
 
     // public final int USERNAME;
     public final String PLATFORM;
-    public final int PLAYTIME;
+    public final int PLAYTIME; // milliseconds
     public final String COUNTRY;
-    public final String IP; // better type?
+    public final String IP; // can make into better type?
     public final String AGENT;
     public final StartReason START_REASON;
     public final EndReason END_REASON;

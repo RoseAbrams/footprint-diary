@@ -52,12 +52,10 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             StringBuilder output = new StringBuilder(40);
             output.append("I used my camera ").append(nPictures + nVideos).append(" time").append(p(fl))
                     .append(". I took ");
-            if (nPictures > 0) {
+            if (nPictures > 0)
                 output.append(nPictures).append(" photo" + p(nPictures) + ", ");
-            }
-            if (nVideos > 0) {
+            if (nVideos > 0)
                 output.append(nVideos).append(" video" + p(nVideos) + ", ");
-            }
             output.substring(0, output.length() - 3);
             output.append('.');
             return output.toString();
@@ -231,27 +229,23 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             int nComments = 0;
             int nReactions = 0;
             for (DiaryEntry e : fl) {
-                if (e instanceof FacebookPost) {
+                if (e instanceof FacebookPost)
                     nPosts++;
-                } else if (e instanceof FacebookComment) {
+                else if (e instanceof FacebookComment)
                     nComments++;
-                } else if (e instanceof FacebookReaction) {
+                else if (e instanceof FacebookReaction)
                     nReactions++;
-                }
             }
 
             StringBuilder output = new StringBuilder(40);
             output.append("I performed ").append(fl.size()).append(" interaction").append(p(fl))
                     .append(" on Facebook. I made ");
-            if (nPosts > 0) {
+            if (nPosts > 0)
                 output.append(nPosts).append(" post" + p(nPosts) + ", ");
-            }
-            if (nComments > 0) {
+            if (nComments > 0)
                 output.append(nComments).append(" comments" + p(nComments) + ", ");
-            }
-            if (nReactions > 0) {
+            if (nReactions > 0)
                 output.append(nReactions).append(" reactions" + p(nReactions) + ", ");
-            }
             output.substring(0, output.length() - 3);
             output.append('.');
             return output.toString();

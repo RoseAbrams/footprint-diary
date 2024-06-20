@@ -20,7 +20,7 @@ public class RedditComment extends RedditSubmission {
         super(dd, id, subreddit, gildings);
         BODY = body;
         PARENT_POST_ID = parentPostId.intern();
-        PARENT_COMMENT_ID = parentCommentId.intern();
+        PARENT_COMMENT_ID = parentCommentId != null ? parentCommentId.intern() : null;
     }
 
     @Override

@@ -8,9 +8,9 @@ import se.roseabrams.footprintdiary.common.Webpage;
 public class YouTubeVideo extends Webpage {
 
     public final String ID;
-    public String title;
-    public String channelId;
-    public String channelName;
+    private String title;
+    private String channelId;
+    private String channelName;
     private static final ArrayList<YouTubeVideo> CACHE = new ArrayList<>(10000);
 
     public YouTubeVideo(String id, String title, String channelId, String channelName) {
@@ -38,7 +38,8 @@ public class YouTubeVideo extends Webpage {
                 return channelName + " – " + title;
             else
                 return title;
-        return ID;
+        else
+            return ID;
     }
 
     public static YouTubeVideo create(String id, String title, String channelId, String channelName) {
