@@ -26,9 +26,11 @@ public abstract class Content {
     }
 
     static String getExtFromPath(String p) {
-        if (p.contains("?")) {
+        if (p.contains("?"))
             p = p.substring(0, p.indexOf("?"));
-        }
-        return p.substring(p.lastIndexOf(".") + 1);
+        String output = p.substring(p.lastIndexOf(".") + 1);
+        if (output == null || output.isBlank())
+            throw new IllegalArgumentException("Cannot determine file extension from \"" + p + "\"");
+        return output;
     }
 }

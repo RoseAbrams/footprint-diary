@@ -5,6 +5,10 @@ public enum ContentType {
     PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION;
 
     public static ContentType parseExtension(String ext) {
+        return parseExtension(ext, true);
+    }
+
+    public static ContentType parseExtension(String ext, boolean allowNull) {
         switch (ext.toLowerCase()) {
             case "jpg":
             case "jpeg":
@@ -65,8 +69,13 @@ public enum ContentType {
             case "exe":
                 return APPLICATION;
             default:
-                System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());
-                return null;
+                if (allowNull) {
+                    System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());
+                    return null;
+                } else {
+                    throw new IllegalArgumentException(
+                            "Unrecognized filetype extension (null disallowed): " + ext);
+                }
         }
     }
 }

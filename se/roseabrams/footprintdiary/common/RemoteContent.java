@@ -18,13 +18,11 @@ public class RemoteContent extends Content {
     }
 
     public RemoteContent(String ext, String url) {
-        this(ContentType.parseExtension(ext), url);
+        this(ContentType.parseExtension(ext, false), url);
     }
 
-    @Deprecated // better to pre-determine type and use above constructors
     public RemoteContent(String url) {
         this(getExtFromPath(url), url);
-        assert TYPE != null;
     }
 
     @Override

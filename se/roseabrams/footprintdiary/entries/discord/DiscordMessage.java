@@ -87,7 +87,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
                 String contents = l[2];
                 String attachments = l[3];
 
-                String[] attachmentsUrls;
+                String[] attachmentUrls;
                 if (attachments.contains(" ")) {
                     ArrayList<String> attachmentsUrlsL = new ArrayList<>();
                     Scanner s2 = new Scanner(attachments);
@@ -95,16 +95,16 @@ public class DiscordMessage extends DiaryEntry implements Message {
                     while (s2.hasNext()) {
                         attachmentsUrlsL.add(s2.next());
                     }
-                    attachmentsUrls = attachmentsUrlsL.toArray(new String[attachmentsUrlsL.size()]);
+                    attachmentUrls = attachmentsUrlsL.toArray(new String[attachmentsUrlsL.size()]);
                 } else {
-                    attachmentsUrls = new String[1];
-                    attachmentsUrls[0] = attachments;
+                    attachmentUrls = new String[1];
+                    attachmentUrls[0] = attachments;
                 }
 
                 DiaryDateTime date = new DiaryDateTime(dateS.substring(0, 20));
                 DiscordMessage d;
                 if (attachments != null && !attachments.isBlank())
-                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentsUrls);
+                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentUrls);
                 else
                     d = new DiscordMessage(date, id, contents, recipient, type);
                 output.add(d);
