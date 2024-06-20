@@ -7,6 +7,10 @@ import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookMessage;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
 import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
@@ -25,10 +29,10 @@ public class DiaryWriter {
         final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
         final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
-        final DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
-        final DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-        //final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
-        //final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+        //final DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
+        //final DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
+        final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
+        final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
 
         final DiaryBook d = new DiaryBook(dd1, dd2);
 
@@ -56,6 +60,14 @@ public class DiaryWriter {
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
+            d.add(FacebookPost.createFromHtml(new File(I + "your_posts__check_ins__photos_and_videos_1.html")));
+            d.add(FacebookPost.createFromHtml(new File(I + "group_posts_and_comments.html")));
+            d.add(FacebookComment.createFromHtml(new File(I + "comments.html")));
+            d.add(FacebookComment.createFromHtml(new File(I + "your_comments_in_groups.html")));
+            d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_1.html")));
+            d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_2.html")));
+            d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_3.html")));
+            d.add(FacebookMessage.createFromFolder());
             System.gc();
 
             String csvSum = d.sumsCsv(true);

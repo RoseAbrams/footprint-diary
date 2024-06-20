@@ -5,7 +5,7 @@ public abstract class Content {
     public final ContentType TYPE;
     public final String FILE_EXTENSION;
 
-    @Deprecated // ext should not be null is possible
+    @Deprecated // ext should not be null if possible
     protected Content(ContentType type) {
         TYPE = type;
         FILE_EXTENSION = null;

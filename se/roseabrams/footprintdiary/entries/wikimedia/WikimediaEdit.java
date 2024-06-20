@@ -15,11 +15,11 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.RemoteContent;
 import se.roseabrams.footprintdiary.common.Webpage;
 
-public class WikimediaEdit extends DiaryEntry implements ContentOwner {
+public class WikimediaEdit extends DiaryEntry implements ContentContainer {
 
     public final String SITE;
     public final String PAGE_TITLE;

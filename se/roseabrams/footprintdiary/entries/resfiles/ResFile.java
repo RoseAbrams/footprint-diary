@@ -7,10 +7,10 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
-public class ResFile extends DiaryEntry implements ContentOwner {
+public class ResFile extends DiaryEntry implements ContentContainer {
 
     public final LocalContent CONTENT;
     private static final String RES_PATH = "D:\\Dropbox\\Public\\res\\";

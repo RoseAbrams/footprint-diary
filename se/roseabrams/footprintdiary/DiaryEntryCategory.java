@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.Message;
 import se.roseabrams.footprintdiary.common.MoneyTransaction;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
@@ -36,7 +36,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             int nPictures = 0;
             int nVideos = 0;
             for (DiaryEntry e : fl) {
-                ContentOwner co = (ContentOwner) e;
+                ContentContainer co = (ContentContainer) e;
                 switch (co.getContent().TYPE) {
                     case PICTURE:
                         nPictures++;

@@ -22,11 +22,11 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.common.GeoLocation;
 import se.roseabrams.footprintdiary.common.GeoLocation3D;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.ContentType;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
-public class CameraCapture extends DiaryEntry implements ContentOwner {
+public class CameraCapture extends DiaryEntry implements ContentContainer {
 
     public final LocalContent FILE;
 

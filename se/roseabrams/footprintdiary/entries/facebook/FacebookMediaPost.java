@@ -4,10 +4,10 @@ import java.io.File;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
-public class FacebookMediaPost extends FacebookPost implements ContentOwner {
+public class FacebookMediaPost extends FacebookPost implements ContentContainer {
     /* "your_photos.html", "your_videos.html", "your_uncategorized_photos.html" */
 
     public final LocalContent MEDIA;

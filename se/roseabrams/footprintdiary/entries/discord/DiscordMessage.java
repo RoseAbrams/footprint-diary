@@ -22,10 +22,10 @@ public class DiscordMessage extends DiaryEntry implements Message {
 
     public final long ID;
     public final String RECIPIENT;
-    public final Type TYPE;
+    public final ChannelType TYPE;
     public final String CONTENTS;
 
-    public DiscordMessage(DiaryDate date, long id, String contents, String recipient, Type type) {
+    public DiscordMessage(DiaryDate date, long id, String contents, String recipient, ChannelType type) {
         super(DiaryEntryCategory.DISCORD, date);
         ID = id;
         CONTENTS = contents;
@@ -65,16 +65,16 @@ public class DiscordMessage extends DiaryEntry implements Message {
             File conversationFile = new File(messagesDirectory + "\\c" + conversationCode, "messages.csv");
             CSVParser s = new CSVParser(conversationFile);
 
-            Type type;
+            ChannelType type;
             String recipient;
             if (conversationName == null) {
                 type = null;
                 recipient = null;
             } else if (conversationName.startsWith("Direct Message with ")) {
-                type = Type.DM;
+                type = ChannelType.DM;
                 recipient = conversationName.substring("Direct Message with ".length());
             } else {
-                type = Type.SERVER_CHANNEL;
+                type = ChannelType.SERVER;
                 recipient = conversationName;
             }
 
@@ -114,8 +114,8 @@ public class DiscordMessage extends DiaryEntry implements Message {
         return output.toArray(new DiscordMessage[output.size()]);
     }
 
-    public static enum Type {
-        DM, SERVER_CHANNEL
+    public static enum ChannelType {
+        DM, SERVER
     }
     /*
      * @Override

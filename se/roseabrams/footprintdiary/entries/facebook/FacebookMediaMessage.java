@@ -4,10 +4,10 @@ import java.io.File;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
-public class FacebookMediaMessage extends FacebookMessage implements ContentOwner {
+public class FacebookMediaMessage extends FacebookMessage implements ContentContainer {
 
     public final LocalContent MEDIA;
 

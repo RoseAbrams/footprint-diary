@@ -2,10 +2,10 @@ package se.roseabrams.footprintdiary.entries.reddit;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.RemoteContent;
 
-public class RedditMediaPost extends RedditPost implements ContentOwner {
+public class RedditMediaPost extends RedditPost implements ContentContainer {
 
     public final RemoteContent MEDIA;
 

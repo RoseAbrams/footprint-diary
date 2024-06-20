@@ -4,10 +4,10 @@ import java.io.File;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.common.Content;
-import se.roseabrams.footprintdiary.common.ContentOwner;
+import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
-public class WhatsAppMediaMessage extends WhatsAppMessage implements ContentOwner {
+public class WhatsAppMediaMessage extends WhatsAppMessage implements ContentContainer {
 
     public final LocalContent ATTACHMENT;
 
