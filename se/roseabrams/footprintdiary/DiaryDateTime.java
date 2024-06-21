@@ -1,5 +1,6 @@
 package se.roseabrams.footprintdiary;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;

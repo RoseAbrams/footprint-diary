@@ -107,7 +107,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         DiaryDateTime offlineStart;
         if (offlineStartL == 0 || offlineStartL == 1) {
             offlineStart = null;
-        } else if (offlineStartL < 1000000000) {
+        } else if (offlineStartL < 1000000000000L) {
             offlineStart = new DiaryDateTime(offlineStartL * 1000);
         } else {
             offlineStart = new DiaryDateTime(offlineStartL);

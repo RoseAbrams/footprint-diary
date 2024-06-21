@@ -44,10 +44,10 @@ public class DiaryWriter {
             d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
-            */// debugged up to here
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
+            */// debugged up to here
             d.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
             d.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
             d.add(DailyActivity.createDays(new File(I + "apple\\health.xml")));

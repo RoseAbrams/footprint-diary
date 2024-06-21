@@ -18,9 +18,9 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         assert month >= 1 && month <= 12;
         assert day >= 1 && month <= 31;
 
-        this.YEAR = year;
-        this.MONTH = month;
-        this.DAY = day;
+        YEAR = year;
+        MONTH = month;
+        DAY = day;
     }
 
     public DiaryDate(String dateString) {
