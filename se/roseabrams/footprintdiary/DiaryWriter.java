@@ -67,7 +67,9 @@ public class DiaryWriter {
             d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_1.html")));
             d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_2.html")));
             d.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_3.html")));
-            d.add(FacebookMessage.createFromFolder());
+            d.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
+            d.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
+            d.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
             System.gc();
 
             String csvSum = d.sumsCsv(true);

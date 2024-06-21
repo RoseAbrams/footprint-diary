@@ -53,9 +53,19 @@ public class FacebookMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.FACEBOOK_NAME);
     }
 
-    public static FacebookMessage[] createFromHtml(File messengerFile) throws IOException {
-        ArrayList<FacebookMessage> output = new ArrayList<>();
-        Document d = Jsoup.parse(messengerFile);
+    public static FacebookMessage[] createFromFolder(File messageParentFolder) throws IOException {
+        ArrayList<FacebookMessage> output = new ArrayList<>(100000);
+        for (File messageFolder : messageParentFolder.listFiles()) {
+            assert messageFolder.listFiles(pathname -> !pathname.isDirectory()).length == 1;
+            File messageFile = new File(messageFolder, "message_1.html");
+            output.addAll(createFromHtml(messageFile));
+        }
+        return output.toArray(new FacebookMessage[output.size()]);
+    }
+
+    public static ArrayList<FacebookMessage> createFromHtml(File messageFile) throws IOException {
+        ArrayList<FacebookMessage> output = new ArrayList<>(1000);
+        Document d = Jsoup.parse(messageFile);
         String channel = d.title();
         Elements messagesE = d.select("div._a706 > div._3-95._a6-g");
         for (Element messageE : messagesE) {
@@ -80,6 +90,6 @@ public class FacebookMessage extends DiaryEntry implements Message {
                 output.add(new FacebookMediaMessage(FacebookWallEvent.parseDate(dateS), text, channel, sender, media));
             }
         }
-        return output.toArray(new FacebookMessage[output.size()]);
+        return output;
     }
 }
