@@ -24,6 +24,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
     public final String RECIPIENT;
     public final ChannelType TYPE;
     public final String CONTENTS;
+    private static final String DM_CHANNEL_PREFIX = "Direct Message with ";
 
     public DiscordMessage(DiaryDate date, long id, String contents, String recipient, ChannelType type) {
         super(DiaryEntryCategory.DISCORD, date);
@@ -68,11 +69,12 @@ public class DiscordMessage extends DiaryEntry implements Message {
             ChannelType type;
             String recipient;
             if (conversationName == null) {
+                // index.json gives the channelname as null, so not much else can be discerned
                 type = null;
-                recipient = null;
-            } else if (conversationName.startsWith("Direct Message with ")) {
+                recipient = conversationCode;
+            } else if (conversationName.startsWith(DM_CHANNEL_PREFIX)) {
                 type = ChannelType.DM;
-                recipient = conversationName.substring("Direct Message with ".length());
+                recipient = conversationName.substring(DM_CHANNEL_PREFIX.length());
             } else {
                 type = ChannelType.SERVER;
                 recipient = conversationName;
@@ -95,6 +97,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
                     while (s2.hasNext()) {
                         attachmentsUrlsL.add(s2.next());
                     }
+                    s2.close();
                     attachmentUrls = attachmentsUrlsL.toArray(new String[attachmentsUrlsL.size()]);
                 } else {
                     attachmentUrls = new String[1];

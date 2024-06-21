@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.common;
 
 public enum ContentType {
 
-    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION;
+    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION, ARCHIVE, CODE;
 
     public static ContentType parseExtension(String ext) {
         return parseExtension(ext, true);
@@ -28,6 +28,8 @@ public enum ContentType {
             case "ogv":
             case "mkv":
             case "avi":
+            case "hevc":
+            case "m4r":
                 return VIDEO;
             case "gif":
                 return GIF;
@@ -68,6 +70,12 @@ public enum ContentType {
                 return WEBPAGE;
             case "exe":
                 return APPLICATION;
+            case "zip":
+            case "rar":
+            case "7z":
+                return ARCHIVE;
+            case "json":
+                return CODE;
             default:
                 if (allowNull) {
                     System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());

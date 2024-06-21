@@ -63,7 +63,7 @@ public class CSVParser implements Iterator<String>, Closeable {
         }
         String output = fBuffer.substring(startPosition, endPosition);
         fPosition = newPosition;
-        if (output.contains(INTR_QUOTE)) 
+        if (output.contains(INTR_QUOTE))
             output = output.replace(INTR_QUOTE, "\"");
         return output;
     }
@@ -72,13 +72,12 @@ public class CSVParser implements Iterator<String>, Closeable {
         return closeToken(closer1, closer2, fPosition);
     }
 
-    private int closeToken(String closer1, String closer2, int startPos) {
+    private int closeToken(String closer1, String closer2, int startPosition) {
         assert closer1 != null && !closer1.isBlank();
         int endPosition;
-        int pos1 = fBuffer.indexOf(closer1, startPos);
-        int pos2 = closer2 != null ? fBuffer.indexOf(closer2, startPos) : -1;
-        int posBackticksOpen = fBuffer.indexOf(BACKTICKS, startPos);
-        int posInternalQuoteOpen = fBuffer.indexOf(INTR_QUOTE, startPos);
+        int pos1 = fBuffer.indexOf(closer1, startPosition);
+        int pos2 = closer2 != null ? fBuffer.indexOf(closer2, startPosition) : -1;
+        int posBackticksOpen = fBuffer.indexOf(BACKTICKS, startPosition);
         if (pos1 == -1)
             if (pos2 == -1)
                 endPosition = fBuffer.length() - 1;
@@ -92,10 +91,16 @@ public class CSVParser implements Iterator<String>, Closeable {
             int posBackticksClose = closeToken(BACKTICKS, null, posBackticksOpen + BACKTICKS.length());
             endPosition = closeToken(closer1, closer2, posBackticksClose + BACKTICKS.length());
         }
-        if (posInternalQuoteOpen != -1 && posInternalQuoteOpen < endPosition) {
-            int posInternalQuoteClose = closeToken(INTR_QUOTE, null, posInternalQuoteOpen + INTR_QUOTE.length());
-            endPosition = closeToken(closer1, closer2, posInternalQuoteClose + INTR_QUOTE.length());
+        if (closer1.equals("\",")) {
+            // working on assumption that internal doublequotes only occurs when token is singlequoted
+            if (fBuffer.charAt(endPosition - 1) == '\"' && fBuffer.charAt(endPosition - 2) != '\"') {
+                endPosition = closeToken(closer1, closer2, endPosition + 1);
+            }
         }
+        //if (posInternalQuoteOpen != -1 && posInternalQuoteOpen < endPosition) {
+        //    int posInternalQuoteClose = closeToken(INTR_QUOTE, null, posInternalQuoteOpen + INTR_QUOTE.length());
+        //    endPosition = closeToken(closer1, closer2, posInternalQuoteClose + INTR_QUOTE.length());
+        //}
         return endPosition;
     }
 
