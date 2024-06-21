@@ -56,9 +56,9 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 output.append(nPictures).append(" photo" + p(nPictures) + ", ");
             if (nVideos > 0)
                 output.append(nVideos).append(" video" + p(nVideos) + ", ");
-            output.substring(0, output.length() - 3);
-            output.append('.');
-            return output.toString();
+            String outputS = output.substring(0, output.length() - 3);
+            outputS += ".";
+            return outputS;
         }
     },
     MEME_SAVED {

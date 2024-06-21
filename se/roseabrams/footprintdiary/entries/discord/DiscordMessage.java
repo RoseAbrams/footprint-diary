@@ -36,7 +36,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
 
     @Override
     public String getStringSummary() {
-        return CONTENTS;
+        return "(" + getRecipient() + ") " + getSender() + ": " + CONTENTS;
     }
 
     @Override
@@ -46,7 +46,12 @@ public class DiscordMessage extends DiaryEntry implements Message {
 
     @Override
     public String getRecipient() {
-        return RECIPIENT;
+        if (TYPE == null)
+            return "unknown channel " + RECIPIENT;
+        else if (TYPE == ChannelType.SERVER)
+            return "server channel " + RECIPIENT;
+        else
+            return RECIPIENT;
     }
 
     @Override

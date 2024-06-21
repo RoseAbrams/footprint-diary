@@ -27,19 +27,23 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     public final String toString() {
         return getStringSummary();
     }
-/*
-    public final String detailedCsv(String delim) {
-        return detailedCsv(new StringBuilder(50), delim).toString();
-    }
 
-    public abstract StringBuilder detailedCsv(StringBuilder s, String delim);
-*/
     public final String indexCsv(String delim) {
         return indexCsv(new StringBuilder(50), delim).toString();
+    }
+
+    static String indexCsvHeaders(String delim) {
+        return "DATE OR DATETIME" + delim + "CATEGORY" + delim + "CLASS" + delim + "STRING SUMMARY";
     }
 
     public StringBuilder indexCsv(StringBuilder s, String delim) {
         return s.append(DATE.toString(true)).append(delim).append(CATEGORY).append(delim).append(getClass().getName())
                 .append(delim).append('\"').append(getStringSummary()).append('\"');
     }
+
+    /*public final String detailedCsv(String delim) {
+        return detailedCsv(new StringBuilder(50), delim).toString();
+    }
+    
+    public abstract StringBuilder detailedCsv(StringBuilder s, String delim);*/
 }

@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.common;
 
 public enum ContentType {
 
-    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION, ARCHIVE, CODE;
+    PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION, ARCHIVE, DATA;
 
     public static ContentType parseExtension(String ext) {
         return parseExtension(ext, true);
@@ -20,6 +20,7 @@ public enum ContentType {
             case "ai":
             case "bmp":
             case "heic":
+            case "tif":
                 return PICTURE;
             case "mp4":
             case "mov":
@@ -38,6 +39,10 @@ public enum ContentType {
             case "ini":
             case "url":
             case "lnk":
+            case "bat":
+            case "cmd":
+            case "search-ms":
+            case "xmp":
                 return SYSTEM;
             case "txt":
                 return PLAINTEXT;
@@ -52,6 +57,7 @@ public enum ContentType {
             case "xlsx":
             case "ppt":
             case "pptx":
+            case "rtf":
                 return DOCUMENT;
             case "mp3":
             case "flac":
@@ -61,21 +67,29 @@ public enum ContentType {
             case "mid":
             case "oga":
             case "m3u8":
+            case "aiff":
+            case "m4a":
                 return AUDIO;
             case "cbr":
             case "cbz":
                 return COMICS;
             case "html":
             case "htm":
+            case "textile":
                 return WEBPAGE;
             case "exe":
+            case "swf":
                 return APPLICATION;
             case "zip":
             case "rar":
             case "7z":
+            case "iso":
                 return ARCHIVE;
             case "json":
-                return CODE;
+            case "csv":
+            case "srt":
+            case "log":
+                return DATA;
             default:
                 if (allowNull) {
                     System.err.println("Unrecognized filetype extension: " + ext.toLowerCase());

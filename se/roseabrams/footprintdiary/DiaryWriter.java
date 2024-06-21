@@ -21,6 +21,7 @@ import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
 import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
 
 public class DiaryWriter {
@@ -29,10 +30,10 @@ public class DiaryWriter {
         final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
         final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
-        //final DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
-        //final DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-        final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
-        final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+        final DiaryDate dd1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
+        final DiaryDate dd2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
+        //final DiaryDate dd1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
+        //final DiaryDate dd2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
 
         final DiaryBook d = new DiaryBook(dd1, dd2);
 
@@ -55,7 +56,8 @@ public class DiaryWriter {
             d.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
             d.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
-            // TODO: yotube comments
+            //d.add(YouTubeComment.createFromHtml());
+            //d.add(YouTubeComment.createFromCsv());
             d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));

@@ -46,14 +46,14 @@ public class DiaryBook extends Diary implements Serializable {
         for (DiaryPage page : PAGES) {
             output.append(page.sumsCsv()).append("\n");
         }
-        return blankZeroes ? output.toString().replace(",0,", ",,") : output.toString();
+        return blankZeroes ? output.toString().replace(",0", ",") : output.toString();
     }
 
     public String indexCsv() {
         StringBuilder output = new StringBuilder(1000000);
-        // headers?
+        output.append(DiaryEntry.indexCsvHeaders(","));
         for (DiaryPage page : PAGES) {
-            output.append(page.indexCsv()).append("\n");
+            output.append(page.indexCsv());
         }
         return output.toString();
     }

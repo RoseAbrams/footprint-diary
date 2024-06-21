@@ -60,7 +60,8 @@ public class DiaryPage extends Diary implements Serializable {
     }
 
     public String prose() {
-        StringBuilder output = new StringBuilder(250);
+        StringBuilder output = new StringBuilder(300);
+        output.append("(").append(DATE.toString(true)).append(")\n\n\n");
         output.append("Dear diary,").append("\n");
         if (E.isEmpty()) {
             output.append("I have nothing to write today.").append("\n");
