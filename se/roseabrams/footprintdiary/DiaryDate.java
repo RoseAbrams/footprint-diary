@@ -14,7 +14,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public static final DiaryDate MAX = new DiaryDate((short) 2025, (byte) 12, (byte) 31);
 
     public DiaryDate(short year, byte month, byte day) {
-        assert year >= MIN.YEAR && year < MAX.YEAR;
+        assert (MIN == null || MAX == null) || (year >= MIN.YEAR && year < MAX.YEAR);
         assert month >= 1 && month <= 12;
         assert day >= 1 && month <= 31;
 

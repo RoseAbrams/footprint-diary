@@ -8,14 +8,15 @@
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "${file}",
+            "vmArgs": "-ea"
         },
         {
             "type": "java",
             "name": "DiaryWriter",
             "request": "launch",
             "mainClass": "se.roseabrams.footprintdiary.DiaryWriter",
-            "vmArgs": "-ea" // enables checking assertions
+            "vmArgs": "-ea"
         }
     ]
 }
