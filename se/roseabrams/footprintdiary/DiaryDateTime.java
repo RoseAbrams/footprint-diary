@@ -1,6 +1,7 @@
 package se.roseabrams.footprintdiary;
 
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -17,9 +18,9 @@ public class DiaryDateTime extends DiaryDate {
         assert minute >= 0 && minute < 60;
         assert second >= 0 && second < 60;
 
-        this.HOUR = hour;
-        this.MINUTE = minute;
-        this.SECOND = second;
+        HOUR = hour;
+        MINUTE = minute;
+        SECOND = second;
     }
 
     public DiaryDateTime(String dateString) {
@@ -29,13 +30,18 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     public DiaryDateTime(long unixMs) {
-        this(new Date(unixMs).toInstant().atZone(ZoneId.systemDefault()).toString());
+        this(new Date(unixMs).toInstant().atZone(ZoneId.systemDefault()));
     }
 
     public DiaryDateTime(GregorianCalendar c) {
         this((short) c.get(GregorianCalendar.YEAR), (byte) c.get(GregorianCalendar.MONTH),
                 (byte) c.get(GregorianCalendar.DAY_OF_MONTH), (byte) c.get(GregorianCalendar.HOUR),
                 (byte) c.get(GregorianCalendar.MINUTE), (byte) c.get(GregorianCalendar.SECOND));
+    }
+
+    public DiaryDateTime(ZonedDateTime zdt) {
+        this((short) zdt.getYear(), (byte) zdt.getMonth().getValue(), (byte) zdt.getDayOfMonth(),
+                (byte) zdt.getHour(), (byte) zdt.getMinute(), (byte) zdt.getSecond());
     }
 
     @Override

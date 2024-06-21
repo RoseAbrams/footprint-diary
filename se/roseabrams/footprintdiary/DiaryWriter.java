@@ -37,14 +37,14 @@ public class DiaryWriter {
 
         final DiaryBook d = new DiaryBook(dd1, dd2);
 
-        try {
+        try {/*
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
             d.add(ResFile.createFromFiles());
             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
-            // debugged up to here
+            */// debugged up to here
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));

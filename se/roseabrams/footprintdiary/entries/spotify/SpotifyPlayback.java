@@ -35,7 +35,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         PLAYTIME = playtime;
         COUNTRY = country.intern();
         IP = ip.intern();
-        AGENT = agent.intern();
+        AGENT = agent != null ? agent.intern() : null;
         START_REASON = startReason;
         END_REASON = endReason;
         SHUFFLE = shuffle;
@@ -47,7 +47,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
 
     @Override
     public String getStringSummary() {
-        return TRACK.toString() + " (" + getPlaytimeString() + ")";
+        return (TRACK != null ? TRACK.toString() : "[unknown track]") + " (" + getPlaytimeString() + ")";
     }
 
     public String getPlaytimeString() {
@@ -71,8 +71,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
     public static SpotifyPlayback[] createAllFromJson(File streamingFile) throws IOException {
         ArrayList<SpotifyPlayback> output = new ArrayList<>(50000);
 
-        JSONObject streamsO = Util.readJsonFile(streamingFile);
-        JSONArray streams = new JSONArray(streamsO);
+        JSONArray streams = Util.readJsonArrayFile(streamingFile);
         for (Object stream : streams) {
             SpotifyPlayback p = createFromJson((JSONObject) stream);
             output.add(p);
@@ -89,25 +88,49 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         int playtime = o.getInt("ms_played");
         String country = o.getString("conn_country");
         String ip = o.getString("ip_addr_decrypted");
-        String track = o.getString("master_metadata_track_name");
-        String album = o.getString("master_metadata_album_artist_name");
-        String artist = o.getString("master_metadata_album_album_name");
-        String id = o.getString("spotify_track_uri");
+        String id = jsonStringNullsafe(o, "spotify_track_uri");
+        if (id != null)
+            id = id.substring(14);
+        String track = jsonStringNullsafe(o, "master_metadata_track_name");
+        String album = jsonStringNullsafe(o, "master_metadata_album_album_name");
+        String artist = jsonStringNullsafe(o, "master_metadata_album_artist_name");
         String agent = o.getString("user_agent_decrypted");
         if (agent.equals("unknown"))
             agent = null;
         StartReason sr = Util.findJsonInEnum(o.getString("reason_start"), StartReason.values());
         EndReason er = Util.findJsonInEnum(o.getString("reason_end"), EndReason.values());
         boolean shuffle = o.getBoolean("shuffle");
-        boolean skipped = o.getBoolean("skipped");
+        boolean skipped = jsonBooleanNullsafe(o, "skipped");
         boolean offline = o.getBoolean("offline");
-        DiaryDateTime offlineStart = new DiaryDateTime(o.getString("offline_timestamp"));
+        // apparently mixture of seconds or milliseconds???
+        long offlineStartL = o.getLong("offline_timestamp");
+        DiaryDateTime offlineStart;
+        if (offlineStartL == 0 || offlineStartL == 1) {
+            offlineStart = null;
+        } else if (offlineStartL < 1000000000) {
+            offlineStart = new DiaryDateTime(offlineStartL * 1000);
+        } else {
+            offlineStart = new DiaryDateTime(offlineStartL);
+        }
         boolean incognito_mode = o.getBoolean("incognito_mode");
 
-        SpotifyTrack t = SpotifyTrack.create(id.substring(14), track, album, artist);
-        assert t != null;
+        SpotifyTrack t = SpotifyTrack.create(id, track, album, artist);
         SpotifyPlayback p = new SpotifyPlayback(dd, t, platform, playtime, country, ip, agent, sr, er, shuffle, skipped,
                 offline, offlineStart, incognito_mode);
         return p;
+    }
+
+    private static String jsonStringNullsafe(JSONObject o, String key) {
+        if (o.isNull(key))
+            return null;
+        else
+            return o.getString(key);
+    }
+
+    private static boolean jsonBooleanNullsafe(JSONObject o, String key) {
+        if (o.isNull(key))
+            return false;
+        else
+            return o.getBoolean(key);
     }
 }

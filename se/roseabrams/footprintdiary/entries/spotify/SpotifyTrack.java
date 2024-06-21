@@ -36,17 +36,18 @@ public class SpotifyTrack extends Webpage {
         return o instanceof SpotifyTrack && ID.equals(((SpotifyTrack) o).ID);
     }
 
+    @Override
     public String toString() {
         return ARTIST + " – " + NAME;
     }
 
     public static SpotifyTrack create(String id, String name, String album, String artist) {
         if (id == null)
-            return null; // should not occur under current setup
-        assert !id.isBlank() && id.length() == 62;
-        assert name != null && !name.isBlank();
-        assert album != null && !album.isBlank();
-        assert artist != null && !artist.isBlank();
+            return null;
+        assert !id.isBlank() && id.length() == 22;
+        assert name == null || !name.isBlank();
+        assert album == null || !album.isBlank();
+        assert artist == null || !artist.isBlank();
 
         for (SpotifyTrack t : CACHE) {
             if (id.equals(t.ID))

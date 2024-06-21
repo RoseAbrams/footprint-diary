@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -31,8 +32,12 @@ public class Util {
         return Files.readString(f.toPath(), CHARSET);
     }
 
-    public static JSONObject readJsonFile(File f) throws IOException {
+    public static JSONObject readJsonObjectFile(File f) throws IOException {
         return new JSONObject(readFile(f));
+    }
+
+    public static JSONArray readJsonArrayFile(File f) throws IOException {
+        return new JSONArray(readFile(f));
     }
 
     public static List<String> readFileLines(File f) throws IOException {
@@ -59,6 +64,8 @@ public class Util {
     }
 
     public static <E extends Enum<E>> E findJsonInEnum(String input, E[] enumValues) {
+        if (input == null || input.isEmpty())
+            return null;
         String inputM = input.toUpperCase().replace('-', '_');
         for (E v : enumValues) {
             if (inputM.equals(v.name())) {
