@@ -17,6 +17,6 @@ public class SpotifyPlaylist {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof SpotifyPlaylist && NAME.equals(((SpotifyPlaylist) o).NAME);
+        return o instanceof SpotifyPlaylist s2 && NAME.equals(s2.NAME);
     }
 }

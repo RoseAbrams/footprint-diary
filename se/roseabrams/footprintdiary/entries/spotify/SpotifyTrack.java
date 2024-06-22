@@ -33,7 +33,7 @@ public class SpotifyTrack extends Webpage {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof SpotifyTrack && ID.equals(((SpotifyTrack) o).ID);
+        return o instanceof SpotifyTrack s2 && ID.equals(s2.ID);
     }
 
     @Override

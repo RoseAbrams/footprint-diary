@@ -18,9 +18,9 @@ public abstract class DiaryEntry implements DiaryEntryData, Serializable {
     }
 
     public boolean equals(Object obj) {
-        return obj instanceof DiaryEntry && getClass().equals(obj.getClass())
-                && DATE.equals(((DiaryEntry) obj).DATE, true)
-                && getStringSummary().equals(((DiaryEntry) obj).getStringSummary());
+        return obj instanceof DiaryEntry d2 && getClass().equals(obj.getClass())
+                && DATE.equals(d2.DATE, true)
+                && getStringSummary().equals(d2.getStringSummary());
     }
 
     @Override

@@ -28,7 +28,7 @@ public class YouTubeVideo extends Webpage {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof YouTubeVideo && ID.equals(((YouTubeVideo) o).ID);
+        return o instanceof YouTubeVideo y2 && ID.equals(y2.ID);
     }
 
     @Override

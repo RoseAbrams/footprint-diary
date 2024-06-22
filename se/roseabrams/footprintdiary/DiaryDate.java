@@ -69,7 +69,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     @Override
     @Deprecated // Use below method to explicitly specify strictness
     public boolean equals(Object obj) {
-        return obj instanceof DiaryDate && equals((DiaryDate) obj, true);
+        return obj instanceof DiaryDate d2 && equals(d2, true);
     }
 
     public boolean equals(DiaryDate obj, boolean strict) {

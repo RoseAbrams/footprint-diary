@@ -56,7 +56,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof SpotifyPlayback && TRACK.equals(((SpotifyPlayback) o).TRACK);
+        return o instanceof SpotifyPlayback s2 && TRACK.equals(s2.TRACK);
     }
 
     public static enum StartReason {
