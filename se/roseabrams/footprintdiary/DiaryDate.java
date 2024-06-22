@@ -24,8 +24,8 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     }
 
     public DiaryDate(String dateString) {
-        this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 6)),
-                Byte.parseByte(dateString.substring(7, 8)));
+        this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 7)),
+                Byte.parseByte(dateString.substring(8, 10)));
     }
 
     GregorianCalendar getDetailedDate() {

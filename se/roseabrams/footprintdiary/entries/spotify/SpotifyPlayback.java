@@ -47,7 +47,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
 
     @Override
     public String getStringSummary() {
-        return (TRACK != null ? TRACK.toString() : "[unknown track]") + " (" + getPlaytimeString() + ")";
+        return super.toString() + " (" + getPlaytimeString() + ")";
     }
 
     public String getPlaytimeString() {
@@ -88,19 +88,19 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         int playtime = o.getInt("ms_played");
         String country = o.getString("conn_country");
         String ip = o.getString("ip_addr_decrypted");
-        String id = jsonStringNullsafe(o, "spotify_track_uri");
+        String id = Util.jsonStringNullsafe(o, "spotify_track_uri");
         if (id != null)
             id = id.substring(14);
-        String track = jsonStringNullsafe(o, "master_metadata_track_name");
-        String album = jsonStringNullsafe(o, "master_metadata_album_album_name");
-        String artist = jsonStringNullsafe(o, "master_metadata_album_artist_name");
+        String track = Util.jsonStringNullsafe(o, "master_metadata_track_name");
+        String album = Util.jsonStringNullsafe(o, "master_metadata_album_album_name");
+        String artist = Util.jsonStringNullsafe(o, "master_metadata_album_artist_name");
         String agent = o.getString("user_agent_decrypted");
         if (agent.equals("unknown"))
             agent = null;
         StartReason sr = Util.findJsonInEnum(o.getString("reason_start"), StartReason.values());
         EndReason er = Util.findJsonInEnum(o.getString("reason_end"), EndReason.values());
         boolean shuffle = o.getBoolean("shuffle");
-        boolean skipped = jsonBooleanNullsafe(o, "skipped");
+        boolean skipped = Util.jsonBooleanNullsafe(o, "skipped");
         boolean offline = o.getBoolean("offline");
         // apparently mixture of seconds or milliseconds???
         long offlineStartL = o.getLong("offline_timestamp");
@@ -118,19 +118,5 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         SpotifyPlayback p = new SpotifyPlayback(dd, t, platform, playtime, country, ip, agent, sr, er, shuffle, skipped,
                 offline, offlineStart, incognito_mode);
         return p;
-    }
-
-    private static String jsonStringNullsafe(JSONObject o, String key) {
-        if (o.isNull(key))
-            return null;
-        else
-            return o.getString(key);
-    }
-
-    private static boolean jsonBooleanNullsafe(JSONObject o, String key) {
-        if (o.isNull(key))
-            return false;
-        else
-            return o.getBoolean(key);
     }
 }

@@ -21,7 +21,7 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
 
     @Override
     public String getStringSummary() {
-        return TRACK + " --> " + PLAYLIST;
+        return super.toString() + " --> " + PLAYLIST;
     }
 
     public static SpotifyPlaylisting[] createFromJson(File playlistFile) throws IOException {
@@ -34,7 +34,7 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
             JSONObject playlist = (JSONObject) playlistO;
             String playlistName = playlist.getString("name");
             DiaryDate modified = new DiaryDate(playlist.getString("lastModifiedDate"));
-            String desc = playlist.getString("description");
+            String desc = Util.jsonStringNullsafe(playlist, "description");
 
             SpotifyPlaylist pl = new SpotifyPlaylist(playlistName, desc, modified);
 
@@ -42,13 +42,19 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
             for (Object itemO : items) {
                 JSONObject item = (JSONObject) itemO;
                 DiaryDate added = new DiaryDate(item.getString("addedDate"));
-                JSONObject track = item.getJSONObject("track");
-                String name = track.getString("trackName");
-                String artist = track.getString("artistName");
-                String album = track.getString("albumName");
-                String id = track.getString("trackUri");
+                SpotifyTrack t;
+                if (!item.isNull("track")) {
+                    JSONObject track = item.getJSONObject("track");
+                    String name = track.getString("trackName");
+                    String artist = track.getString("artistName");
+                    String album = track.getString("albumName");
+                    String id = track.getString("trackUri");
+                    t = SpotifyTrack.create(id.substring(14), name, album, artist);
+                } else {
+                    //if (!item.isNull("localTrack")) TODO
+                    t = null;
+                }
 
-                SpotifyTrack t = SpotifyTrack.create(id.substring(14), name, album, artist);
                 output.add(new SpotifyPlaylisting(added, t, pl));
             }
         }

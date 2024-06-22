@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -73,5 +74,30 @@ public class Util {
             }
         }
         throw new IllegalArgumentException("No value " + input + " in enum " + enumValues.getClass());
+    }
+
+    public static String jsonStringNullsafe(JSONObject o, String key) {
+        if (o.isNull(key))
+            return null;
+        else
+            return o.getString(key);
+    }
+
+    public static boolean jsonBooleanNullsafe(JSONObject o, String key) {
+        if (o.isNull(key))
+            return false;
+        else
+            return o.getBoolean(key);
+    }
+
+    public static String parseHtml(String input) {
+        String output = input.replace("+", " ");
+        while (output.contains("%")) {
+            String charRef = output.substring(output.indexOf("%") + 1, output.indexOf("%") + 3);
+            int charResultI = Integer.parseInt(charRef, 16);
+            char charResult = (char) charResultI;
+            output = output.replace("%" + charRef, String.valueOf(charResult));
+        }
+        return output;
     }
 }

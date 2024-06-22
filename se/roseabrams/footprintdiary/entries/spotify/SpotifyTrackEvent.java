@@ -19,4 +19,9 @@ public abstract class SpotifyTrackEvent extends DiaryEntry implements ContentCon
     public Content getContent() {
         return TRACK;
     }
+
+    @Override
+    public String getStringSummary() {
+        return TRACK != null ? TRACK.toString() : "[unknown track]";
+    }
 }
