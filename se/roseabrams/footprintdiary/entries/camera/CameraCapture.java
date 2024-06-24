@@ -56,7 +56,13 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
         for (File file : folder.listFiles()) {
             DiaryDateTime modifiedDate = new DiaryDateTime(file.lastModified());
             String filetypeS = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-            DiaryDateTime filenameDate = ;
+
+            DiaryDateTime filenameDate;
+            try {
+                filenameDate = new DiaryDateTime(file.getName());
+            } catch (RuntimeException e) {
+                filenameDate = null;
+            }
 
             ContentType filetype = ContentType.parseExtension(filetypeS);
             if (filetype == ContentType.SYSTEM)
@@ -115,43 +121,6 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
         }
         return output;
     }
-    /*
-     * @Deprecated // old and unused
-     * public static CameraCapture[] createFromLog(File logfile) throws IOException
-     * {
-     * ArrayList<CameraCapture> output = new ArrayList<>(10000);
-     * Scanner s = new Scanner(logfile);
-     * while (s.hasNextLine()) {
-     * Scanner s2 = new Scanner(s.nextLine());
-     * s2.useDelimiter(":");
-     * String filename = s2.next();
-     * long lastModified = s2.nextLong();
-     * 
-     * File file = new File("D:\\Dropbox\\Camera Uploads", filename); // won't work
-     * for Kina folder
-     * DiaryDateTime date = new DiaryDateTime(lastModified);
-     * String filetype = filename.substring(filename.lastIndexOf(".") + 1);
-     * 
-     * CameraCapture i;
-     * switch (ContentType.parseExtension(filetype)) {
-     * case PICTURE:
-     * case VIDEO:
-     * i = new CameraCapture(date, file);
-     * break;
-     * case SYSTEM:
-     * continue;
-     * default:
-     * s2.close();
-     * throw new UnsupportedOperationException("Unrecognized filetype: " +
-     * filetype);
-     * }
-     * output.add(i);
-     * s2.close();
-     * }
-     * s.close();
-     * return output.toArray(new CameraCapture[output.size()]);
-     * }
-     */
     /*
      * @Override
      * public StringBuilder detailedCsv(StringBuilder s, String delim) {
