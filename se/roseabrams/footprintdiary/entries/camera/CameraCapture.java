@@ -56,6 +56,7 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
         for (File file : folder.listFiles()) {
             DiaryDateTime modifiedDate = new DiaryDateTime(file.lastModified());
             String filetypeS = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            DiaryDateTime filenameDate = ;
 
             ContentType filetype = ContentType.parseExtension(filetypeS);
             if (filetype == ContentType.SYSTEM)
@@ -97,7 +98,14 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
             }
 
             CameraCapture c;
-            DiaryDateTime bestDate = exifDate != null ? exifDate : modifiedDate;
+            DiaryDateTime bestDate;
+            if (filenameDate != null)
+                bestDate = filenameDate;
+            else if (exifDate != null)
+                bestDate = exifDate;
+            else
+                bestDate = modifiedDate;
+
             if (location == null) {
                 c = new CameraCapture(bestDate, file);
             } else {
