@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
@@ -60,7 +61,7 @@ public class DiaryWriter {
             D.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
-            D.add(youtubeCommentHack());
+            //D.add(youtubeCommentHack());
             D.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
@@ -104,13 +105,13 @@ public class DiaryWriter {
         }
     }
 
-    private static ArrayList<YouTubeComment> youtubeCommentHack() {
+    private static ArrayList<YouTubeComment> youtubeCommentHack() throws IOException {
         ArrayList<YouTubeComment> unsorted = new ArrayList<>();
         ArrayList<YouTubeComment> sorted = new ArrayList<>();
-        unsorted.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
-        unsorted.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
-        unsorted.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
-        unsorted.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
+        unsorted.addAll(Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html"))));
+        unsorted.addAll(Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html"))));
+        unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv"))));
+        unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv"))));
         for (YouTubeComment c1 : unsorted) {
             YouTubeComment better = null;
             for (YouTubeComment c2 : unsorted) {
@@ -121,6 +122,7 @@ public class DiaryWriter {
                     }
                 }
             }
+            // uuggghhh it don't solve duplicate adding into the result
             if (better == null) {
                 sorted.add(c1);
             } else {

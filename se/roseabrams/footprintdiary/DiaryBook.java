@@ -27,7 +27,7 @@ public class DiaryBook extends Diary implements Serializable {
         }
     }
 
-    public void add(Collection<DiaryEntry> entries) {
+    public void add(Collection<? extends DiaryEntry> entries) {
         for (DiaryEntry e : entries) {
             add(e);
         }

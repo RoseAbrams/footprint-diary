@@ -1,6 +1,8 @@
 package se.roseabrams.footprintdiary.common;
 
-public abstract class Content {
+import java.io.Serializable;
+
+public abstract class Content implements Serializable {
 
     public final ContentType TYPE;
     public final String FILE_EXTENSION;
