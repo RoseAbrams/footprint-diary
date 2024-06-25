@@ -53,8 +53,9 @@ public class YouTubeComment extends YouTubeEvent {
                 String videoId = videoLink.substring(videoLink.indexOf("="), videoLink.indexOf("&"));
                 String commentId = videoLink.substring(videoLink.lastIndexOf("lc=") + 3);
                 String timeS = commentE.selectFirst("div.wlgrwd > div.H3Q9vf").ownText();
-                Byte hour = Byte.parseByte(timeS.substring(0, timeS.indexOf(":")));
-                Byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1), (timeS.indexOf(":") + 3));
+                byte hour = Byte.parseByte(timeS.substring(0, timeS.indexOf(":")));
+                byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1), (timeS.indexOf(":") + 3));
+                hour += timeS.contains("PM") ? 12 : 0;
 
                 YouTubeVideo v = YouTubeVideo.create(videoId, videoTitle, null, null);
                 YouTubeComment c = new YouTubeComment(new DiaryDateTime(day, hour, minute, (byte) 0),
