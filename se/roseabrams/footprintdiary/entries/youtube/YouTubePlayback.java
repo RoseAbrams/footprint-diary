@@ -13,7 +13,7 @@ import org.jsoup.select.Elements;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 
-public class YouTubePlayback extends YouTubeEvent {
+public class YouTubePlayback extends YouTubeVideoEvent {
 
     public YouTubePlayback(DiaryDate dd, YouTubeVideo video) {
         super(dd, video);

@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 
-public class YouTubeComment extends YouTubeEvent {
+public class YouTubeComment extends YouTubeVideoEvent {
 
     public final String ID;
     public final String TEXT;
