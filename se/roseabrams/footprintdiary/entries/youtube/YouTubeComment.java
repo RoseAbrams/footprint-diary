@@ -47,17 +47,23 @@ public class YouTubeComment extends YouTubeEvent {
                 assert day != null;
                 Element textE = commentE.selectFirst("div.QTGV3c");
                 String text = textE.text();
-                Element videoE = commentE.selectFirst("div.SiEggd > a");
-                String videoTitle = videoE.text();
-                String videoLink = videoE.attr("href");
-                String videoId = videoLink.substring(videoLink.indexOf("="), videoLink.indexOf("&"));
-                String commentId = videoLink.substring(videoLink.lastIndexOf("lc=") + 3);
+                Element parentE = commentE.selectFirst("div.SiEggd > a");
+                String parentName = parentE.text();
+                String parentLink = parentE.attr("href");
+                String commentId = parentLink.substring(parentLink.lastIndexOf("lc=") + 3);
+                if (parentLink.equals("watch?")) {
+                    String videoId = parentLink.substring(parentLink.indexOf("="), parentLink.indexOf("&"));
+                    YouTubeVideo v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
+                } else if (parentLink.equals("post")) {
+                    ...
+                } else {
+                    throw new AssertionError(); // should not happen unless there's an unknown third parent type
+                }
                 String timeS = commentE.selectFirst("div.wlgrwd > div.H3Q9vf").ownText();
                 byte hour = Byte.parseByte(timeS.substring(0, timeS.indexOf(":")));
                 byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1), (timeS.indexOf(":") + 3));
                 hour += timeS.contains("PM") ? 12 : 0;
 
-                YouTubeVideo v = YouTubeVideo.create(videoId, videoTitle, null, null);
                 YouTubeComment c = new YouTubeComment(new DiaryDateTime(day, hour, minute, (byte) 0),
                         v, commentId, text);
                 output.add(c);

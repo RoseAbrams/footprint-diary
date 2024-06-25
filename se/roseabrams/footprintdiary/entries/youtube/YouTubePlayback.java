@@ -52,7 +52,7 @@ public class YouTubePlayback extends YouTubeEvent {
                 channelId = channelUrl.substring("https://youtube.com/channel/".length() - 1);
                 channelName = channelLink.text();
             }
-            YouTubeVideo v = YouTubeVideo.create(videoId, videoTitle, channelId, channelName);
+            YouTubeVideo v = YouTubeVideo.getOrCreate(videoId, videoTitle, channelId, channelName);
 
             Node dateE = playbackE.select("br").last().nextSibling();
             String dateS = dateE.toString();

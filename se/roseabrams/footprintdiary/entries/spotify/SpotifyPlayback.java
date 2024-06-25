@@ -114,7 +114,7 @@ public class SpotifyPlayback extends SpotifyTrackEvent {
         }
         boolean incognito_mode = o.getBoolean("incognito_mode");
 
-        SpotifyTrack t = SpotifyTrack.create(id, track, album, artist);
+        SpotifyTrack t = SpotifyTrack.getOrCreate(id, track, album, artist);
         SpotifyPlayback p = new SpotifyPlayback(dd, t, platform, playtime, country, ip, agent, sr, er, shuffle, skipped,
                 offline, offlineStart, incognito_mode);
         return p;

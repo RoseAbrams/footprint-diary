@@ -41,7 +41,7 @@ public class SpotifyTrack extends Webpage {
         return ARTIST + " – " + NAME;
     }
 
-    public static SpotifyTrack create(String id, String name, String album, String artist) {
+    public static SpotifyTrack getOrCreate(String id, String name, String album, String artist) {
         if (id == null)
             return null;
         assert !id.isBlank() && id.length() == 22;
