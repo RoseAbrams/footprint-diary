@@ -24,6 +24,10 @@ public class DiaryDateTime extends DiaryDate {
         SECOND = second;
     }
 
+    public DiaryDateTime(DiaryDate date, Byte hour, Byte minute, Byte second) {
+        this(date.YEAR, date.MONTH, date.DAY, hour, minute, second);
+    }
+
     public DiaryDateTime(String dateString) {
         this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 7)),
                 Byte.parseByte(dateString.substring(8, 10)), Byte.parseByte(dateString.substring(11, 13)),

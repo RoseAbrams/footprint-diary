@@ -56,8 +56,9 @@ public class DiaryWriter {
             d.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             d.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
             d.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
-            //d.add(YouTubeComment.createFromHtml());
-            //d.add(YouTubeComment.createFromCsv());
+            d.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
+            d.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
+            d.add(YouTubeComment.createFromCsv());
             d.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
             d.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
