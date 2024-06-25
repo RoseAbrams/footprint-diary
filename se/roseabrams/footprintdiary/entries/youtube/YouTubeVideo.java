@@ -13,7 +13,7 @@ public class YouTubeVideo extends Webpage {
     private String channelName;
     private static final ArrayList<YouTubeVideo> CACHE = new ArrayList<>(10000);
 
-    public YouTubeVideo(String id, String title, String channelId, String channelName) {
+    private YouTubeVideo(String id, String title, String channelId, String channelName) {
         super("https://youtube.com/watch?v=" + id, ContentType.VIDEO);
         ID = id;
         this.title = title;
