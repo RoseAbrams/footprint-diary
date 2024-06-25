@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 
 public class DiaryBook extends Diary implements Serializable {
@@ -21,6 +22,12 @@ public class DiaryBook extends Diary implements Serializable {
     }
 
     public void add(DiaryEntry[] entries) {
+        for (DiaryEntry e : entries) {
+            add(e);
+        }
+    }
+
+    public void add(Collection<DiaryEntry> entries) {
         for (DiaryEntry e : entries) {
             add(e);
         }

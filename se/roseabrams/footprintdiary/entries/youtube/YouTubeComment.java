@@ -23,6 +23,8 @@ public class YouTubeComment extends YouTubeEvent {
 
     public YouTubeComment(DiaryDate dd, YouTubeVideo video, String id, String text, boolean isReply) {
         super(dd, video);
+        assert id != null && !id.isBlank();
+
         ID = id;
         TEXT = text;
         IS_REPLY = isReply;
@@ -41,16 +43,21 @@ public class YouTubeComment extends YouTubeEvent {
         return TEXT;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof YouTubeComment c2 && ID.equals(c2.ID); // is this reliable? better check during debug
+    }
+
     public static YouTubeComment[] createFromHtml(File commentsFile) throws IOException {
         ArrayList<YouTubeComment> output = new ArrayList<>(1000);
         Document d = Jsoup.parse(commentsFile);
         // Elements commentsEs = d.select("c-wiz.xDtZAf div.uUy2re");
-        DiaryDate day = null;
+        DiaryDate date = null;
         // for (Element commentE : commentsEs) {
         for (Element e : d.root().children()) {
             if (e.tagName().equals("c-wiz") && e.hasClass("xDtZAf")) {
                 Element commentE = e;
-                assert day != null;
+                assert date != null;
                 Element textE = commentE.selectFirst("div.QTGV3c");
                 String text = textE.text();
                 Element parentE = commentE.selectFirst("div.SiEggd > a");
@@ -73,24 +80,25 @@ public class YouTubeComment extends YouTubeEvent {
                 hour += timeS.contains("PM") ? 12 : 0;
                 boolean isReply = parentDesc.startsWith("Replied");
 
-                YouTubeComment c = new YouTubeComment(new DiaryDateTime(day, hour, minute, (byte) 0),
+                YouTubeComment c = new YouTubeComment(new DiaryDateTime(date, hour, minute, (byte) 0),
                         v, commentId, text, isReply);
                 output.add(c);
             } else if (e.tagName().equals("div") && e.hasClass("CW0isc")) {
                 Element daySeperatorE = e;
-                String dayS = daySeperatorE.selectFirst("h2").text();
+                String dateS = daySeperatorE.selectFirst("h2").text();
                 short year;
-                byte dayOfMonth;
-                if (dayS.contains(",")) {
-                    year = Short.parseShort(dayS.substring(dayS.indexOf(",") + 1));
-                    dayOfMonth = Byte.parseByte(dayS.substring(dayS.indexOf(" ") + 1, dayS.indexOf(",")));
+                byte month = DiaryDate.parseMonthName(dateS.substring(0, 3));
+                byte day;
+                if (dateS.contains(",")) {
+                    year = Short.parseShort(dateS.substring(dateS.indexOf(",") + 1));
+                    day = Byte.parseByte(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(",")));
                 } else {
                     // year is only shown for non-current years at time of scrape
                     year = 2024;
-                    dayOfMonth = Byte.parseByte(dayS.substring(dayS.indexOf(" ") + 1));
+                    day = Byte.parseByte(dateS.substring(dateS.indexOf(" ") + 1));
                 }
 
-                day = new DiaryDate(year, DiaryDate.parseMonthName(dayS.substring(0, 3)), dayOfMonth);
+                date = new DiaryDate(year, month, day);
             } else {
                 throw new AssertionError();
             }

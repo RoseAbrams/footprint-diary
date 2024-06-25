@@ -12,6 +12,7 @@ public abstract class YouTubeEvent extends DiaryEntry implements ContentContaine
 
     public YouTubeEvent(DiaryDate dd, YouTubeVideo video) {
         super(DiaryEntryCategory.YOUTUBE, dd);
+        assert video != null;
         VIDEO = video;
     }
 
