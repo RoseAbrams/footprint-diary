@@ -24,7 +24,7 @@ import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;
-import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubeEvent;
 
 public class DiaryWriter {
 
@@ -39,18 +39,17 @@ public class DiaryWriter {
 
         final DiaryBook D = new DiaryBook(DD1, DD2);
 
-        try {/*
-             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-             d.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-             d.add(ResFile.createFromFiles());
-             d.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
-             d.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
-             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
-             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
-             d.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
-             d.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-             */
+        try {
+            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+            D.add(ResFile.createFromFiles());
+            D.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
+            D.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
+            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
+            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
+            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
+            D.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
             // debugged up to here
             D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
             D.add(DailyActivity.createDays(new File(I + "apple\\health.xml")));
@@ -58,7 +57,12 @@ public class DiaryWriter {
             D.add(WikimediaEdit.createFromWebsites());
             D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
-            D.add(YouTubePlayback.createFromHtml(new File(I + "google\\youtube watch.html")));
+            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
+            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
+            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
+            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
+            D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
+            D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
             //D.add(youtubeCommentHack());
@@ -67,13 +71,14 @@ public class DiaryWriter {
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
-            D.add(FacebookPost.createFromHtml(new File(I + "your_posts__check_ins__photos_and_videos_1.html")));
-            D.add(FacebookPost.createFromHtml(new File(I + "group_posts_and_comments.html")));
-            D.add(FacebookComment.createFromHtml(new File(I + "comments.html")));
-            D.add(FacebookComment.createFromHtml(new File(I + "your_comments_in_groups.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_1.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_2.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "likes_and_reactions_3.html")));
+            D.add(FacebookPost
+                    .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
+            D.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
+            D.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
+            D.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
+            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
+            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
+            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
@@ -109,7 +114,8 @@ public class DiaryWriter {
         ArrayList<YouTubeComment> unsorted = new ArrayList<>();
         ArrayList<YouTubeComment> sorted = new ArrayList<>();
         unsorted.addAll(Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html"))));
-        unsorted.addAll(Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html"))));
+        unsorted.addAll(
+                Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html"))));
         unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv"))));
         unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv"))));
         for (YouTubeComment c1 : unsorted) {

@@ -43,7 +43,7 @@ public class YouTubeVideo extends Webpage {
     }
 
     public static YouTubeVideo getOrCreate(String id, String title, String channelId, String channelName) {
-        assert id != null && !id.isBlank() && id.length() == 11;
+        assert id != null && id.length() == 11;
 
         for (YouTubeVideo v : CACHE) {
             if (id.equals(v.ID)) {

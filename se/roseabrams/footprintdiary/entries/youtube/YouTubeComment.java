@@ -66,11 +66,13 @@ public class YouTubeComment extends YouTubeVideoEvent {
                 String parentName = parentLinkE.text();
                 String parentLink = parentLinkE.attr("href");
                 String commentId = parentLink.substring(parentLink.lastIndexOf("lc=") + 3);
-                if (parentLink.equals("watch?")) {
+                YouTubeVideo v;
+                if (parentLink.contains("watch?")) {
                     String videoId = parentLink.substring(parentLink.indexOf("="), parentLink.indexOf("&"));
-                    YouTubeVideo v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
-                } else if (parentLink.equals("post")) {
-                    ...
+                    v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
+                } else if (parentLink.contains("/post/")) {
+                    System.err.println("skipped YouTube comment on post, implementation pending"); // TODO
+                    continue;
                 } else {
                     throw new AssertionError(); // should not happen unless there's an unknown third parent type
                 }
@@ -115,13 +117,14 @@ public class YouTubeComment extends YouTubeVideoEvent {
             s2.useDelimiter(",");
             String channelId = s2.next();
             String timestampS = s2.next();
-            int price = s2.nextInt(); // ?
+            int price = s2.nextInt();
             String commentId = s2.next();
             String parentCommentId = s2.next();
             String videoId = s2.next();
             String textJson = s2.nextLine();
             s2.close();
 
+            assert price == 0; // purely exploratory
             textJson = textJson.substring(1, textJson.length() - 2); // remove surrounding quotes
             //textJson = textJson.replace("\\\"\"", "\""); // probably not needed since converting to json later
             textJson = textJson.replace("\"\"", "\"");
