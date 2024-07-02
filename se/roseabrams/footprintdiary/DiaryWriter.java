@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
+import se.roseabrams.footprintdiary.entries.apple.DailyActivity;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
@@ -14,7 +15,6 @@ import se.roseabrams.footprintdiary.entries.facebook.FacebookFriend;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookMessage;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
-import se.roseabrams.footprintdiary.entries.health.DailyActivity;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.resfiles.ResFile;

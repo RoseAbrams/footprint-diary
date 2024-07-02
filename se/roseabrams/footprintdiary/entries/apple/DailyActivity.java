@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.entries.health;
+package se.roseabrams.footprintdiary.entries.apple;
 
 import java.io.File;
 import java.io.IOException;
