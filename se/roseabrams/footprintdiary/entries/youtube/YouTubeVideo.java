@@ -14,7 +14,7 @@ public class YouTubeVideo extends Webpage {
     private static final ArrayList<YouTubeVideo> CACHE = new ArrayList<>(10000);
 
     private YouTubeVideo(String id, String title, String channelId, String channelName) {
-        super("https://youtube.com/watch?v=" + id, ContentType.VIDEO);
+        super("https://youtube.com/watch?v=" + id, title, ContentType.VIDEO);
         ID = id;
         this.title = title;
         if (channelId == null) {

@@ -49,20 +49,22 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     }
 
     public RemoteContent getSite() {
-        return new Webpage("https://" + SITE + ".org/");
+        return new Webpage("https://" + SITE + ".org/"/*, SITE*/);
     }
 
     public RemoteContent getArticle() {
-        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE);
+        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE/*, PAGE_TITLE*/);
     }
 
     public RemoteContent getArticlePermalink() {
-        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID);
+        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID/*,
+                "version " + OLDID + " of \"" + PAGE_TITLE + "\""*/);
     }
 
     public RemoteContent getDiff() {
         StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
-        return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
+        return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString()/*,
+                "diff " + OLDID + " of \"" + PAGE_TITLE + "\""*/);
     }
 
     @Override

@@ -8,7 +8,7 @@ public class SteamGame extends Webpage {
     public final String NAME;
 
     public SteamGame(int storeId, String name) {
-        super("https://store.steampowered.com/app/" + storeId, ContentType.APPLICATION);
+        super("https://store.steampowered.com/app/" + storeId, name, ContentType.APPLICATION);
         NAME = name;
     }
 }

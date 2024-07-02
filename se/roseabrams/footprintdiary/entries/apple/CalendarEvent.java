@@ -24,7 +24,7 @@ public class CalendarEvent extends DiaryEntry {
     public final Webpage URL;
 
     public CalendarEvent(DiaryDateTime createdDate, DiaryDateTime startDate, DiaryDateTime endDate,
-            String summary, String description, String location, int sequence, String urlS) {
+            String summary, String description, String location, int sequence, Webpage url) {
         super(DiaryEntryCategory.PHONE_CALENDAR, startDate);
 
         assert summary != null;
@@ -36,7 +36,7 @@ public class CalendarEvent extends DiaryEntry {
         START_DATE = startDate.shouldReduce() ? startDate.reduce() : startDate;
         END_DATE = endDate.shouldReduce() ? endDate.reduce() : endDate;
         SEQUENCE = sequence;
-        URL = new Webpage(urlS);
+        URL = url;
     }
 
     @Override
@@ -78,7 +78,8 @@ public class CalendarEvent extends DiaryEntry {
                 assert currentIsEvent;
                 currentIsEvent = false;
                 CalendarEvent c = new CalendarEvent(new DiaryDateTime(createdDateS), new DiaryDateTime(startDateS),
-                        new DiaryDateTime(endDateS), summary, description, location, Integer.parseInt(sequenceS), urlS);
+                        new DiaryDateTime(endDateS), summary, description, location, Integer.parseInt(sequenceS),
+                        new Webpage(urlS));
                 output.add(c);
             } else if (icsLine.equals("BEGIN:VALARM")) {
                 currentIsAlarm = true;

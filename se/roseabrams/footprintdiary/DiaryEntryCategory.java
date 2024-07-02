@@ -257,6 +257,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             int[] n = countMessages(fl);
             return "I sent " + n[0] + " message" + p(n[0]) + " on Facebook, and received " + n[1] + ".";
         }
+    },
+    WEB_HISTORY {
+        @Override
+        public String describeInProse(ArrayList<DiaryEntry> fl) {
+            throw new UnsupportedOperationException("Unimplemented method 'describeInProse'");
+        }
     };
 
     public abstract String describeInProse(ArrayList<DiaryEntry> filteredList);

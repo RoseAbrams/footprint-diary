@@ -16,7 +16,7 @@ public class SpotifyTrack extends Webpage {
     private static final ArrayList<SpotifyTrack> CACHE = new ArrayList<>(10000);
 
     private SpotifyTrack(String id, String name, String album, String artist) {
-        super("https://open.spotify.com/track/" + id, ContentType.AUDIO);
+        super("https://open.spotify.com/track/" + id, artist + " – " + name, ContentType.AUDIO);
         ID = id;
         NAME = name;
         ALBUM = album.intern();
