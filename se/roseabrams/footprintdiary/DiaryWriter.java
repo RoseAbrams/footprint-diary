@@ -10,6 +10,7 @@ import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
+import se.roseabrams.footprintdiary.entries.facebook.FacebookFriend;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookMessage;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
@@ -34,6 +35,7 @@ public class DiaryWriter {
     private static final DiaryDate DD2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
     //private static final DiaryDate DD1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
     //private static final DiaryDate DD2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
+    // TODO consider removing these limits entirely and instead determine quality from spans
 
     public static void main(String[] args) {
 
@@ -82,6 +84,7 @@ public class DiaryWriter {
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
             D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
+            D.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
             System.gc();
 
             String csvSum = D.sumsCsv(true);
@@ -137,4 +140,10 @@ public class DiaryWriter {
         }
         return sorted;
     }
+    /*  future datasources:
+     *      facebook
+     *          connected_apps_and_websites.html
+     *          recently_viewed.html
+     *          who_you've_followed.html
+     */
 }
