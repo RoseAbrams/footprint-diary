@@ -39,7 +39,7 @@ public class YouTubeVideo extends Webpage {
             else
                 return title;
         else
-            return ID;
+            return super.toString();
     }
 
     public static YouTubeVideo getOrCreate(String id, String title, String channelId, String channelName) {

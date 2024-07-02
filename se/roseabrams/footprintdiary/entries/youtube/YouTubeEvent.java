@@ -26,29 +26,40 @@ public abstract class YouTubeEvent extends DiaryEntry {
         Document d = Jsoup.parse(watchedFile);
         Elements playbackEs = d.body().select("div.outer-cell div.content-cell.mdl-typography--body-1");
         for (Element playbackE : playbackEs) {
+            if (!playbackE.hasText())
+                continue; // half of the matches are empty, no idea how to filter them away with CSS
+
             YouTubeEvent newEvent;
 
             Node dateE = playbackE.select("br").last().nextSibling();
-            String dateS = dateE.toString();
+            String dateS = dateE.toString().trim();
             DiaryDateTime date = new DiaryDateTime(
-                    Short.parseShort(dateS.substring(dateS.indexOf(",") + 1, dateS.lastIndexOf(","))),
+                    Short.parseShort(dateS.substring(dateS.indexOf(",") + 2, dateS.lastIndexOf(","))),
                     DiaryDate.parseMonthName(dateS.substring(0, 3)),
                     Byte.parseByte(dateS.substring(4, dateS.indexOf(","))),
-                    (byte) (Byte.parseByte(dateS.substring(dateS.lastIndexOf(",") + 1, dateS.indexOf(":")))
-                            + (dateS.contains("PM") ? 12 : 0)),
+                    (byte) (Byte.parseByte(dateS.substring(dateS.lastIndexOf(",") + 2, dateS.indexOf(":")))
+                            + (dateS.contains("PM") && !dateS.contains(" 12:") ? 12 : 0)),
                     Byte.parseByte(dateS.substring(dateS.indexOf(":") + 1, dateS.lastIndexOf(":"))),
-                    Byte.parseByte(dateS.substring(dateS.lastIndexOf(":"), dateS.lastIndexOf(":") + 2)));
+                    Byte.parseByte(dateS.substring(dateS.lastIndexOf(":") + 1, dateS.lastIndexOf(":") + 3)));
             Elements links = playbackE.select("a");
             Element primaryLink = links.first();
-            String primaryUrl = primaryLink.attr("href");
 
-            if (playbackE.text().startsWith("Watched")) {
+            if (playbackE.text().startsWith("Watched a video that has been removed")) {
+                continue; // TODO
+            } else if (playbackE.text().startsWith("Watched")) {
                 String videoId;
                 String videoTitle;
                 String channelId;
                 String channelName;
 
-                videoId = primaryUrl.substring("https://youtube.com/watch?v=".length() - 1);
+                String primaryUrl = primaryLink.attr("href");
+                if (primaryUrl.contains("music.youtube"))
+                    primaryUrl = primaryUrl.replace("music.youtube", "www.youtube");
+                assert primaryUrl.startsWith("https://www.youtube.com/watch?v=");
+                videoId = primaryUrl.substring("https://www.youtube.com/watch?v=".length());
+                if (videoId.isEmpty())
+                    continue; // very weird entry that somehow shows up...?
+
                 if (primaryLink.text().equals(primaryUrl))
                     videoTitle = null;
                 else
@@ -59,7 +70,8 @@ public abstract class YouTubeEvent extends DiaryEntry {
                 } else {
                     Element channelLink = links.last();
                     String channelUrl = channelLink.attr("href");
-                    channelId = channelUrl.substring("https://youtube.com/channel/".length() - 1);
+                    assert channelUrl.startsWith("https://www.youtube.com/channel/");
+                    channelId = channelUrl.substring("https://www.youtube.com/channel/".length());
                     channelName = channelLink.text();
                 }
                 Element infoE = playbackE.parent().selectFirst("div.mdl-typography--caption");
@@ -71,6 +83,8 @@ public abstract class YouTubeEvent extends DiaryEntry {
                 String searchTerm = primaryLink.text();
 
                 newEvent = new YouTubeSearch(date, searchTerm);
+            } else if (playbackE.text().startsWith("Visited")) {
+                continue; // TODO
             } else {
                 throw new AssertionError();
             }

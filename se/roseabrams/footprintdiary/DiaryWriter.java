@@ -54,13 +54,13 @@ public class DiaryWriter {
             D.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
             D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
             //D.add(WikimediaEdit.createFromWebsites());//has problems
-            */// debugged up to here
-            D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
-            D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
-            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
+            //D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//has problems
+            //D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//has problems
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
+            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
+            */// debugged up to here
             D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
             D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));

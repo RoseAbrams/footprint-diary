@@ -29,6 +29,7 @@ public class RedditComment extends RedditSubmission {
     }
 
     @SuppressWarnings("unused")
+    /// TODO needs multiline support
     public static RedditComment[] createFromCsv(File commentsFile) throws IOException {
         ArrayList<RedditComment> output = new ArrayList<>(1000);
         for (String post : Util.readFileLines(commentsFile)) {
