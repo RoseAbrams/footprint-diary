@@ -19,7 +19,6 @@ public class YouTubeComment extends YouTubeVideoEvent {
     public final String ID;
     public final String TEXT;
     public final boolean IS_REPLY;
-    private static final Pattern JSON_OBJECT_DELIM = Pattern.compile("(?:\"}),(?:{\")");
 
     public YouTubeComment(DiaryDate dd, YouTubeVideo video, String id, String text, boolean isReply) {
         super(dd, video);
@@ -54,33 +53,44 @@ public class YouTubeComment extends YouTubeVideoEvent {
         // Elements commentsEs = d.select("c-wiz.xDtZAf div.uUy2re");
         DiaryDate date = null;
         // for (Element commentE : commentsEs) {
-        for (Element e : d.root().children()) {
+        for (Element e : d.selectFirst("body > div").children()) {
             if (e.tagName().equals("c-wiz") && e.hasClass("xDtZAf")) {
                 Element commentE = e;
                 assert date != null;
                 Element textE = commentE.selectFirst("div.QTGV3c");
                 String text = textE.text();
-                Element parentE = commentE.selectFirst("div.SiEggd > a");
-                String parentDesc = parentE.ownText();
+
+                YouTubeVideo v;
+                Element descE = commentE.selectFirst("div.SiEggd");
+                if (descE == null) 
+                    continue; // really not sure what happened here...?
+                Element parentE = descE.selectFirst("a");
+                if (parentE == null) {
+                    if (descE.text().contains("unavailable video"))
+                        continue; // TODO
+                    else if (descE.text().contains("private video"))
+                        continue; // TODO
+                    else
+                        throw new AssertionError();
+                }
                 Element parentLinkE = parentE.selectFirst("a");
                 String parentName = parentLinkE.text();
                 String parentLink = parentLinkE.attr("href");
                 String commentId = parentLink.substring(parentLink.lastIndexOf("lc=") + 3);
-                YouTubeVideo v;
                 if (parentLink.contains("watch?")) {
-                    String videoId = parentLink.substring(parentLink.indexOf("="), parentLink.indexOf("&"));
+                    String videoId = parentLink.substring(parentLink.indexOf("=") + 1, parentLink.indexOf("&"));
                     v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
                 } else if (parentLink.contains("/post/")) {
-                    System.err.println("skipped YouTube comment on post, implementation pending"); // TODO
+                    System.err.println("skipped YouTube comment on post: \"" + text + "\""); // TODO
                     continue;
-                } else {
+                } else
                     throw new AssertionError(); // should not happen unless there's an unknown third parent type
-                }
+
                 String timeS = commentE.selectFirst("div.wlgrwd > div.H3Q9vf").ownText();
                 byte hour = Byte.parseByte(timeS.substring(0, timeS.indexOf(":")));
-                byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1), (timeS.indexOf(":") + 3));
-                hour += timeS.contains("PM") ? 12 : 0;
-                boolean isReply = parentDesc.startsWith("Replied");
+                byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1, timeS.indexOf(":") + 3));
+                hour += timeS.contains("PM") && !timeS.startsWith("12") ? 12 : 0;
+                boolean isReply = parentE != null && parentE.ownText().startsWith("Replied");
 
                 YouTubeComment c = new YouTubeComment(new DiaryDateTime(date, hour, minute, (byte) 0),
                         v, commentId, text, isReply);
@@ -92,7 +102,7 @@ public class YouTubeComment extends YouTubeVideoEvent {
                 byte month = DiaryDate.parseMonthName(dateS.substring(0, 3));
                 byte day;
                 if (dateS.contains(",")) {
-                    year = Short.parseShort(dateS.substring(dateS.indexOf(",") + 1));
+                    year = Short.parseShort(dateS.substring(dateS.indexOf(",") + 2));
                     day = Byte.parseByte(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(",")));
                 } else {
                     // year is only shown for non-current years at time of scrape
@@ -109,6 +119,7 @@ public class YouTubeComment extends YouTubeVideoEvent {
     }
 
     public static YouTubeComment[] createFromCsv(File commentsFile) throws IOException {
+        final Pattern JSON_OBJECT_DELIM = Pattern.compile("(?:\\\"}),(?:{\\\")");
         ArrayList<YouTubeComment> output = new ArrayList<>(1000);
         Scanner s = new Scanner(commentsFile);
         s.nextLine(); // headings

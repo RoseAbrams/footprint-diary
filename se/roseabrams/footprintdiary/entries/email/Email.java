@@ -12,9 +12,9 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.common.Message;
 
-public class Email /*extends DiaryEntry implements Message*/ {
-/*
-    public Email(DiaryDate dd) {
+public class Email extends DiaryEntry implements Message {
+
+    public Email(DiaryDate dd, String sender, String recipient, String subject) {
         super(DiaryEntryCategory.EMAIL, dd);
     }
 
@@ -30,17 +30,22 @@ public class Email /*extends DiaryEntry implements Message*/ {
         for (String mboxLine : mboxLines) {
             boolean currentIsEmail = false;
             long id;
-            DiaryDateTime arrivedDate;
+            DiaryDateTime date;
             String sender;
             String recipient;
             String subject;
             if (mboxLine.matches(MBOX_MESSAGE_START_LINE.pattern())) {
                 if (currentIsEmail) {
-                    ... // reset all
-                    Email e = new Email(sender, recipient, subject);
+                    currentIsEmail = false;
+                    Email e = new Email(date, sender, recipient, subject);
                     output.add(e);
                 }
                 currentIsEmail = true;
+                id = 0;
+                date = null;
+                sender = null;
+                recipient = null;
+                subject = null;
                 String idS = mboxLine.substring(5, mboxLine.indexOf("@"));
                 String dateS = mboxLine.substring(mboxLine.indexOf("@") + 4); // looks like always UTC-0
                 ...
@@ -55,11 +60,11 @@ public class Email /*extends DiaryEntry implements Message*/ {
                 ... // looks like only first such entry per email is the real one
                 recipient = mboxLine.substring(mboxLine.indexOf(":") + 1);
             } else if (mboxLine.startsWith("Date: ")) {
-                ... // looks same or very close to firstline
+                ... // appears same or very close to firstline
             } else if (mboxLine.startsWith("X-Gmail-Labels: ")) {
                 ... // probably differentiates sent/received and other markings
             }
         }
-    }*/
+    }
 }
 // found by quick googling, good starting point? https://github.com/epfromer/pst-extractor

@@ -39,7 +39,7 @@ public class DiaryWriter {
 
         final DiaryBook D = new DiaryBook(DD1, DD2);
 
-        try {/*
+        try {
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
@@ -50,22 +50,22 @@ public class DiaryWriter {
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
             D.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            //D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//has problems
+            D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//has problems
             D.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
             D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-            //D.add(WikimediaEdit.createFromWebsites());//has problems
-            //D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//has problems
-            //D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//has problems
+            D.add(WikimediaEdit.createFromWebsites());//has problems
+            D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//has problems
+            D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//has problems
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
-            */// debugged up to here
             D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
             D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
             //D.add(youtubeCommentHack());
+            // debugged up to here
             D.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
             D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
