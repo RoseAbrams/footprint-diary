@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary.entries.apple;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -42,26 +43,33 @@ public class DailyActivity extends DiaryEntry implements CustomCountable {
     }
 
     public static DailyActivity[] createDays(File exportFile) throws IOException {
-        HashMap<DiaryDate, DailyActivity> output = new HashMap<>();
+        ArrayList<DailyActivity> output = new ArrayList<>();
         HealthData[] h = HealthData.createAllFromXml(exportFile);
         for (HealthData d : h) {
-            output.putIfAbsent(d.DATE, new DailyActivity(d.DATE));
-            DailyActivity a = output.get(d.DATE);
+            DailyActivity foundA = null;
+            for (DailyActivity iA : output) {
+                if (d.DATE.equals(iA.DATE, false))
+                    foundA = iA;
+            }
+            if (foundA == null) {
+                foundA = new DailyActivity(d.DATE);
+                output.add(foundA);
+            }
             switch (d.TYPE) {
                 case STEP_COUNT:
-                    a.stepsTaken += d.VALUE;
+                    foundA.stepsTaken += d.VALUE;
                     break;
                 case DISTANCE_MOVED:
-                    a.kmWalked += d.VALUE;
+                    foundA.kmWalked += d.VALUE;
                     break;
                 case ENERGY_BURNED_ACTIVE:
                 case ENERGY_BURNED_BASAL:
-                    a.kcalBurned += d.VALUE;
+                    foundA.kcalBurned += d.VALUE;
                     break;
                 default:
                     break;
             }
         }
-        return output.values().toArray(new DailyActivity[output.size()]);
+        return output.toArray(new DailyActivity[output.size()]);
     }
 }

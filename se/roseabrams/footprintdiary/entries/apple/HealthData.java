@@ -29,11 +29,7 @@ public class HealthData extends DiaryEntry {
             DiaryDateTime creationDate, DiaryDateTime startDate, DiaryDateTime endDate) {
         super(DiaryEntryCategory.HEALTH, startDate.reduce());
 
-        // probably not true, but let's check
-        assert creationDate.equals(startDate, false);
-        assert creationDate.equals(endDate, false);
-
-        assert type.unit().equals(unit) || (type.unit() == null && unit == null);
+        assert (type.unit() == null && unit == null) || type.unit().equals(unit);
 
         TYPE = type;
         SOURCE_NAME = sourceName;

@@ -71,12 +71,17 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     @Override
+    @Deprecated // better to explicitly specify strictness
     public int compareTo(DiaryDate d2) {
+        return compareTo(d2, true);
+    }
+
+    public int compareTo(DiaryDate d2, boolean strict) {
         int comparedSuper = super.compareTo(d2);
         if (comparedSuper != 0)
             return comparedSuper;
 
-        if (!(d2 instanceof DiaryDateTime))
+        if (!(d2 instanceof DiaryDateTime) || !strict)
             return 0;
 
         int comparedHour = Byte.compare(HOUR, ((DiaryDateTime) d2).HOUR);
@@ -93,7 +98,7 @@ public class DiaryDateTime extends DiaryDate {
 
     @Override
     public boolean equals(DiaryDate obj, boolean strict) {
-        return compareTo(obj) == 0 && (strict ? obj instanceof DiaryDateTime : true);
+        return compareTo(obj, false) == 0 && (strict ? obj instanceof DiaryDateTime : true);
     }
 
     @Override
