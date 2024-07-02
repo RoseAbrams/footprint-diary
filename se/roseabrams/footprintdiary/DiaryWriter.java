@@ -31,17 +31,15 @@ public class DiaryWriter {
 
     private static final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
     private static final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
-    private static final DiaryDate DD1 = new DiaryDate((short) 2010, (byte) 1, (byte) 1);
+    private static final DiaryDate DD1 = new DiaryDate((short) 2009, (byte) 1, (byte) 1);
     private static final DiaryDate DD2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-    //private static final DiaryDate DD1 = new DiaryDate((short) 2021, (byte) 1, (byte) 1);
-    //private static final DiaryDate DD2 = new DiaryDate((short) 2021, (byte) 12, (byte) 31);
     // TODO consider removing these limits entirely and instead determine quality from spans
 
     public static void main(String[] args) {
 
         final DiaryBook D = new DiaryBook(DD1, DD2);
 
-        try {
+        try {/*
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
@@ -52,7 +50,7 @@ public class DiaryWriter {
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
             D.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            // debugged up to here
+            */// debugged up to here
             D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
             D.add(DailyActivity.createDays(new File(I + "apple\\health.xml")));
             D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));

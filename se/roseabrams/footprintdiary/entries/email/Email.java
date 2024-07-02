@@ -10,9 +10,10 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
+import se.roseabrams.footprintdiary.common.Message;
 
-public abstract class Email extends DiaryEntry {
-
+public class Email /*extends DiaryEntry implements Message*/ {
+/*
     public Email(DiaryDate dd) {
         super(DiaryEntryCategory.EMAIL, dd);
     }
@@ -59,6 +60,6 @@ public abstract class Email extends DiaryEntry {
                 ... // probably differentiates sent/received and other markings
             }
         }
-    }
+    }*/
 }
 // found by quick googling, good starting point? https://github.com/epfromer/pst-extractor
