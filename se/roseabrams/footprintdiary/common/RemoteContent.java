@@ -32,6 +32,6 @@ public class RemoteContent extends Content {
 
     @Override
     public String getPath() {
-        return URL.getPath();
+        return URL.toExternalForm();
     }
 }

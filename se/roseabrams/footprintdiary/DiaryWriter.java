@@ -39,10 +39,10 @@ public class DiaryWriter {
 
         final DiaryBook D = new DiaryBook(DD1, DD2);
 
-        try {
+        try {/*
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
             D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));/*
+            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
             D.add(ResFile.createFromFiles());
             D.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
             D.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
@@ -50,11 +50,11 @@ public class DiaryWriter {
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
             D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
             D.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            //D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//not debugged
+            //D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//has problems
             D.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
-            */// debugged up to here
             D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-            D.add(WikimediaEdit.createFromWebsites());
+            //D.add(WikimediaEdit.createFromWebsites());//has problems
+            */// debugged up to here
             D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
             D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));

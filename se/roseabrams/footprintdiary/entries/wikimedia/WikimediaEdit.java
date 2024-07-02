@@ -49,22 +49,20 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     }
 
     public RemoteContent getSite() {
-        return new Webpage("https://" + SITE + ".org/"/*, SITE*/);
+        return new Webpage("https://" + SITE + ".org/");
     }
 
     public RemoteContent getArticle() {
-        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE/*, PAGE_TITLE*/);
+        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE); // TODO all strings must be HTMLified for valid paths
     }
 
     public RemoteContent getArticlePermalink() {
-        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID/*,
-                "version " + OLDID + " of \"" + PAGE_TITLE + "\""*/);
+        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID);
     }
 
     public RemoteContent getDiff() {
         StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
-        return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString()/*,
-                "diff " + OLDID + " of \"" + PAGE_TITLE + "\""*/);
+        return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
     }
 
     @Override
@@ -87,18 +85,23 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     }
 
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
-        Connection c = Jsoup.connect("https://" + site + ".org/w/index.php?title="
-                + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=10000");
+        Connection c = Jsoup.newSession();
+        c.timeout(120000);
+        c.url("https://" + site + ".org/w/index.php?title="
+                + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=100");
         Document d = c.get();
 
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
         Elements edits = d.body().select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list");
         for (Element edit : edits) {
-            int oldid = Integer.parseInt(edit.select("li").first().attr("data-mw-revid"));
-            int editSize = Integer.parseInt(edit.select("span.mw-diff-bytes").first().text());
+            String oldidS = edit.select("li").first().attr("data-mw-revid");
+            int oldid = Integer.parseInt(oldidS);
+            String editSizeS = edit.select(".mw-diff-bytes").first().text();
+            int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", ""));
             String dateS = edit.select("a.mw-changeslist-date").first().text();
-            DiaryDateTime date = new DiaryDateTime(Short.parseShort(dateS.substring(14, 18)),
-                    DiaryDate.parseMonthName(dateS.substring(11, 13)), Byte.parseByte(dateS.substring(7, 9)),
+            DiaryDateTime date = new DiaryDateTime(Short.parseShort(dateS.substring(dateS.lastIndexOf(" 20") + 1)),
+                    DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(",") + 4, dateS.lastIndexOf(" ")).trim()),
+                    Byte.parseByte(dateS.substring(dateS.indexOf(",") + 2, dateS.indexOf(",") + 4).trim()),
                     Byte.parseByte(dateS.substring(0, 2)), Byte.parseByte(dateS.substring(3, 5)), (byte) 0);
             String pageTitle = edit.select("a.mw-contributions-title").first().text();
             String editSummary = edit.select("span.comment").first().text();

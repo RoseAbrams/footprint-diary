@@ -18,9 +18,9 @@ public class SkypeMessage extends DiaryEntry implements Message {
     public final String RECIPIENT;
     public final String MESSAGE;
 
-    public SkypeMessage(DiaryDateTime dd, String user, String recipient, String message) {
+    public SkypeMessage(DiaryDateTime dd, String sender, String recipient, String message) {
         super(DiaryEntryCategory.SKYPE, dd);
-        SENDER = user.intern();
+        SENDER = sender.intern();
         RECIPIENT = recipient.intern();
         MESSAGE = message;
     }
@@ -67,14 +67,34 @@ public class SkypeMessage extends DiaryEntry implements Message {
         }
         assert recipient != null;
 
-        for (String message : messages) {
-            String timestampS = message.substring(message.indexOf("["), message.indexOf("]"));
-            DiaryDateTime timestamp = new DiaryDateTime(Short.parseShort("20" + timestampS.substring(6, 8)),
-                    Byte.parseByte(timestampS.substring(3, 5)), Byte.parseByte(timestampS.substring(0, 2)),
-                    Byte.parseByte(timestampS.substring(9, 11)), Byte.parseByte(timestampS.substring(12, 14)),
-                    Byte.parseByte(timestampS.substring(15, 17)));
-            String sender = message.substring(message.indexOf("]") + 2, message.indexOf(": "));
-            String messageBody = message.substring(message.indexOf(":") + 2);
+        for (int i = 0; i < messages.size(); i++) {
+            String message = messages.get(i);
+            if (message.isBlank())
+                continue;
+
+            String timestampS = message.substring(message.indexOf("[") + 1, message.indexOf("]"));
+            DiaryDateTime timestamp;
+            if (timestampS.charAt(2) == '/') {
+                timestamp = new DiaryDateTime(Short.parseShort("20" + timestampS.substring(6, 8)),
+                        Byte.parseByte(timestampS.substring(3, 5)), Byte.parseByte(timestampS.substring(0, 2)),
+                        Byte.parseByte(timestampS.substring(9, 11)), Byte.parseByte(timestampS.substring(12, 14)),
+                        Byte.parseByte(timestampS.substring(15, 17)));
+            } else if (timestampS.charAt(4) == '-') {
+                timestamp = new DiaryDateTime(timestampS);
+            } else {
+                throw new AssertionError();
+            }
+            String sender;
+            if (message.contains("] ***"))
+                sender = "SYSTEM"; // TODO media messages also looks like this, with syntax of "*** USERNAME sent FILENAME ***"
+            else
+                sender = message.substring(message.indexOf("]") + 2, message.indexOf(": "));
+            String messageBody = message.substring(message.indexOf(":", message.indexOf("]")) + 2);
+
+            while (i < messages.size() - 1 && !messages.get(i + 1).startsWith("[")) {
+                messageBody += messageBody + "\n" + messages.get(i + 1);
+                i++;
+            }
 
             output.add(new SkypeMessage(timestamp, sender, recipient, messageBody));
         }

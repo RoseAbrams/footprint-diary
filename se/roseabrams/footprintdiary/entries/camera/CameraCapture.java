@@ -84,9 +84,11 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
                     TiffImageMetadata exif = ((JpegImageMetadata) metadata).getExif();
                     String[] exifDateO1 = (String[]) exif.getFieldValue(TiffTagConstants.TIFF_TAG_DATE_TIME);
                     String[] exifDateO2 = (String[]) exif.getFieldValue(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-                    assert exifDateO1[0].equals(exifDateO2[0]);
                     if (exifDateO1 != null)
-                        exifDate = new DiaryDateTime(exifDateO1[0]);
+                        if (exifDateO2 != null && !exifDateO1[0].equals(exifDateO2[0]))
+                            exifDate = new DiaryDateTime(exifDateO2[0]);
+                        else
+                            exifDate = new DiaryDateTime(exifDateO1[0]);
                     GpsInfo coords = exif.getGpsInfo();
                     if (coords != null) {
                         double latitude = coords.getLatitudeAsDegreesNorth();

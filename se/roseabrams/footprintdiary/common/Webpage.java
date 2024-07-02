@@ -5,7 +5,6 @@ public class Webpage extends RemoteContent {
     public final String TITLE;
     public final ContentType CONTAINED_TYPE;
 
-    @Deprecated // try to include the title
     public Webpage(String url) {
         this(url, null);
     }
