@@ -43,6 +43,14 @@ public class DiaryBook extends Diary implements Serializable {
         discardedOutsideDateRange++;
     }
 
+    public DiaryPage randomPage() {
+        return PAGES[(int) (PAGES.length * Math.random())];
+    }
+
+    public DiaryEntry randomEntry() {
+        return randomPage().randomEntry();
+    }
+
     public String sumsCsv(boolean blankZeroes) {
         StringBuilder output = new StringBuilder(100000);
         for (DiaryEntryCategory s : DiaryEntryCategory.valuesCustomOrder()) {

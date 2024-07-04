@@ -22,7 +22,7 @@ public class YouTubeComment extends YouTubeVideoEvent {
 
     public YouTubeComment(DiaryDate dd, YouTubeVideo video, String id, String text, boolean isReply) {
         super(dd, video);
-        assert id != null && !id.isBlank();
+        assert (id != null && !id.isBlank()) || video == null;
 
         ID = id;
         TEXT = text;
@@ -61,31 +61,34 @@ public class YouTubeComment extends YouTubeVideoEvent {
                 String text = textE.text();
 
                 YouTubeVideo v;
+                String commentId;
                 Element descE = commentE.selectFirst("div.SiEggd");
-                if (descE == null) 
+                if (descE == null)
                     continue; // really not sure what happened here...?
                 Element parentE = descE.selectFirst("a");
                 if (parentE == null) {
-                    if (descE.text().contains("unavailable video"))
-                        continue; // TODO
-                    else if (descE.text().contains("private video"))
-                        continue; // TODO
-                    else
+                    if (descE.text().contains("unavailable video")) {
+                        v = null;
+                        commentId = null;
+                    } else if (descE.text().contains("private video")) {
+                        v = null;
+                        commentId = null;
+                    } else
                         throw new AssertionError();
+                } else {
+                    Element parentLinkE = parentE.selectFirst("a");
+                    String parentName = parentLinkE.text();
+                    String parentLink = parentLinkE.attr("href");
+                    commentId = parentLink.substring(parentLink.lastIndexOf("lc=") + 3);
+                    if (parentLink.contains("watch?")) {
+                        String videoId = parentLink.substring(parentLink.indexOf("=") + 1, parentLink.indexOf("&"));
+                        v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
+                    } else if (parentLink.contains("/post/")) {
+                        System.err.println("skipped YouTube comment on post: \"" + text + "\""); // TODO
+                        continue;
+                    } else
+                        throw new AssertionError(); // should not happen unless there's an unknown third parent type
                 }
-                Element parentLinkE = parentE.selectFirst("a");
-                String parentName = parentLinkE.text();
-                String parentLink = parentLinkE.attr("href");
-                String commentId = parentLink.substring(parentLink.lastIndexOf("lc=") + 3);
-                if (parentLink.contains("watch?")) {
-                    String videoId = parentLink.substring(parentLink.indexOf("=") + 1, parentLink.indexOf("&"));
-                    v = YouTubeVideo.getOrCreate(videoId, parentName, null, null);
-                } else if (parentLink.contains("/post/")) {
-                    System.err.println("skipped YouTube comment on post: \"" + text + "\""); // TODO
-                    continue;
-                } else
-                    throw new AssertionError(); // should not happen unless there's an unknown third parent type
-
                 String timeS = commentE.selectFirst("div.wlgrwd > div.H3Q9vf").ownText();
                 byte hour = Byte.parseByte(timeS.substring(0, timeS.indexOf(":")));
                 byte minute = Byte.parseByte(timeS.substring(timeS.indexOf(":") + 1, timeS.indexOf(":") + 3));

@@ -24,6 +24,9 @@ public class DiaryPage extends Diary implements Serializable {
         E.get(e.CATEGORY).add(e);
     }
 
+    public DiaryEntry randomEntry() {
+    }
+
     @Override
     public String toString() {
         return DATE + " (" + E.size() + ")";

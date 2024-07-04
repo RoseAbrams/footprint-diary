@@ -128,83 +128,11 @@ public class SteamStoreEvent extends SteamEvent {
         return output.toArray(new SteamStoreEvent[output.size()]);
     }
 
-    @Deprecated // super-rough draft based on above, TODO should probably delete and start over
     public static SteamStoreEvent[] createFromHtml(File purchaseHistory) throws IOException {
         ArrayList<SteamStoreEvent> output = new ArrayList<>(1000);
         org.jsoup.nodes.Document d = Jsoup.parse(purchaseHistory);
         Elements tableRows = d.select("tbody > tr.wallet_table_row");
         for (int i = 0; i < tableRows.size(); i++) {
-            Element row = tableRows.get(i);
-            Elements cells = row.children();
-            assert cells.size() == 6;
-            DiaryDate date = null;
-            String[] items = null;
-            Type type = null;
-            String paymentMethod = null;
-            float total = Float.NaN;
-            float walletChange = Float.NaN;
-            float walletBalance = Float.NaN;
-            for (int j = 0; j < cells.size(); j++) {
-                Element cell = cells.get(j);
-                switch (j) {
-                    case 0:
-                        String dateS = cell.text();
-                        date = new DiaryDate(Short.parseShort(dateS.substring(dateS.indexOf(",") + 2)),
-                                DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(","))),
-                                Byte.parseByte(dateS.substring(0, 2).trim()));
-                        break;
-                    case 1:
-                        Elements itemsN = cell.children();
-                        if (itemsN.size() == 0) {
-                            items = new String[1];
-                            items[0] = cell.text();
-                        } else {
-                            items = new String[itemsN.size()];
-                            for (int k = 0; k < items.length; k++) {
-                                if (itemsN.get(k).text().startsWith("Gift sent to"))
-                                    continue;
-                                items[k] = itemsN.get(k).text();
-                            }
-                        }
-                        break;
-                    case 2:
-                        Elements types = cell.children();
-                        String typeS = types.get(0).text();
-                        if (typeS.contains("Market Transaction"))
-                            type = Type.MARKET_TRANSACTION;
-                        else if (typeS.equals("Purchase"))
-                            type = Type.STORE_PURCHASE;
-                        else if (typeS.contains("In-Game"))
-                            type = Type.IN_GAME_PURCHASE;
-                        else if (typeS.equals("Gift Purchase"))
-                            type = Type.GIFT_PURCHASE;
-                        else if (typeS.equals("Refund"))
-                            type = Type.REFUND;
-                        else
-                            throw new IllegalArgumentException();
-                        Element typePaymentN = types.get(1);
-                        assert typePaymentN != null; // looks like it, let's make sure
-                        paymentMethod = typePaymentN.text();
-                        break;
-                    case 3:
-                        total = parseCurrency(cell.text());
-                        break;
-                    case 4:
-                        if (cell.text().isBlank())
-                            walletChange = 0;
-                        else
-                            walletChange = parseCurrency(cell.text());
-                        break;
-                    case 5:
-                        if (cell.text().isBlank())
-                            walletBalance = 0;
-                        else
-                            walletBalance = parseCurrency(cell.text());
-                        break;
-                    default:
-                        throw new AssertionError();
-                }
-            }
             output.add(new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange, walletBalance));
         }
 

@@ -50,9 +50,10 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
                     String album = track.getString("albumName");
                     String id = track.getString("trackUri");
                     t = SpotifyTrack.getOrCreate(id.substring(14), name, album, artist);
+                } else if (!item.isNull("localTrack")) {
+                    t = null; //TODO
                 } else {
-                    //if (!item.isNull("localTrack")) TODO
-                    t = null;
+                    throw new AssertionError();
                 }
 
                 output.add(new SpotifyPlaylisting(added, t, pl));

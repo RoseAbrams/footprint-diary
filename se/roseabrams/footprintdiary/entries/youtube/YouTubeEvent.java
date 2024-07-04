@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -31,7 +30,7 @@ public abstract class YouTubeEvent extends DiaryEntry {
 
             YouTubeEvent newEvent;
 
-            Node dateE = playbackE.select("br").last().nextSibling();
+            Element dateE = playbackE.select("br").last().nextElementSibling();
             String dateS = dateE.toString().trim();
             DiaryDateTime date = new DiaryDateTime(
                     Short.parseShort(dateS.substring(dateS.indexOf(",") + 2, dateS.lastIndexOf(","))),
@@ -44,47 +43,52 @@ public abstract class YouTubeEvent extends DiaryEntry {
             Elements links = playbackE.select("a");
             Element primaryLink = links.first();
 
-            if (playbackE.text().startsWith("Watched a video that has been removed")) {
-                continue; // TODO
-            } else if (playbackE.text().startsWith("Watched")) {
-                String videoId;
-                String videoTitle;
-                String channelId;
-                String channelName;
-
-                String primaryUrl = primaryLink.attr("href");
-                if (primaryUrl.contains("music.youtube"))
-                    primaryUrl = primaryUrl.replace("music.youtube", "www.youtube");
-                assert primaryUrl.startsWith("https://www.youtube.com/watch?v=");
-                videoId = primaryUrl.substring("https://www.youtube.com/watch?v=".length());
-                if (videoId.isEmpty())
-                    continue; // very weird entry that somehow shows up...?
-
-                if (primaryLink.text().equals(primaryUrl))
-                    videoTitle = null;
-                else
-                    videoTitle = primaryLink.text();
-                if (links.size() == 1) {
-                    channelId = null;
-                    channelName = null;
+            if (playbackE.text().startsWith("Watched")) {
+                YouTubeVideo v;
+                boolean isAd;
+                if (playbackE.text().startsWith("Watched a video that has been removed")) {
+                    v = null;
+                    isAd = false;
                 } else {
-                    Element channelLink = links.last();
-                    String channelUrl = channelLink.attr("href");
-                    assert channelUrl.startsWith("https://www.youtube.com/channel/");
-                    channelId = channelUrl.substring("https://www.youtube.com/channel/".length());
-                    channelName = channelLink.text();
-                }
-                Element infoE = playbackE.parent().selectFirst("div.mdl-typography--caption");
-                boolean isAd = infoE.text().contains("From Google Ads");
+                    String videoId;
+                    String videoTitle;
+                    String channelId;
+                    String channelName;
 
-                YouTubeVideo v = YouTubeVideo.getOrCreate(videoId, videoTitle, channelId, channelName);
+                    String primaryUrl = primaryLink.attr("href");
+                    if (primaryUrl.contains("music.youtube"))
+                        primaryUrl = primaryUrl.replace("music.youtube", "www.youtube");
+                    assert primaryUrl.startsWith("https://www.youtube.com/watch?v=");
+                    videoId = primaryUrl.substring("https://www.youtube.com/watch?v=".length());
+                    if (videoId.isEmpty())
+                        continue; // very weird entry that somehow shows up...?
+
+                    if (primaryLink.text().equals(primaryUrl))
+                        videoTitle = null;
+                    else
+                        videoTitle = primaryLink.text();
+                    if (links.size() == 1) {
+                        channelId = null;
+                        channelName = null;
+                    } else {
+                        Element channelLink = links.last();
+                        String channelUrl = channelLink.attr("href");
+                        assert channelUrl.startsWith("https://www.youtube.com/channel/");
+                        channelId = channelUrl.substring("https://www.youtube.com/channel/".length());
+                        channelName = channelLink.text();
+                    }
+                    Element infoE = playbackE.parent().selectFirst("div.mdl-typography--caption");
+                    isAd = infoE.text().contains("From Google Ads");
+
+                    v = YouTubeVideo.getOrCreate(videoId, videoTitle, channelId, channelName);
+                }
                 newEvent = new YouTubePlayback(date, v, isAd);
             } else if (playbackE.text().startsWith("Searched for")) {
                 String searchTerm = primaryLink.text();
 
                 newEvent = new YouTubeSearch(date, searchTerm);
             } else if (playbackE.text().startsWith("Visited")) {
-                continue; // TODO
+                continue; // website arrived at when adverts clicked on, probably not very interesting
             } else {
                 throw new AssertionError();
             }
