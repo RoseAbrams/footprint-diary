@@ -276,6 +276,16 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         public String describeInProse(List<DiaryEntry> fl) {
             return "I visited " + fl.size() + " website" + p(fl) + ".";
         }
+    },
+    EMAIL {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+            int[] n = countMessages(fl);
+            String output = "I recieved " + n[1] + " email" + p(n[1]);
+            if (n[0] > 0)
+                output += " and sent " + n[0];
+            return output + ".";
+        }
     };
 
     public abstract String describeInProse(List<DiaryEntry> filteredList);

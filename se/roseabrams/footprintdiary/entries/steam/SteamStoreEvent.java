@@ -128,7 +128,7 @@ public class SteamStoreEvent extends SteamEvent {
         return output.toArray(new SteamStoreEvent[output.size()]);
     }
 
-    @Deprecated // super-rough draft based on above, should probably delete and start over
+    @Deprecated // super-rough draft based on above, TODO should probably delete and start over
     public static SteamStoreEvent[] createFromHtml(File purchaseHistory) throws IOException {
         ArrayList<SteamStoreEvent> output = new ArrayList<>(1000);
         org.jsoup.nodes.Document d = Jsoup.parse(purchaseHistory);

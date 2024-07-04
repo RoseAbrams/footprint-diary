@@ -2,7 +2,9 @@ package se.roseabrams.footprintdiary.entries.email;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -14,8 +16,46 @@ import se.roseabrams.footprintdiary.common.Message;
 
 public class Email extends DiaryEntry implements Message {
 
-    public Email(DiaryDate dd, String sender, String recipient, String subject) {
+    public final String SENDER_NAME;
+    public final String SENDER_ADDRESS;
+    public final String RECIPIENT;
+    public final String SUBJECT;
+    public final Folder FOLDER;
+    public final boolean IMPORTANT;
+
+    public Email(DiaryDate dd, String senderName, String senderAddress, String recipient,
+            String subject, Folder folder, boolean important) {
         super(DiaryEntryCategory.EMAIL, dd);
+        SENDER_NAME = senderName;
+        SENDER_ADDRESS = senderAddress;
+        RECIPIENT = recipient;
+        SUBJECT = subject;
+        FOLDER = folder;
+        IMPORTANT = important;
+    }
+
+    @Override
+    public String getStringSummary() {
+        return SUBJECT;
+    }
+
+    @Override
+    public String getSender() {
+        return SENDER_ADDRESS;
+    }
+
+    @Override
+    public String getRecipient() {
+        return RECIPIENT;
+    }
+
+    @Override
+    public boolean isByMe() {
+        return FOLDER == Folder.SENT;
+    }
+
+    public static enum Folder {
+        INBOX, SENT, TRASH;
     }
 
     private static final Pattern MBOX_MESSAGE_START_LINE = Pattern.compile("From [0-9]{19}@.*");
@@ -27,44 +67,102 @@ public class Email extends DiaryEntry implements Message {
     public static Email[] createFromMbox(File emailFile) {
         ArrayList<Email> output = new ArrayList<>();
         List<String> mboxLines = Util.readFileLines(emailFile);
-        for (String mboxLine : mboxLines) {
+        for (int i = 0; i < mboxLines.size(); i++) {
+            String mboxLine = mboxLines.get(i);
             boolean currentIsEmail = false;
             long id;
-            DiaryDateTime date;
-            String sender;
-            String recipient;
-            String subject;
+            DiaryDateTime bestDate = null;
+            DiaryDateTime firstlineDate = null;
+            DiaryDateTime fieldDate = null;
+            String senderName = null;
+            String senderAddress = null;
+            String recipient = null;
+            String subject = null;
+            Folder folder = null;
+            boolean important = false;
             if (mboxLine.matches(MBOX_MESSAGE_START_LINE.pattern())) {
                 if (currentIsEmail) {
                     currentIsEmail = false;
-                    Email e = new Email(date, sender, recipient, subject);
+                    Email e = new Email(bestDate, senderName, senderAddress, recipient, subject, folder, important);
                     output.add(e);
                 }
                 currentIsEmail = true;
                 id = 0;
-                date = null;
-                sender = null;
+                bestDate = null;
+                firstlineDate = null;
+                fieldDate = null;
+                senderName = null;
+                senderAddress = null;
                 recipient = null;
                 subject = null;
+                folder = null;
+                important = false;
                 String idS = mboxLine.substring(5, mboxLine.indexOf("@"));
-                String dateS = mboxLine.substring(mboxLine.indexOf("@") + 4); // looks like always UTC-0
-                ...
+                firstlineDate = parseDate(mboxLine.substring(mboxLine.indexOf("@") + 4)); // looks like always UTC-0
             } else if (mboxLine.startsWith("Subject: ")) {
-                subject = mboxLine.substring(mboxLine.indexOf(":") + 1);
-                if (subject.startsWith("=?utf-8")) {
-                    ...
+                subject = mboxLine.substring(mboxLine.indexOf(":") + 2);
+                while (mboxLines.get(i + 1).startsWith(" ")) {
+                    subject += mboxLines.get(i + 1);
+                    i++;
                 }
-            } else if (mboxLine.startsWith("Delivered-To: ")) {
-                recipient = mboxLine.substring(mboxLine.indexOf(":") + 1);
-            } else if (mboxLine.startsWith("Received: from ")) {
-                ... // looks like only first such entry per email is the real one
-                recipient = mboxLine.substring(mboxLine.indexOf(":") + 1);
+                while (subject.contains("=?") && subject.contains("?=")) {
+                    /// doesn't solve partial encodes
+                    int posEncodeStart = subject.indexOf("=?") + 2;
+                    int posEncodeEnd = subject.indexOf("?=");
+                    int posEncodePayloadStart = subject.lastIndexOf("?", posEncodeEnd) + 1;
+                    String encode = subject.substring(posEncodeStart - 2, posEncodeEnd + 2);
+                    String encodingName = subject.substring(posEncodeStart, posEncodePayloadStart - 1);
+                    String payload = subject.substring(posEncodePayloadStart, posEncodeEnd);
+                    String payloadDecoded = new String(Base64.getDecoder().decode(payload.getBytes(encodingName)));
+                    subject = subject.replace(payload, payloadDecoded);
+                }
+            } else if (mboxLine.startsWith("To: ")) {
+                recipient = mboxLine.substring(mboxLine.indexOf(":") + 2);
+                /*} else if (mboxLine.startsWith("Received: from ")) {
+                if (sender == null) { // looks like only first such entry per email is the real one
+                    sender = mboxLine.substring("Received: from ".length(), mboxLine.indexOf("(") - 2);
+                }
+                recipient = mboxLine.substring(mboxLine.indexOf(":") + 1);*/
+            } else if (mboxLine.startsWith("From: ") && !mboxLine.startsWith("From: From:")) {
+                String sender = mboxLine.substring(mboxLine.indexOf(":") + 2);
+                senderName = sender.substring(0, sender.indexOf("<"));
+                senderAddress = sender.substring(sender.indexOf("<") + 1, sender.indexOf(">"));
             } else if (mboxLine.startsWith("Date: ")) {
-                ... // appears same or very close to firstline
+                fieldDate = parseDate(mboxLine.substring(mboxLine.indexOf(":") + 2));
             } else if (mboxLine.startsWith("X-Gmail-Labels: ")) {
-                ... // probably differentiates sent/received and other markings
+                Scanner s = new Scanner(mboxLine.substring(mboxLine.indexOf(":") + 2));
+                s.useDelimiter(",");
+                while (s.hasNext()) {
+                    String label = s.next();
+                    if (label.startsWith("Category ")) {
+                        category.add(label.substring("Category ".length()));
+                    } else {
+                        switch (label) {
+                            case "Inbox":
+                                folder = Folder.INBOX;
+                                break;
+                            case "Sent":
+                                folder = Folder.SENT;
+                                break;
+                            case "Spam":
+                                folder = Folder.TRASH;
+                                break;
+                            case "Important":
+                                important = true;
+                                break;
+                            case "Opened":
+                            case "Unread":
+                                break;
+                            default:
+                                throw new AssertionError();
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private static DiaryDateTime parseDate(String substring) {
     }
 }
 // found by quick googling, good starting point? https://github.com/epfromer/pst-extractor
