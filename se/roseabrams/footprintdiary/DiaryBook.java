@@ -7,15 +7,15 @@ import java.util.GregorianCalendar;
 
 public class DiaryBook extends Diary implements Serializable {
 
-    private final DiaryPage[] PAGES;
+    private final SortedDiaryPage[] PAGES;
     @SuppressWarnings("unused")
     private int discardedOutsideDateRange;
 
     public DiaryBook(DiaryDate starDate, DiaryDate endDate) { // exclusive enddate
-        PAGES = new DiaryPage[starDate.differenceDays(endDate)];
+        PAGES = new SortedDiaryPage[starDate.differenceDays(endDate)];
         GregorianCalendar iDate = (GregorianCalendar) starDate.getDetailedDate().clone();
         for (int i = 0; i < PAGES.length; i++) {
-            PAGES[i] = new DiaryPage(new DiaryDate((short) iDate.get(GregorianCalendar.YEAR),
+            PAGES[i] = new SortedDiaryPage(new DiaryDate((short) iDate.get(GregorianCalendar.YEAR),
                     (byte) (iDate.get(GregorianCalendar.MONTH) + 1), (byte) iDate.get(GregorianCalendar.DAY_OF_MONTH)));
             iDate.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -34,7 +34,7 @@ public class DiaryBook extends Diary implements Serializable {
     }
 
     public void add(DiaryEntry e) {
-        for (DiaryPage page : PAGES) {
+        for (SortedDiaryPage page : PAGES) {
             if (page.DATE.equals(e.DATE, false)) {
                 page.add(e);
                 return;
@@ -43,7 +43,7 @@ public class DiaryBook extends Diary implements Serializable {
         discardedOutsideDateRange++;
     }
 
-    public DiaryPage randomPage() {
+    public SortedDiaryPage randomPage() {
         return PAGES[(int) (PAGES.length * Math.random())];
     }
 
@@ -58,7 +58,7 @@ public class DiaryBook extends Diary implements Serializable {
         }
         output.deleteCharAt(output.length() - 1);
         output.append("\n");
-        for (DiaryPage page : PAGES) {
+        for (SortedDiaryPage page : PAGES) {
             output.append(page.sumsCsv()).append("\n");
         }
         return blankZeroes ? output.toString().replace(",0", ",") : output.toString();
@@ -67,7 +67,7 @@ public class DiaryBook extends Diary implements Serializable {
     public String indexCsv() {
         StringBuilder output = new StringBuilder(1000000);
         output.append(DiaryEntry.indexCsvHeaders(","));
-        for (DiaryPage page : PAGES) {
+        for (SortedDiaryPage page : PAGES) {
             output.append(page.indexCsv());
         }
         return output.toString();
