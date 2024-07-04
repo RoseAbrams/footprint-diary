@@ -8,6 +8,7 @@ import se.roseabrams.footprintdiary.common.CustomCountable;
 
 public class DiaryPage extends Diary implements Serializable {
 
+    private final ArrayList<DiaryEntry> A = new ArrayList<>();
     private final HashMap<DiaryEntryCategory, ArrayList<DiaryEntry>> E = new HashMap<>();
     public final DiaryDate DATE;
 
@@ -19,12 +20,14 @@ public class DiaryPage extends Diary implements Serializable {
         if (!DATE.equals(e.DATE, false))
             throw new IllegalArgumentException(
                     "DiaryEntry don't belong on this DiaryPage - expected " + DATE + ", got " + e.DATE);
+        A.add(e);
         if (!E.containsKey(e.CATEGORY))
             E.putIfAbsent(e.CATEGORY, new ArrayList<>());
         E.get(e.CATEGORY).add(e);
     }
 
     public DiaryEntry randomEntry() {
+        return A.get((int) (A.size() * Math.random()));
     }
 
     @Override
@@ -53,11 +56,9 @@ public class DiaryPage extends Diary implements Serializable {
 
     public String indexCsv() {
         StringBuilder output = new StringBuilder(1000);
-        for (ArrayList<DiaryEntry> es : E.values()) {
-            for (DiaryEntry e : es) {
-                e.indexCsv(output, ",");
-                output.append("\n");
-            }
+        for (DiaryEntry e : A) {
+            e.indexCsv(output, ",");
+            output.append("\n");
         }
         return output.toString();
     }
