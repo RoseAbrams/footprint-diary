@@ -83,11 +83,11 @@ public class DiaryWriter {
             DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
             System.gc();
 
-            writeCsvSum(new File(O + "diarySumTable.csv"));
-            writeCsvIndex(new File(O + "diaryIndexTable.csv"));
+            DW.writeCsvSum(new File(O + "diarySumTable.csv"));
+            DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
             System.gc();
 
-            writeProseSummary(new File(O + "diaryProse.rtf"));
+            DW.writeProseSummary(new File(O + "diaryProse.rtf"));
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);
@@ -103,9 +103,9 @@ public class DiaryWriter {
         D = new DiaryBook();
     }
 
-    public void add(DiaryEntry[] de, String description) {
+    public void add(DiaryEntry[] de) {
         D.add(de);
-        DiaryEntrySpanBoundary[] desb = DiaryEntrySpanBoundary.create(de, description);
+        //DiaryEntrySpanBoundary[] desb = DiaryEntrySpanBoundary.create(de, description);
     }
 
     public void writeCsvSum(File outputFile) throws IOException {
