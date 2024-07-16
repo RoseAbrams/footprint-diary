@@ -51,7 +51,7 @@ public class SteamStoreEvent extends SteamEvent {
     }
 
     public static enum Type {
-        STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME_PURCHASE, GIFT_PURCHASE, REFUND;
+        STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME, GIFT_PURCHASE, REFUND;
     }
 
     @Deprecated // remake this with Jsoup
@@ -94,7 +94,7 @@ public class SteamStoreEvent extends SteamEvent {
                         else if (typeS.equals("Purchase"))
                             type = Type.STORE_PURCHASE;
                         else if (typeS.contains("In-Game"))
-                            type = Type.IN_GAME_PURCHASE;
+                            type = Type.IN_GAME;
                         else if (typeS.equals("Gift Purchase"))
                             type = Type.GIFT_PURCHASE;
                         else
@@ -133,6 +133,34 @@ public class SteamStoreEvent extends SteamEvent {
         org.jsoup.nodes.Document d = Jsoup.parse(purchaseHistory);
         Elements tableRows = d.select("tbody > tr.wallet_table_row");
         for (int i = 0; i < tableRows.size(); i++) {
+            Element tableRow = tableRows.get(i);
+            String dateS = tableRow.selectFirst("td.wht_date").text();
+            DiaryDate date = new DiaryDate(Short.parseShort(dateS.substring(8)),
+                    DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(","))),
+                    Byte.parseByte(dateS.substring(0, 2)));
+
+            Elements itemsE = tableRow.select("td.wht_items > div");
+            String[] items = new String[itemsE.size()];
+            for (int j = 0; j < itemsE.size(); j++) {
+                items[j] = itemsE.get(j).text();
+            }
+
+            Element typeE = tableRow.selectFirst("td.wht_type");
+            String typeS = typeE.firstElementChild().text();
+            Type type = Type.valueOf(typeS.toUpperCase().replace(" ", "_"));
+
+            Element paymentMethodE = typeE.selectFirst("div.wht_payment");
+            String paymentMethod = paymentMethodE.text();
+
+            Element totalE = tableRow.selectFirst("td.wht_total");
+            float total = parseCurrency(totalE.text());
+
+            Element walletChangeE = tableRow.selectFirst("td.wht_wallet_change");
+            float walletChange = parseCurrency(walletChangeE.text());
+
+            Element walletBalanceE = tableRow.selectFirst("td.wht_wallet_balance");
+            float walletBalance = parseCurrency(walletBalanceE.text());
+
             output.add(new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange, walletBalance));
         }
 
