@@ -53,7 +53,7 @@ public class DiaryWriter {
             D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//needs redebug
             D.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
             D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-            D.add(WikimediaEdit.createFromWebsites());//has problems
+            D.add(WikimediaEdit.createFromWebsites());//needs redebug
             D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
             D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
             D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));

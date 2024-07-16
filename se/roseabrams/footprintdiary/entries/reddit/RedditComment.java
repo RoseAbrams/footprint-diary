@@ -53,13 +53,15 @@ public class RedditComment extends RedditSubmission {
                 i++;
                 body += commentsLines.get(i);
             }
-            //String media = s.nextLine(); // seems to always be empty, below assert checks
-            assert body.endsWith(",");
+            //String media = s.nextLine(); // seems to always be empty...
+            assert body.endsWith(","); // ... but let's make sure
             if (body.charAt(0) == '\"')
                 body = body.substring(1, body.length() - 3);
             else
                 body = body.substring(0, body.length() - 2);
             body = body.replace("\"\"", "\"");
+            body = body.replace("\\*", "*");
+            assert !body.contains("\\"); // in case of other escaped chars
 
             int postIdIndex = postLink.indexOf("/comments/") + "/comments/".length();
             String postId = postLink.substring(postIdIndex, postLink.indexOf("/", postIdIndex));

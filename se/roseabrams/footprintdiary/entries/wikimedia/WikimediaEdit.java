@@ -16,7 +16,6 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.common.Content;
 import se.roseabrams.footprintdiary.common.ContentContainer;
-import se.roseabrams.footprintdiary.common.RemoteContent;
 import se.roseabrams.footprintdiary.common.Webpage;
 
 public class WikimediaEdit extends DiaryEntry implements ContentContainer {
@@ -48,19 +47,19 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         }
     }
 
-    public RemoteContent getSite() {
+    public Webpage getSite() {
         return new Webpage("https://" + SITE + ".org/");
     }
 
-    public RemoteContent getArticle() {
-        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE); // TODO all strings must be HTMLified for valid paths
+    public Webpage getArticle() {
+        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE.replace(" ", "_"));
     }
 
-    public RemoteContent getArticlePermalink() {
-        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE + "&oldid=" + OLDID);
+    public Webpage getArticlePermalink() {
+        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE.replace(" ", "+") + "&oldid=" + OLDID);
     }
 
-    public RemoteContent getDiff() {
+    public Webpage getDiff() {
         StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
         return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
     }

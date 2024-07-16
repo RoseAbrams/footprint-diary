@@ -42,6 +42,9 @@ public class RedditPost extends RedditSubmission {
             String subreddit = s.next();
             int gildings = Integer.parseInt(s.next());
             String title = s.next();
+            if (title.charAt(0) == '\"')
+                title = title.substring(1, title.length() - 2);
+            title = title.replace("\"\"", "\"");
             String mediaS = s.next();
             if (mediaS.startsWith("/r/"))
                 mediaS = ""; // sometimes it points to itself for text posts
@@ -54,6 +57,7 @@ public class RedditPost extends RedditSubmission {
             if (body.charAt(0) == '\"')
                 body = body.substring(1, body.length() - 2);
             body = body.replace("\"\"", "\"");
+            body = body.replace("\"*", "*");
 
             RedditPost r;
             if (!mediaS.isBlank())
