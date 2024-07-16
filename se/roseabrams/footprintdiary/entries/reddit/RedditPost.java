@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.reddit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -29,8 +30,9 @@ public class RedditPost extends RedditSubmission {
     /// TODO needs multiline support
     public static RedditPost[] createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
-        for (String post : Util.readFileLines(postsFile)) {
-            Scanner s = new Scanner(post);
+        List<String> postsLines = Util.readFileLines(postsFile);
+        for (int i = 0; i < postsLines.size(); i++) {
+            Scanner s = new Scanner(postsLines.get(i));
             s.useDelimiter(",");
             String id = s.next();
             String linkFull = s.next();
@@ -41,10 +43,17 @@ public class RedditPost extends RedditSubmission {
             int gildings = Integer.parseInt(s.next());
             String title = s.next();
             String mediaS = s.next();
-            if (mediaS.startsWith("/r/")) {
+            if (mediaS.startsWith("/r/"))
                 mediaS = ""; // sometimes it points to itself for text posts
-            }
             String body = s.nextLine();
+            while (postsLines.get(i + 1).subSequence(6, 11).equals(",http")
+                    || postsLines.get(i + 1).subSequence(7, 12).equals(",http")) {
+                i++;
+                body += postsLines.get(i);
+            }
+            if (body.charAt(0) == '\"')
+                body = body.substring(1, body.length() - 2);
+            body = body.replace("\"\"", "\"");
 
             RedditPost r;
             if (!mediaS.isBlank())

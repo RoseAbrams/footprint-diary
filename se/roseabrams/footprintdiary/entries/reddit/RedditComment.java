@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.reddit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -32,8 +33,9 @@ public class RedditComment extends RedditSubmission {
     /// TODO needs multiline support
     public static RedditComment[] createFromCsv(File commentsFile) throws IOException {
         ArrayList<RedditComment> output = new ArrayList<>(1000);
-        for (String post : Util.readFileLines(commentsFile)) {
-            Scanner s = new Scanner(post);
+        List<String> commentsLines = Util.readFileLines(commentsFile);
+        for (int i = 0; i < commentsLines.size(); i++) {
+            Scanner s = new Scanner(commentsLines.get(i));
             s.useDelimiter(",");
             String id = s.next();
             String linkFull = s.next();
@@ -46,8 +48,18 @@ public class RedditComment extends RedditSubmission {
             String parentId = s.next();
             if (parentId.isBlank())
                 parentId = null;
-            String body = s.next();
-            String media = s.nextLine();
+            String body = s.nextLine();
+            while (commentsLines.get(i + 1).subSequence(7, 12).equals(",http")) {
+                i++;
+                body += commentsLines.get(i);
+            }
+            //String media = s.nextLine(); // seems to always be empty, below assert checks
+            assert body.endsWith(",");
+            if (body.charAt(0) == '\"')
+                body = body.substring(1, body.length() - 3);
+            else
+                body = body.substring(0, body.length() - 2);
+            body = body.replace("\"\"", "\"");
 
             int postIdIndex = postLink.indexOf("/comments/") + "/comments/".length();
             String postId = postLink.substring(postIdIndex, postLink.indexOf("/", postIdIndex));
@@ -59,7 +71,7 @@ public class RedditComment extends RedditSubmission {
 
         return output.toArray(new RedditComment[output.size()]);
     }
-/*
+    /*
     @Override
     public StringBuilder detailedCsv(StringBuilder s, String delim) {
         return s.append(ID).append(BODY).append(delim).append(PARENT_POST_ID).append(delim).append(PARENT_COMMENT_ID).append(delim)
