@@ -133,6 +133,7 @@ public class SteamStoreEvent extends SteamEvent {
         org.jsoup.nodes.Document d = Jsoup.parse(purchaseHistory);
         Elements tableRows = d.select("tbody > tr.wallet_table_row");
         for (int i = 0; i < tableRows.size(); i++) {
+            ...
             output.add(new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange, walletBalance));
         }
 

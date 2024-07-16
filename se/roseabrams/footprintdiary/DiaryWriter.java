@@ -29,77 +29,65 @@ import se.roseabrams.footprintdiary.entries.youtube.YouTubeEvent;
 
 public class DiaryWriter {
 
+    private final DiaryBook D;
     private static final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
     private static final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
-    private static final DiaryDate DD1 = new DiaryDate((short) 2009, (byte) 1, (byte) 1);
-    private static final DiaryDate DD2 = new DiaryDate((short) 2023, (byte) 6, (byte) 30);
-    // TODO consider removing these limits entirely and instead determine quality from spans
 
     public static void main(String[] args) {
 
-        final DiaryBook D = new DiaryBook(DD1, DD2);
+        final DiaryWriter DW = new DiaryWriter();
 
         try {
-            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            D.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-            D.add(ResFile.createFromFiles());
-            D.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
-            D.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
-            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
-            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
-            D.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
-            D.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            D.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//has problems
-            D.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
-            D.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-            D.add(WikimediaEdit.createFromWebsites());//has problems
-            D.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//has problems
-            D.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//has problems
-            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
-            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
-            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
-            D.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
-            D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
-            D.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
+            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+            DW.add(ResFile.createFromFiles());
+            DW.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
+            DW.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
+            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
+            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
+            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
+            DW.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
+            DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//has problems
+            DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
+            DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
+            DW.add(WikimediaEdit.createFromWebsites());//has problems
+            DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//has problems
+            DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//has problems
+            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
+            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
+            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
+            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
+            DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
+            DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
             //D.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
             //D.add(youtubeCommentHack());
             // debugged up to here
-            D.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
-            D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
-            D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
-            D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
-            D.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
-            D.add(FacebookPost
+            DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
+            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
+            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
+            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
+            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
+            DW.add(FacebookPost
                     .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
-            D.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
-            D.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
-            D.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
-            D.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
-            D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
-            D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
-            D.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
-            D.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
+            DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
+            DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
+            DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
+            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
+            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
+            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
+            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
+            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
+            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
+            DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
             System.gc();
 
-            String csvSum = D.sumsCsv(true);
-            Util.writeFile(new File(O + "diarySumTable.csv"), csvSum);
-
-            String csvIndex = D.indexCsv();
-            Util.writeFile(new File(O + "diaryIndexTable.csv"), csvIndex);
+            writeCsvSum(new File(O + "diarySumTable.csv"));
+            writeCsvIndex(new File(O + "diaryIndexTable.csv"));
             System.gc();
 
-            String[] prose = D.prose();
-            StringBuilder rtf = new StringBuilder(100000);
-            rtf.append("{\\rtf\\ansi\\deff0\\widoctrl\\ftnbj \\sectd\\linex0\\endnhere \\pard\\plain \\fs30 ");
-            for (String page : prose) {
-                rtf.append(page.replace("\n", "\\par ")).append("\\page ");
-            }
-            rtf.append("}");
-            Util.writeFile(new File(O + "diaryProse.rtf"), rtf.toString());
+            writeProseSummary(new File(O + "diaryProse.rtf"));
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);
@@ -109,6 +97,36 @@ public class DiaryWriter {
             }
             System.exit(1);
         }
+    }
+
+    public DiaryWriter() {
+        D = new DiaryBook();
+    }
+
+    public void add(DiaryEntry[] de, String description) {
+        D.add(de);
+        DiaryEntrySpanBoundary[] desb = DiaryEntrySpanBoundary.create(de, description);
+    }
+
+    public void writeCsvSum(File outputFile) throws IOException {
+        String csvSum = D.sumsCsv(true);
+        Util.writeFile(outputFile, csvSum);
+    }
+
+    public void writeCsvIndex(File outputFile) throws IOException {
+        String csvIndex = D.indexCsv();
+        Util.writeFile(outputFile, csvIndex);
+    }
+
+    public void writeProseSummary(File outputFile) throws IOException {
+        String[] prose = D.prose();
+        StringBuilder rtf = new StringBuilder(100000);
+        rtf.append("{\\rtf\\ansi\\deff0\\widoctrl\\ftnbj \\sectd\\linex0\\endnhere \\pard\\plain \\fs30 ");
+        for (String page : prose) {
+            rtf.append(page.replace("\n", "\\par ")).append("\\page ");
+        }
+        rtf.append("}");
+        Util.writeFile(outputFile, rtf.toString());
     }
 
     private static ArrayList<YouTubeComment> youtubeCommentHack() throws IOException {

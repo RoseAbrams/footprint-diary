@@ -84,11 +84,13 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         return output.toArray(new WikimediaEdit[output.size()]);
     }
 
+    private static final int EDIT_LIMIT = 100;//10000;
+
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
         Connection c = Jsoup.newSession();
         c.timeout(120000);
         c.url("https://" + site + ".org/w/index.php?title="
-                + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=100");
+                + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=" + EDIT_LIMIT);
         Document d = c.get();
 
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
@@ -115,21 +117,4 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         }
         return output;
     }
-    /*
-     * public static WikimediaEdit[] createFromHtml(File contribsFile, String site)
-     * throws IOException {
-     * ArrayList<WikimediaEdit> output = new ArrayList<>();
-     * Document d = Util.readXmlFile(contribsFile);
-     * NodeList contribs = d.getDocumentElement().getChildNodes();
-     * String baseURL = "https://" + site + ".org";
-     * for (int i = 0; i < contribs.getLength(); i++) {
-     * if (contribs.item(i).getNodeName().equals("ul")) {
-     * Node contrib = contribs.item(i).getFirstChild();
-     * contrib. // why can't i just query it??
-     * }
-     * }
-     * 
-     * return output.toArray(new WikimediaEdit[output.size()]);
-     * }
-     */
 }
