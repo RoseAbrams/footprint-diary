@@ -1,7 +1,11 @@
 package se.roseabrams.footprintdiary;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -73,6 +77,29 @@ public class Util {
             }
         }
         throw new IllegalArgumentException("No value " + input + " in enum " + enumValues.getClass());
+    }
+
+    public static void serialize(Object o, File outputFile) throws IOException {
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(o);
+        oos.flush();
+        fos.flush();
+        oos.close();
+        fos.close();
+    }
+
+    public static Object deserialize(File inputFile) throws IOException {
+        try {
+            FileInputStream fis = new FileInputStream(inputFile);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object output = ois.readObject();
+            ois.close();
+            fis.close();
+            return output;
+        } catch (ClassNotFoundException e) {
+            throw new IOException(e);
+        }
     }
 
     public static String jsonStringNullsafe(JSONObject o, String key) {

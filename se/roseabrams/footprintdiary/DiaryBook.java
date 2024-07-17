@@ -1,24 +1,15 @@
 package se.roseabrams.footprintdiary;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 
 public class DiaryBook extends Diary implements Serializable {
 
-    private final DiaryPage[] PAGES;
-    @SuppressWarnings("unused")
-    private int discardedOutsideDateRange;
+    private final ArrayList<DiaryPage> PAGES;
 
-    public DiaryBook(DiaryDate starDate, DiaryDate endDate) { // exclusive enddate
-        PAGES = new DiaryPage[starDate.differenceDays(endDate)];
-        GregorianCalendar iDate = (GregorianCalendar) starDate.getDetailedDate().clone();
-        for (int i = 0; i < PAGES.length; i++) {
-            PAGES[i] = new DiaryPage(new DiaryDate((short) iDate.get(GregorianCalendar.YEAR),
-                    (byte) (iDate.get(GregorianCalendar.MONTH) + 1), (byte) iDate.get(GregorianCalendar.DAY_OF_MONTH)));
-            iDate.add(Calendar.DAY_OF_MONTH, 1);
-        }
+    public DiaryBook() {
+        PAGES = new ArrayList<>(3000);
     }
 
     public void add(DiaryEntry[] entries) {
@@ -40,11 +31,24 @@ public class DiaryBook extends Diary implements Serializable {
                 return;
             }
         }
-        discardedOutsideDateRange++;
+        DiaryPage newPage = new DiaryPage(e.DATE.reduce());
+        PAGES.add(newPage);
+        PAGES.sort(null);
+        newPage.add(e);
+    }
+
+    public void addFillerPages() {
+        for (int i = 0; i < PAGES.size() - 1; i++) {
+            DiaryDate thisPageDate = PAGES.get(i).DATE;
+            DiaryDate tomorrowPageDate = thisPageDate.tomorrow();
+            DiaryDate nextPageDate = PAGES.get(i + 1).DATE;
+            if (!tomorrowPageDate.equals(nextPageDate, false))
+                PAGES.add(i + 1, new DiaryPage(tomorrowPageDate));
+        }
     }
 
     public DiaryPage randomPage() {
-        return PAGES[(int) (PAGES.length * Math.random())];
+        return PAGES.get((int) (PAGES.size() * Math.random()));
     }
 
     public DiaryEntry randomEntry() {
@@ -74,9 +78,9 @@ public class DiaryBook extends Diary implements Serializable {
     }
 
     public String[] prose() {
-        String[] output = new String[PAGES.length];
-        for (int i = 0; i < PAGES.length; i++) {
-            output[i] = PAGES[i].prose();
+        String[] output = new String[PAGES.size()];
+        for (int i = 0; i < PAGES.size(); i++) {
+            output[i] = PAGES.get(i).prose();
         }
         return output;
     }

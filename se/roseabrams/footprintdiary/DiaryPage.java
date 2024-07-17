@@ -6,13 +6,14 @@ import java.util.HashMap;
 
 import se.roseabrams.footprintdiary.common.CustomCountable;
 
-public class DiaryPage extends Diary implements Serializable {
+public class DiaryPage extends Diary implements Serializable, Comparable<DiaryPage> {
 
-    private final ArrayList<DiaryEntry> A = new ArrayList<>();
+    private final ArrayList<DiaryEntry> A = new ArrayList<>(100);
     private final HashMap<DiaryEntryCategory, ArrayList<DiaryEntry>> E = new HashMap<>();
     public final DiaryDate DATE;
 
     public DiaryPage(DiaryDate date) {
+        assert !(date instanceof DiaryDateTime);
         DATE = date;
     }
 
@@ -22,7 +23,7 @@ public class DiaryPage extends Diary implements Serializable {
                     "DiaryEntry don't belong on this DiaryPage - expected " + DATE + ", got " + e.DATE);
         A.add(e);
         if (!E.containsKey(e.CATEGORY))
-            E.putIfAbsent(e.CATEGORY, new ArrayList<>());
+            E.putIfAbsent(e.CATEGORY, new ArrayList<>(20));
         E.get(e.CATEGORY).add(e);
     }
 
@@ -33,6 +34,11 @@ public class DiaryPage extends Diary implements Serializable {
     @Override
     public String toString() {
         return DATE + " (" + E.size() + ")";
+    }
+
+    @Override
+    public int compareTo(DiaryPage o) {
+        return DATE.compareTo(o.DATE, false);
     }
 
     public String sumsCsv() {
