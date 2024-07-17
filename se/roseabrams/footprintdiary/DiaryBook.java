@@ -31,10 +31,20 @@ public class DiaryBook extends Diary implements Serializable {
                 return;
             }
         }
-        DiaryPage newPage = new DiaryPage(e.DATE);
+        DiaryPage newPage = new DiaryPage(e.DATE.reduce());
         PAGES.add(newPage);
         PAGES.sort(null);
         newPage.add(e);
+    }
+
+    public void addFillerPages() {
+        for (int i = 0; i < PAGES.size() - 1; i++) {
+            DiaryDate thisPageDate = PAGES.get(i).DATE;
+            DiaryDate tomorrowPageDate = thisPageDate.tomorrow();
+            DiaryDate nextPageDate = PAGES.get(i + 1).DATE;
+            if (!tomorrowPageDate.equals(nextPageDate, false))
+                PAGES.add(i + 1, new DiaryPage(tomorrowPageDate));
+        }
     }
 
     public DiaryPage randomPage() {

@@ -13,6 +13,7 @@ public class DiaryPage extends Diary implements Serializable, Comparable<DiaryPa
     public final DiaryDate DATE;
 
     public DiaryPage(DiaryDate date) {
+        assert !(date instanceof DiaryDateTime);
         DATE = date;
     }
 
@@ -37,7 +38,7 @@ public class DiaryPage extends Diary implements Serializable, Comparable<DiaryPa
 
     @Override
     public int compareTo(DiaryPage o) {
-        return DATE.compareTo(o.DATE);
+        return DATE.compareTo(o.DATE, false);
     }
 
     public String sumsCsv() {

@@ -83,6 +83,10 @@ public class DiaryWriter {
             DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
             System.gc();
 
+            Util.serialize(DW.D, new File(O + "diary.ser"));
+
+            DW.D.addFillerPages();
+
             DW.writeCsvSum(new File(O + "diarySumTable.csv"));
             DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
             System.gc();

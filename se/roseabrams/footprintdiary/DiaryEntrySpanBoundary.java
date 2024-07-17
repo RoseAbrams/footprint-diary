@@ -20,16 +20,16 @@ public class DiaryEntrySpanBoundary extends DiaryEntry {
         DiaryDate start = DiaryDate.MAX;
         DiaryDate end = DiaryDate.MIN;
         for (DiaryEntry entry : entries) {
-            if (entry.DATE.compareTo(start) < 0) {
-                start = entry.DATE.reduce();
+            if (entry.DATE.compareTo(start, false) < 0) {
+                start = entry.DATE;
             }
-            if (entry.DATE.compareTo(end) > 0) {
-                start = entry.DATE.reduce();
+            if (entry.DATE.compareTo(end, false) > 0) {
+                start = entry.DATE;
             }
         }
-        DiaryDateSpan dds = new DiaryDateSpan(start, end);
-        DiaryEntrySpanBoundary startB = new DiaryEntrySpanBoundary(start, true, description);
-        DiaryEntrySpanBoundary endB = new DiaryEntrySpanBoundary(end, false, description);
+        DiaryDateSpan dds = new DiaryDateSpan(start.reduce(), end.reduce());
+        DiaryEntrySpanBoundary startB = new DiaryEntrySpanBoundary(start.reduce(), true, description);
+        DiaryEntrySpanBoundary endB = new DiaryEntrySpanBoundary(end.reduce(), false, description);
         DiaryEntrySpanBoundary[] output = { startB, endB };
         return output;
     }
