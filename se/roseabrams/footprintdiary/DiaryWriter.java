@@ -38,7 +38,7 @@ public class DiaryWriter {
     public static void main(String[] args) {
 
         final DiaryWriter DW = new DiaryWriter();
-        boolean debugging = true;
+        final boolean debugging = true;
 
         try {
             if (!debugging) {
@@ -75,7 +75,7 @@ public class DiaryWriter {
                 DW.writeCsvSum(new File(O + "diarySumTable.csv"));
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
-            } else { // move this after debugging progress
+            } else { // move this as the debugging progresses
                 DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));

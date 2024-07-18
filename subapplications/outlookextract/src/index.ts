@@ -1,6 +1,7 @@
 import { PSTMessage } from "pst-extractor";
 import { PSTFile } from "pst-extractor";
 import { PSTFolder } from "pst-extractor";
+import * as fs from "fs";
 const resolve = require("path").resolve;
 
 let depth = -1;
@@ -12,27 +13,56 @@ const pstFile = new PSTFile(
   )
 );
 //example();
-for (let folderL1 of pstFile.getRootFolder().getSubFolders()) {
-  if (folderL1.displayName == "Top of Personal Folders") {
-    for (let folderL2 of folderL1.getSubFolders()) {
-      if (
-        folderL2.displayName == "Inbox" ||
-        folderL2.displayName == "Sent Items"
-      ) {
-        console.log("files in folder: " + folderL2.contentCount);
-        console.log("emails in folder: " + folderL2.emailCount);
-        while (true) {
-          let email: PSTMessage = folderL2.getNextChild();
-          if (email == null) break;
-          console.log(email.clientSubmitTime);
-          email = folderL2.getNextChild();
+//explore();
+exportDecompiled("Inbox");
+exportDecompiled("Sent Items");
+
+function explore() {
+  for (let folderL1 of pstFile.getRootFolder().getSubFolders()) {
+    if (folderL1.displayName == "Top of Personal Folders") {
+      for (let folderL2 of folderL1.getSubFolders()) {
+        if (
+          folderL2.displayName == "Inbox" ||
+          folderL2.displayName == "Sent Items"
+        ) {
+          console.log("files in folder: " + folderL2.contentCount);
+          console.log("emails in folder: " + folderL2.emailCount);
+          while (true) {
+            let email: PSTMessage = folderL2.getNextChild();
+            if (email == null) break;
+            console.log(email.clientSubmitTime);
+          }
         }
+        console.log("---");
       }
-      console.log("---");
     }
   }
 }
 
+function exportDecompiled(folderName: string) {
+  const output = [];
+  for (let folderL1 of pstFile.getRootFolder().getSubFolders()) {
+    if (folderL1.displayName == "Top of Personal Folders") {
+      for (let folderL2 of folderL1.getSubFolders()) {
+        if (folderL2.displayName == folderName) {
+          while (true) {
+            let email: PSTMessage = folderL2.getNextChild();
+            if (email == null) break;
+            output.push(email.toJSON());
+          }
+        }
+      }
+    }
+  }
+  fs.writeFile(
+    `C:/Users/RosaAbrahamsson/Downloads/pst decompiled (${folderName}).json`,
+    JSON.stringify(output),
+    "utf8",
+    () => {}
+  );
+}
+
+/// https://github.com/epfromer/pst-extractor
 function example() {
   console.log(pstFile.getMessageStore().displayName);
   processFolder(pstFile.getRootFolder());

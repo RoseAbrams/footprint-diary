@@ -77,7 +77,7 @@ public class MedicalRecord extends DiaryEntry {
             else
                 timestamp = timestampTemp;
 
-            String bestTypeS = payloadTypeS; // TODO find best field for data
+            String bestTypeS = payloadTypeS; // TODO find best field for this
             Type type = Type.valueOf(bestTypeS.toUpperCase());
 
             MedicalRecord m = new MedicalRecord(timestamp, type, author, provider, payloadText);
