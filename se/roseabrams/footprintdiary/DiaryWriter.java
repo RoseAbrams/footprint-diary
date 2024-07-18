@@ -10,11 +10,13 @@ import se.roseabrams.footprintdiary.entries.apple.DailyActivity;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
 import se.roseabrams.footprintdiary.entries.camera.CameraCapture;
 import se.roseabrams.footprintdiary.entries.discord.DiscordMessage;
+import se.roseabrams.footprintdiary.entries.email.Email;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookFriend;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookMessage;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
+import se.roseabrams.footprintdiary.entries.medical.MedicalRecord;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
@@ -81,6 +83,8 @@ public class DiaryWriter {
             DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
             DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
             DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
+            DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
+            DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
             System.gc();
 
             Util.serialize(DW.D, new File(O + "diary.ser"));

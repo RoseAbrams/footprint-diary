@@ -12,12 +12,12 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public transient GregorianCalendar detailedDate = null;
     public static final DiaryDate MIN = new DiaryDate((short) 2000, (byte) 1, (byte) 1);
     public static final DiaryDate MAX = new DiaryDate((short) 2025, (byte) 12, (byte) 31);
-    protected static final boolean DEFAULT_STRICTNESS = true;
+    private static final boolean DEFAULT_STRICTNESS = true;
 
     public DiaryDate(short year, byte month, byte day) {
         assert (MIN == null || MAX == null) || (year >= MIN.YEAR && year < MAX.YEAR);
         assert month >= 1 && month <= 12;
-        assert day >= 1 && month <= daysInMonth(year, month);
+        assert day >= 1 && day <= daysInMonth(year, month);
 
         YEAR = year;
         MONTH = month;
@@ -36,11 +36,11 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         return detailedDate;
     }
 
-    public int differenceDays(DiaryDate d2) {
+    int differenceDays(DiaryDate d2) {
         return differenceDays(this, d2);
     }
 
-    public static int differenceDays(DiaryDate d1, DiaryDate d2) {
+    static int differenceDays(DiaryDate d1, DiaryDate d2) {
         return (int) TimeUnit.MILLISECONDS
                 .toDays(d2.getDetailedDate().getTime().getTime() - d1.getDetailedDate().getTime().getTime());
     }
