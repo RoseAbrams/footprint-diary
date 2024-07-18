@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.Message;
@@ -12,6 +13,7 @@ import se.roseabrams.footprintdiary.entries.facebook.FacebookComment;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookFriend;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookPost;
 import se.roseabrams.footprintdiary.entries.facebook.FacebookReaction;
+import se.roseabrams.footprintdiary.entries.medical.MedicalRecord;
 import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
@@ -51,8 +53,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             }
 
             StringBuilder output = new StringBuilder(40);
-            output.append("I used my camera ").append(nPictures + nVideos)
-                    .append(" time").append(p(fl)).append(". I took ");
+            output.append("I used my camera ").append(nPictures + nVideos).append(" time").append(p(fl))
+                    .append(". I took ");
             if (nPictures > 0)
                 output.append(nPictures).append(" photo" + p(nPictures) + ", ");
             if (nVideos > 0)
@@ -71,8 +73,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     MEME_CREATED {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            return "I made " + fl.size() + " meme" + p(fl) + " and published "
-                    + (fl.size() == 1 ? "it" : "them") + " online.";
+            return "I made " + fl.size() + " meme" + p(fl) + " and published " + (fl.size() == 1 ? "it" : "them")
+                    + " online.";
         }
     },
     WALLPAPER_SAVED {
@@ -138,8 +140,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 else if (e instanceof SpotifyPlaylisting)
                     nPlaylisted++;
             }
-            return "I listened to " + nPlayed + " song" + p(nPlayed) + " on Spotify and added "
-                    + nPlaylisted + " song" + p(nPlaylisted) + " to my playlists.";
+            return "I listened to " + nPlayed + " song" + p(nPlayed) + " on Spotify and added " + nPlaylisted + " song"
+                    + p(nPlaylisted) + " to my playlists.";
         }
     },
     STEAM {
@@ -285,6 +287,31 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             if (n[0] > 0)
                 output += " and sent " + n[0];
             return output + ".";
+        }
+    },
+    MEDICAL {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+            StringBuilder output = new StringBuilder(100);
+            output.append("I interacted with healthcare ").append(fl.size()).append(" time").append(p(fl)).append(",");
+            TreeSet<String> providers = new TreeSet<>();
+            TreeSet<String> authors = new TreeSet<>();
+            for (DiaryEntry e : fl) {
+                providers.add(((MedicalRecord) e).PROVIDER);
+                authors.add(((MedicalRecord) e).AUTHOR);
+            }
+            output.append(" at ");
+            if (providers.size() == 1)
+                output.append(providers.first());
+            else
+                output.append(providers.size()).append(" different places");
+            output.append(" with ");
+            if (authors.size() == 1)
+                output.append(authors.first());
+            else
+                output.append(authors.size()).append(" different people");
+            output.append(".");
+            return output.toString();
         }
     };
 

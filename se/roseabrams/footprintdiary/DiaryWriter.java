@@ -38,64 +38,63 @@ public class DiaryWriter {
     public static void main(String[] args) {
 
         final DiaryWriter DW = new DiaryWriter();
+        boolean debugging = true;
 
         try {
-            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
-            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
-            DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
-            DW.add(ResFile.createFromFiles());
-            DW.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
-            DW.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
-            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
-            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
-            DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
-            DW.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-            DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//needs redebug
-            DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
-            DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-            DW.add(WikimediaEdit.createFromWebsites());//needs redebug
-            DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
-            DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
-            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
-            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
-            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
-            DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
-            DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
-            DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
-            //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
-            //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
-            //DW.add(youtubeCommentHack());
-            // debugged up to here
-            DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
-            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
-            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
-            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
-            DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
-            DW.add(FacebookPost
-                    .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
-            DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
-            DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
-            DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
-            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
-            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
-            DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
-            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
-            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
-            DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
-            DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
-            DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
-            DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
-            System.gc();
+            if (!debugging) {
+                DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Camera Uploads")));
+                DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Bilder")));
+                DW.add(CameraCapture.createFromFiles(new File("D:\\Dropbox\\Privat\\utdaterat\\Kina\\Filmer")));
+                DW.add(ResFile.createFromFiles());
+                DW.add(DiscordMessage.createAllFromCsv(new File(I + "discord\\messages")));
+                DW.add(WhatsAppMessage.createAllFromFolder(new File(I + "whatsapp")));
+                DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_0.json")));
+                DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
+                DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
+                DW.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
+                DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//needs redebug
+                DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
+                DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
+                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
+                DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
+                DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
+                DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
+                DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
+                DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
+                DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
+                DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
+                DW.add(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
+                //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
+                //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
+                //DW.add(youtubeCommentHack());
 
-            Util.serialize(DW.D, new File(O + "diary.ser"));
+                Util.serialize(DW.D, new File(O + "diary.ser"));
 
-            DW.D.addFillerPages();
+                DW.D.addFillerPages();
 
-            DW.writeCsvSum(new File(O + "diarySumTable.csv"));
-            DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
-            System.gc();
-
-            DW.writeProseSummary(new File(O + "diaryProse.rtf"));
+                DW.writeCsvSum(new File(O + "diarySumTable.csv"));
+                DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
+                DW.writeProseSummary(new File(O + "diaryProse.rtf"));
+            } else { // move this after debugging progress
+                DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
+                DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
+                DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
+                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
+                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
+                DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
+                DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
+                DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
+            }
         } catch (IOException e) {
             System.err.println(e);
             e.printStackTrace(System.err);
@@ -114,6 +113,7 @@ public class DiaryWriter {
     public void add(DiaryEntry[] de) {
         D.add(de);
         //DiaryEntrySpanBoundary[] desb = DiaryEntrySpanBoundary.create(de, description);
+        System.gc();
     }
 
     public void writeCsvSum(File outputFile) throws IOException {

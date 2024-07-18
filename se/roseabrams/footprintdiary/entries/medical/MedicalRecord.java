@@ -14,7 +14,6 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.common.TitledString;
-import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 
 public class MedicalRecord extends DiaryEntry {
 
@@ -77,9 +76,11 @@ public class MedicalRecord extends DiaryEntry {
                 timestamp = timestampTemp.reduce();
             else
                 timestamp = timestampTemp;
+
+            String bestTypeS = payloadTypeS; // TODO find best field for data
             Type type = Type.valueOf(bestTypeS.toUpperCase());
 
-            MedicalRecord m = new MedicalRecord(timestampTemp, type, author, provider, payloadText);
+            MedicalRecord m = new MedicalRecord(timestamp, type, author, provider, payloadText);
             output.add(m);
         }
         return output.toArray(new MedicalRecord[output.size()]);

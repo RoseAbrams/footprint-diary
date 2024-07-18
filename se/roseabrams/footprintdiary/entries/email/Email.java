@@ -162,7 +162,10 @@ public class Email extends DiaryEntry implements Message {
         }
     }
 
+    public static Email[] createFromMbox(File emailFile) {
+        // found by quick googling, good starting point? https://github.com/epfromer/pst-extractor
+    }
+
     private static DiaryDateTime parseDate(String substring) {
     }
 }
-// found by quick googling, good starting point? https://github.com/epfromer/pst-extractor
