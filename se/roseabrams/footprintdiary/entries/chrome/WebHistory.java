@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.chrome;
+package se.roseabrams.footprintdiary.entries.chrome;
 
 import java.io.File;
 import java.io.IOException;
