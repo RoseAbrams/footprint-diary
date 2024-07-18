@@ -13,9 +13,9 @@ const pstFile = new PSTFile(
   )
 );
 //example();
-//explore();
-exportDecompiled("Inbox");
-exportDecompiled("Sent Items");
+explore();
+//exportDecompiled("Inbox");
+//exportDecompiled("Sent Items");
 
 function explore() {
   for (let folderL1 of pstFile.getRootFolder().getSubFolders()) {
@@ -45,10 +45,9 @@ function exportDecompiled(folderName: string) {
     if (folderL1.displayName == "Top of Personal Folders") {
       for (let folderL2 of folderL1.getSubFolders()) {
         if (folderL2.displayName == folderName) {
-          while (true) {
+          for (let i = 0; i < 10000; i++) {
             let email: PSTMessage = folderL2.getNextChild();
-            if (email == null) break;
-            output.push(email.toJSON());
+            output.push(email === null ? null : email.toJSON());
           }
         }
       }
