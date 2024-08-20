@@ -1,6 +1,8 @@
 package se.roseabrams.footprintdiary.entries.wikimedia;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.jsoup.Connection;
@@ -58,15 +60,25 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     }
 
     public Webpage getArticle() {
-        if (article == null)
-            article = new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE.replace(" ", "_"));
+        if (article == null) {
+            try {
+                article = new Webpage(getSite().getPath() + "wiki/" + URLEncoder.encode(PAGE_TITLE, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
+        }
         return article;
     }
 
     public Webpage getArticlePermalink() {
-        if (articlePermalink == null)
-            articlePermalink = new Webpage(getSite().getPath() + "w/index.php?title="
-                    + PAGE_TITLE.replace(" ", "+") + "&oldid=" + OLDID);
+        if (articlePermalink == null) {
+            try {
+                articlePermalink = new Webpage(getSite().getPath() + "w/index.php?title="
+                        + URLEncoder.encode(PAGE_TITLE, "UTF-8") + "&oldid=" + OLDID);
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
+        }
         return articlePermalink;
     }
 
@@ -92,7 +104,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     public static WikimediaEdit[] createFromWebsites() throws IOException {
         ArrayList<WikimediaEdit> output = new ArrayList<>(7000);
         for (String wiki : PersonalConstants.WIKIS_WITH_EDITS) {
-            output.addAll(createFromWebsite(wiki));
+            output.addAll(createFromWebsite(wiki.intern()));
         }
         return output.toArray(new WikimediaEdit[output.size()]);
     }
@@ -114,19 +126,23 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
             String editSizeS = edit.select(".mw-diff-bytes").first().text();
             int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", ""));
             String dateS = edit.select("a.mw-changeslist-date").first().text();
+            // TODO timeformat is localized to wikilanguage, feels hopeless to unify🙁
             DiaryDateTime date = new DiaryDateTime(Short.parseShort(dateS.substring(dateS.lastIndexOf(" 20") + 1)),
                     DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(",") + 4, dateS.lastIndexOf(" ")).trim()),
                     Byte.parseByte(dateS.substring(dateS.indexOf(",") + 2, dateS.indexOf(",") + 4).trim()),
                     Byte.parseByte(dateS.substring(0, 2)), Byte.parseByte(dateS.substring(3, 5)), (byte) 0);
             String pageTitle = edit.select("a.mw-contributions-title").first().text();
             String editSummary = edit.select("span.comment").first().text();
+            if (editSummary.equals("No edit summary"))
+                editSummary = "";
             Elements tagsE = edit.select("span.mw-tag-markers > span.mw-tag-marker");
             String[] tags = new String[tagsE.size()];
             for (int i = 0; i < tagsE.size(); i++) {
                 tags[i] = tagsE.get(i).text().intern();
             }
 
-            output.add(new WikimediaEdit(date, site, pageTitle, editSize, oldid, editSummary, tags));
+            WikimediaEdit w = new WikimediaEdit(date, site, pageTitle, editSize, oldid, editSummary, tags);
+            output.add(w);
         }
         return output;
     }

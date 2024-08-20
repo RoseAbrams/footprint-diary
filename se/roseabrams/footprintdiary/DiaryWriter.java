@@ -52,10 +52,10 @@ public class DiaryWriter {
                 DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
                 DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
                 DW.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-                DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));//needs redebug
+                DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
+                DW.add(WikimediaEdit.createFromWebsites());//needs further work
                 DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
                 DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
                 DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
@@ -76,7 +76,6 @@ public class DiaryWriter {
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
             } else { // move this as the debugging progresses
-                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
                 DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
                 DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
 
