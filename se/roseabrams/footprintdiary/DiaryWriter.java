@@ -76,12 +76,17 @@ public class DiaryWriter {
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
             } else { // move this as the debugging progresses
+                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
+                DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
+                DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
+
                 DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
-                DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
+                DW.add(FacebookPost
+                        .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
                 DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));

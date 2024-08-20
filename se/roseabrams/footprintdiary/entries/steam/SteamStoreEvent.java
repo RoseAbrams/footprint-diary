@@ -47,11 +47,11 @@ public class SteamStoreEvent extends SteamEvent {
         for (String i : ITEMS) {
             output.append(i).append(", ");
         }
-        return output.substring(0, output.length() - 3);
+        return output.substring(0, output.length() - 2);
     }
 
     public static enum Type {
-        STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME, GIFT_PURCHASE, REFUND;
+        STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME_PURCHASE, GIFT_PURCHASE, REFUND;
     }
 
     @Deprecated // remake this with Jsoup
@@ -94,7 +94,7 @@ public class SteamStoreEvent extends SteamEvent {
                         else if (typeS.equals("Purchase"))
                             type = Type.STORE_PURCHASE;
                         else if (typeS.contains("In-Game"))
-                            type = Type.IN_GAME;
+                            type = Type.IN_GAME_PURCHASE;
                         else if (typeS.equals("Gift Purchase"))
                             type = Type.GIFT_PURCHASE;
                         else
@@ -135,39 +135,63 @@ public class SteamStoreEvent extends SteamEvent {
         for (int i = 0; i < tableRows.size(); i++) {
             Element tableRow = tableRows.get(i);
             String dateS = tableRow.selectFirst("td.wht_date").text();
-            DiaryDate date = new DiaryDate(Short.parseShort(dateS.substring(8)),
+            DiaryDate date = new DiaryDate(Short.parseShort(dateS.substring(dateS.indexOf(",") + 2)),
                     DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(","))),
-                    Byte.parseByte(dateS.substring(0, 2)));
+                    Byte.parseByte(dateS.substring(0, 2).trim()));
 
-            Elements itemsE = tableRow.select("td.wht_items > div");
-            String[] items = new String[itemsE.size()];
-            for (int j = 0; j < itemsE.size(); j++) {
-                items[j] = itemsE.get(j).text();
+            Elements itemE = tableRow.select("td.wht_items");
+            Elements itemsE = itemE.select("div");
+            String[] items;
+            if (itemsE.size() == 0) {
+                items = new String[1];
+                items[0] = itemE.text().intern();
+            } else {
+                items = new String[itemsE.size()];
+                for (int j = 0; j < itemsE.size(); j++) {
+                    items[j] = itemsE.get(j).text().intern();
+                }
             }
 
             Element typeE = tableRow.selectFirst("td.wht_type");
             String typeS = typeE.firstElementChild().text();
-            Type type = Type.valueOf(typeS.toUpperCase().replace(" ", "_"));
+            Type type;
+            if (typeS.contains("Market Transaction"))
+                type = Type.MARKET_TRANSACTION;
+            else if (typeS.equals("Purchase"))
+                type = Type.STORE_PURCHASE;
+            else if (typeS.contains("In-Game"))
+                type = Type.IN_GAME_PURCHASE;
+            else if (typeS.equals("Gift Purchase"))
+                type = Type.GIFT_PURCHASE;
+            else if (typeS.equals("Refund"))
+                type = Type.REFUND;
+            else
+                throw new IllegalArgumentException();
 
-            Element paymentMethodE = typeE.selectFirst("div.wht_payment");
+            //Element paymentMethodE = typeE.selectFirst("div.wht_payment");
+            Element paymentMethodE = typeE.lastElementChild();
             String paymentMethod = paymentMethodE.text();
 
             Element totalE = tableRow.selectFirst("td.wht_total");
             float total = parseCurrency(totalE.text());
 
             Element walletChangeE = tableRow.selectFirst("td.wht_wallet_change");
-            float walletChange = parseCurrency(walletChangeE.text());
+            float walletChange = walletChangeE.text().isEmpty() ? 0 : parseCurrency(walletChangeE.text());
 
             Element walletBalanceE = tableRow.selectFirst("td.wht_wallet_balance");
-            float walletBalance = parseCurrency(walletBalanceE.text());
+            float walletBalance = walletBalanceE.text().isEmpty() ? 0 : parseCurrency(walletBalanceE.text());
 
-            output.add(new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange, walletBalance));
+            SteamStoreEvent s = new SteamStoreEvent(date, items, type, paymentMethod, total, walletChange,
+                    walletBalance);
+            output.add(s);
         }
 
         return output.toArray(new SteamStoreEvent[output.size()]);
     }
 
     public static float parseCurrency(String s) {
+        if (s.startsWith("$"))
+            s = s.substring(1);
         return Float.parseFloat(s.substring(0, s.indexOf(",") + 3)
                 .replace(',', '.').replace("--", "00"));
     }
