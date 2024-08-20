@@ -17,12 +17,8 @@ public class RemoteContent extends Content {
         }
     }
 
-    public RemoteContent(String ext, String url) {
-        this(ContentType.parseExtension(ext, false), url);
-    }
-
     public RemoteContent(String url) {
-        this(getExtFromPath(url), url);
+        this(getTypeFromContextOrExt(url), url);
     }
 
     @Override
@@ -33,5 +29,12 @@ public class RemoteContent extends Content {
     @Override
     public String getPath() {
         return URL.toExternalForm();
+    }
+
+    static ContentType getTypeFromContextOrExt(String p) {
+        if (p.contains("youtube.com/watch?v="))
+            return ContentType.VIDEO;
+
+        return ContentType.parseExtension(getExtFromPath(p));
     }
 }

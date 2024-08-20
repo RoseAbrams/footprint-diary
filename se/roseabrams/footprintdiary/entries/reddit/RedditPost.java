@@ -26,12 +26,11 @@ public class RedditPost extends RedditSubmission {
         return TITLE;
     }
 
-    @SuppressWarnings("unused")
     /// TODO needs multiline support
     public static RedditPost[] createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
         List<String> postsLines = Util.readFileLines(postsFile);
-        for (int i = 0; i < postsLines.size(); i++) {
+        for (int i = 1; i < postsLines.size(); i++) {
             Scanner s = new Scanner(postsLines.get(i));
             s.useDelimiter(",");
             String id = s.next();
@@ -39,23 +38,26 @@ public class RedditPost extends RedditSubmission {
             String dateS = s.next();
             DiaryDateTime date = new DiaryDateTime(dateS);
             String ip = s.next();
+            assert ip.isEmpty();
             String subreddit = s.next();
             int gildings = Integer.parseInt(s.next());
             String title = s.next();
             if (title.charAt(0) == '\"')
-                title = title.substring(1, title.length() - 2);
+                title = title.substring(1, title.length() - 1);
             title = title.replace("\"\"", "\"");
             String mediaS = s.next();
             if (mediaS.startsWith("/r/"))
                 mediaS = ""; // sometimes it points to itself for text posts
-            String body = s.nextLine();
-            while (postsLines.get(i + 1).subSequence(6, 11).equals(",http")
-                    || postsLines.get(i + 1).subSequence(7, 12).equals(",http")) {
+            String body = s.nextLine(); // TODO handle internal commas
+            body = body.substring(1); // remove opening comma
+            while (i + 1 < postsLines.size() && postsLines.get(i + 1).length() < 100
+                    || (!postsLines.get(i + 1).subSequence(6, 11).equals(",http")
+                            && !postsLines.get(i + 1).subSequence(7, 12).equals(",http"))) {
                 i++;
-                body += postsLines.get(i);
+                body += "\n" + postsLines.get(i);
             }
-            if (body.charAt(0) == '\"')
-                body = body.substring(1, body.length() - 2);
+            if (!body.isEmpty() && body.charAt(0) == '\"')
+                body = body.substring(1, body.length() - 1);
             body = body.replace("\"\"", "\"");
             body = body.replace("\"*", "*");
 

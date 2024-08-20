@@ -29,12 +29,11 @@ public class RedditComment extends RedditSubmission {
         return BODY;
     }
 
-    @SuppressWarnings("unused")
     /// TODO needs multiline support
     public static RedditComment[] createFromCsv(File commentsFile) throws IOException {
         ArrayList<RedditComment> output = new ArrayList<>(1000);
         List<String> commentsLines = Util.readFileLines(commentsFile);
-        for (int i = 0; i < commentsLines.size(); i++) {
+        for (int i = 1; i < commentsLines.size(); i++) {
             Scanner s = new Scanner(commentsLines.get(i));
             s.useDelimiter(",");
             String id = s.next();
