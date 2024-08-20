@@ -26,6 +26,10 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     public final int OLDID;
     public final String EDIT_SUMMARY;
     public final String[] TAGS;
+    private transient Webpage site;
+    private transient Webpage article;
+    private transient Webpage articlePermalink;
+    private transient Webpage diff;
 
     public WikimediaEdit(DiaryDateTime dd, String site, String pageTitle, int editSize, int oldid, String editSummary,
             String[] tags) {
@@ -48,20 +52,30 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
     }
 
     public Webpage getSite() {
-        return new Webpage("https://" + SITE + ".org/");
+        if (site == null)
+            site = new Webpage("https://" + SITE + ".org/");
+        return site;
     }
 
     public Webpage getArticle() {
-        return new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE.replace(" ", "_"));
+        if (article == null)
+            article = new Webpage(getSite().getPath() + "wiki/" + PAGE_TITLE.replace(" ", "_"));
+        return article;
     }
 
     public Webpage getArticlePermalink() {
-        return new Webpage(getSite().getPath() + "w/index.php?title=" + PAGE_TITLE.replace(" ", "+") + "&oldid=" + OLDID);
+        if (articlePermalink == null)
+            articlePermalink = new Webpage(getSite().getPath() + "w/index.php?title="
+                    + PAGE_TITLE.replace(" ", "+") + "&oldid=" + OLDID);
+        return articlePermalink;
     }
 
     public Webpage getDiff() {
-        StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
-        return new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
+        if (diff == null) {
+            StringBuilder s = new StringBuilder(getArticlePermalink().getPath());
+            diff = new Webpage(s.insert(s.lastIndexOf("&"), "&diff=prev").toString());
+        }
+        return diff;
     }
 
     @Override
