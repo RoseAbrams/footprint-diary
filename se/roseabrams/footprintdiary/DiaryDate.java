@@ -10,18 +10,23 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public final byte MONTH;
     public final byte DAY;
     public transient GregorianCalendar detailedDate = null;
-    public static final DiaryDate MIN = new DiaryDate((short) 2000, (byte) 1, (byte) 1);
-    public static final DiaryDate MAX = new DiaryDate((short) 2025, (byte) 12, (byte) 31);
+    public static final short YEAR_MIN = 2000;
+    public static final short YEAR_LOW = 2005;
+    public static final short YEAR_MAX = 2050;
+    public static final short YEAR_HIGH = 2025;
     private static final boolean DEFAULT_STRICTNESS = true;
 
     public DiaryDate(short year, byte month, byte day) {
-        assert (MIN == null || MAX == null) || (year >= MIN.YEAR && year < MAX.YEAR);
+        assert year >= YEAR_MIN && year < YEAR_MAX;
         assert month >= 1 && month <= 12;
         assert day >= 1 && day <= daysInMonth(year, month);
 
         YEAR = year;
         MONTH = month;
         DAY = day;
+
+        if (year < YEAR_LOW || year > YEAR_HIGH)
+            System.err.println("DiaryDate " + this + " is far from the expeted daterange. Is it correctly ingested?");
     }
 
     public DiaryDate(String dateString) {
@@ -80,8 +85,24 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         if (comparedDay != 0)
             return comparedDay;
 
-        if (strict && d2 instanceof DiaryDateTime)
-            // intent: if two DiaryDates are non-strictly equal but have differing precision, strict comparison returns that more precision is greater
+        if (!strict)
+            return 0;
+
+        if (this instanceof DiaryDateTime dt1) {
+            if (d2 instanceof DiaryDateTime dt2) {
+                int comparedHour = Byte.compare(dt1.HOUR, dt2.HOUR);
+                int comparedMinute = Byte.compare(dt1.MINUTE, dt2.MINUTE);
+                int comparedSecond = Byte.compare(dt1.SECOND, dt2.SECOND);
+
+                if (comparedHour != 0)
+                    return comparedHour;
+                if (comparedMinute != 0)
+                    return comparedMinute;
+                return comparedSecond;
+            } else
+                // intent: if two DiaryDates are non-strictly equal but have differing precision, strict comparison returns that more precision is greater
+                return 1;
+        } else if (d2 instanceof DiaryDateTime)
             return -1;
         else
             return 0;

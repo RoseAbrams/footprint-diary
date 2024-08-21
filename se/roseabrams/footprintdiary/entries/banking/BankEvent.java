@@ -26,8 +26,9 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
         super(DiaryEntryCategory.FINANCE, date);
         AMOUNT = amount;
         BALANCE = balance;
-        FROM_ACCOUNT = fromAccount.intern();
-        TO_ACCOUNT = toAccount.intern();
+        FROM_ACCOUNT = fromAccount.isBlank() ? null : fromAccount.intern();
+        TO_ACCOUNT = toAccount.isBlank() ? null : toAccount.intern();
+        assert FROM_ACCOUNT != null || TO_ACCOUNT != null;
         DESCRIPTION = description;
         CURRENCY = currency;
     }
@@ -59,25 +60,24 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
             Scanner s = new Scanner(transaction);
             s.useDelimiter(";");
             String dateS = s.next();
+            if (dateS.contains("Bokföringsdag") || dateS.contains("Reserverat"))
+                continue;
             DiaryDate date = new DiaryDate(dateS);
             String amountS = s.next();
             float amount = Float.parseFloat(amountS.replace(',', '.'));
             String fromAccount = s.next();
-            if (fromAccount.isBlank())
-                fromAccount = null;
             String toAccount = s.next();
-            if (toAccount.isBlank())
-                toAccount = null;
-            assert fromAccount == null || toAccount == null; // just testing
+            assert fromAccount.isBlank() || toAccount.isBlank();
             String toAccountName = s.next();
-            assert toAccountName.isBlank(); // just testing
+            assert toAccountName.isBlank(); // not sure what this should contain... "egen notering" maybe?
             String description = s.next();
             String balanceS = s.next();
             float balance = Float.parseFloat(balanceS.replace(',', '.'));
             String currencyS = s.next();
             Currency currency = Currency.valueOf(currencyS);
 
-            output.add(new BankEvent(date, amount, fromAccount, toAccount, description, balance, currency));
+            BankEvent b = new BankEvent(date, amount, fromAccount, toAccount, description, balance, currency);
+            output.add(b);
             s.close();
         }
         return output.toArray(new BankEvent[output.size()]);

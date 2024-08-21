@@ -56,8 +56,8 @@ public class DiaryWriter {
                 DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 DW.add(WikimediaEdit.createFromWebsites());//needs further work
-                DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
-                DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
+                DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs further work
+                DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs further work
                 DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
                 DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
                 DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
@@ -67,6 +67,11 @@ public class DiaryWriter {
                 //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
                 //DW.add(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
                 //DW.add(youtubeCommentHack());
+                DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
+                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
 
                 Util.serialize(DW.D, new File(O + "diary.ser"));
 
@@ -75,15 +80,7 @@ public class DiaryWriter {
                 DW.writeCsvSum(new File(O + "diarySumTable.csv"));
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
-            } else { // move this as the debugging progresses
-                DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs redebug
-                DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs redebug
-
-                DW.add(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
-                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));
-                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
-                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
-                DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
+            } else {
                 DW.add(FacebookPost
                         .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
                 DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));

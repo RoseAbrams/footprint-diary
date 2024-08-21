@@ -11,6 +11,10 @@ public class RemoteContent extends Content {
     RemoteContent(ContentType type, String url) {
         super(type);
         try {
+            if (!url.contains("://")) {
+                System.err.println("URL \"" + url + "\" has no protocol, will assume HTTP");
+                url = "http://" + url;
+            }
             URL = URI.create(url).toURL();
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Illegal URL passed.", e);

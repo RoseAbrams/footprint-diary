@@ -219,7 +219,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return output;
         }
     },
-    PHONE_CALENDAR {
+    CALENDAR {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
             return "I went through " + fl.size() + " item" + p(fl) + " on my calendar.";

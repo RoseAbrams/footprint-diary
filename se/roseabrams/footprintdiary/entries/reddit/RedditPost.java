@@ -47,7 +47,7 @@ public class RedditPost extends RedditSubmission {
             title = title.replace("\"\"", "\"");
             String mediaS = s.next();
             if (mediaS.startsWith("/r/"))
-                mediaS = ""; // sometimes it points to itself for text posts
+                mediaS = ""; // sometimes it points to itself for text posts // TODO check behavior when crossposting
             String body = s.nextLine(); // TODO handle internal commas
             body = body.substring(1); // remove opening comma
             while (i + 1 < postsLines.size() && postsLines.get(i + 1).length() < 100

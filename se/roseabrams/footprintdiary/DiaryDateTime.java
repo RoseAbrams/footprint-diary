@@ -71,40 +71,6 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     @Override
-    @Deprecated // better to explicitly specify strictness
-    public int compareTo(DiaryDate d2) {
-        return compareTo(d2, true);
-    }
-
-    @Override
-    public int compareTo(DiaryDate d2, boolean strict) {
-        int comparedUnstrict = super.compareTo(d2, false);
-        if (comparedUnstrict != 0)
-            return comparedUnstrict;
-
-        if (!strict)
-            return 0;
-        if (!(d2 instanceof DiaryDateTime))
-            // intent: if two DiaryDates are non-strictly equal but have differing precision, strict comparison returns that more precision is greater
-            return 1;
-
-        int comparedHour = Byte.compare(HOUR, ((DiaryDateTime) d2).HOUR);
-        int comparedMinute = Byte.compare(MINUTE, ((DiaryDateTime) d2).MINUTE);
-        int comparedSecond = Byte.compare(SECOND, ((DiaryDateTime) d2).SECOND);
-
-        if (comparedHour != 0)
-            return comparedHour;
-        if (comparedMinute != 0)
-            return comparedMinute;
-        return comparedSecond;
-    }
-
-    @Override
-    public boolean equals(DiaryDate obj, boolean strict) {
-        return compareTo(obj, strict) == 0;
-    }
-
-    @Override
     public String toString(boolean leadingZeroes) {
         if (leadingZeroes)
             return super.toString(leadingZeroes) + "T" + (HOUR < 10 ? "0" + HOUR : HOUR) + ":"

@@ -17,8 +17,8 @@ public class DiaryEntrySpanBoundary extends DiaryEntry {
     }
 
     public static DiaryEntrySpanBoundary[] create(DiaryEntry[] entries, String description) {
-        DiaryDate start = DiaryDate.MAX;
-        DiaryDate end = DiaryDate.MIN;
+        DiaryDate start = DiaryDate.YEAR_MAX;
+        DiaryDate end = DiaryDate.YEAR_MIN;
         for (DiaryEntry entry : entries) {
             if (entry.DATE.compareTo(start, false) < 0) {
                 start = entry.DATE;
