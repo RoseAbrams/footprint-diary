@@ -126,11 +126,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
             String editSizeS = edit.select(".mw-diff-bytes").first().text();
             int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", ""));
             String dateS = edit.select("a.mw-changeslist-date").first().text();
-            // TODO timeformat is localized to wikilanguage, feels hopeless to unify🙁
-            DiaryDateTime date = new DiaryDateTime(Short.parseShort(dateS.substring(dateS.lastIndexOf(" 20") + 1)),
-                    DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(",") + 4, dateS.lastIndexOf(" ")).trim()),
-                    Byte.parseByte(dateS.substring(dateS.indexOf(",") + 2, dateS.indexOf(",") + 4).trim()),
-                    Byte.parseByte(dateS.substring(0, 2)), Byte.parseByte(dateS.substring(3, 5)), (byte) 0);
+            DiaryDateTime date = parseDate(dateS);
             String pageTitle = edit.select("a.mw-contributions-title").first().text();
             String editSummary = edit.select("span.comment").first().text();
             if (editSummary.equals("No edit summary"))
@@ -145,5 +141,23 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
             output.add(w);
         }
         return output;
+    }
+
+    private static DiaryDateTime parseDate(String dateS) {
+        if (dateS.contains("kl.")) {
+            // Swedish-language date
+            return new DiaryDateTime(
+                    Short.parseShort(dateS.substring(dateS.lastIndexOf(" kl.") - 4, dateS.lastIndexOf(" kl."))),
+                    DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(" ") + 4)),
+                    Byte.parseByte(dateS.substring(0, dateS.indexOf(" "))),
+                    Byte.parseByte(dateS.substring(dateS.lastIndexOf(".") - 2, dateS.lastIndexOf("."))),
+                    Byte.parseByte(dateS.substring(dateS.lastIndexOf(".") + 1)), (byte) 0);
+        } else {
+            // English-language date
+            return new DiaryDateTime(Short.parseShort(dateS.substring(dateS.lastIndexOf(" 20") + 1)),
+                    DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(",") + 4, dateS.lastIndexOf(" ")).trim()),
+                    Byte.parseByte(dateS.substring(dateS.indexOf(",") + 2, dateS.indexOf(",") + 4).trim()),
+                    Byte.parseByte(dateS.substring(0, 2)), Byte.parseByte(dateS.substring(3, 5)), (byte) 0);
+        }
     }
 }

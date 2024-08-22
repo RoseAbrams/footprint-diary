@@ -143,6 +143,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
             case "apr":
                 return 4;
             case "may":
+            case "maj":
                 return 5;
             case "jun":
                 return 6;
@@ -153,6 +154,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
             case "sep":
                 return 9;
             case "oct":
+            case "okt":
                 return 10;
             case "nov":
                 return 11;
