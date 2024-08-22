@@ -147,8 +147,8 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     STEAM {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
+            throw new UnsupportedOperationException(); // update and reshame for all new classes
             return "I bought " + fl.size() + " game" + p(fl) + " on Steam.";
-            // TODO update when more classes are finished
         }
     },
     REDDIT {

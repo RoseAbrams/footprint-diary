@@ -38,16 +38,16 @@ public class RedditPost extends RedditSubmission {
             String dateS = s.next();
             DiaryDateTime date = new DiaryDateTime(dateS);
             String ip = s.next();
-            assert ip.isEmpty();
+            assert ip.isEmpty(); // not sure why this exists or is supposed to mean
             String subreddit = s.next();
             int gildings = Integer.parseInt(s.next());
-            String title = s.next();
+            String title = s.next(); // TODO handle internal commas
             if (title.charAt(0) == '\"')
                 title = title.substring(1, title.length() - 1);
             title = title.replace("\"\"", "\"");
             String mediaS = s.next();
-            if (mediaS.startsWith("/r/"))
-                mediaS = ""; // sometimes it points to itself for text posts // TODO check behavior when crossposting
+            if (mediaS.startsWith("/r/")) // sometimes it points to itself for text posts // TODO check behavior when crossposting
+                mediaS = "";
             String body = s.nextLine(); // TODO handle internal commas
             body = body.substring(1); // remove opening comma
             while (i + 1 < postsLines.size() && postsLines.get(i + 1).length() < 100

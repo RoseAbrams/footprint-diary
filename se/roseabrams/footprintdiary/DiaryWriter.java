@@ -23,6 +23,9 @@ import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
 import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
+import se.roseabrams.footprintdiary.entries.steam.SteamAchievment;
+import se.roseabrams.footprintdiary.entries.steam.SteamGame;
+import se.roseabrams.footprintdiary.entries.steam.SteamLicenseEvent;
 import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
@@ -52,7 +55,7 @@ public class DiaryWriter {
                 DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_1.json")));
                 DW.add(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
                 DW.add(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
-                DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
+                //steam
                 DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 DW.add(WikimediaEdit.createFromWebsites());//needs redebug
@@ -81,6 +84,10 @@ public class DiaryWriter {
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
             } else {
+                SteamGame.cacheFromWebsite();
+                DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
+                DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
+                DW.add(SteamAchievment.createFromWebsite());
                 DW.add(WikimediaEdit.createFromWebsites());//needs redebug
                 DW.add(FacebookPost
                         .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));

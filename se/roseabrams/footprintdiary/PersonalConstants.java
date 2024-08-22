@@ -9,6 +9,7 @@ public class PersonalConstants {
     public static final String[] WIKIS_WITH_EDITS = { "en.wikipedia", "en.wiktionary", "commons.wikimedia",
             "www.wikidata", "sv.wikipedia", "sv.wiktionary", "en.wikiquote", "en.wikisource", "meta.wikimedia" };
     public static final String FACEBOOK_NAME = "Rosa Luna Abr";
+    public static final String STEAM_USERNAME = "roseabrams96";
 
     private PersonalConstants() {
     }
