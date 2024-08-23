@@ -9,18 +9,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
+import se.roseabrams.footprintdiary.common.MoneyTransaction;
 
-public class SteamStoreEvent extends SteamEvent {
+public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
 
     public final long TRANSACTION_ID;
     private final String[] ITEMS;
+    private final SteamGame[] GAMES;
     public final Type TYPE;
     public final String PAYMENT_METHOD;
     public final float PAYMENT_TOTAL;
     public final float WALLET_CHANGE;
     public final float WALLET_BALANCE;
 
-    public SteamStoreEvent(DiaryDate dd, long transactionId, String[] items, Type type, String paymentMethod,
+    public SteamStoreEvent(DiaryDate dd, long transactionId, String[] items, SteamGame[] games, Type type,
+            String paymentMethod,
             float paymentTotal, float walletChange, float walletBalance) {
         super(DiaryEntryCategory.STEAM, dd);
         assert dd != null;
@@ -32,6 +35,7 @@ public class SteamStoreEvent extends SteamEvent {
 
         TRANSACTION_ID = transactionId;
         ITEMS = items;
+        GAMES = games;
         TYPE = type;
         PAYMENT_METHOD = paymentMethod.intern();
         PAYMENT_TOTAL = paymentTotal;
@@ -46,6 +50,21 @@ public class SteamStoreEvent extends SteamEvent {
             output.append(i).append(", ");
         }
         return output.substring(0, output.length() - 2);
+    }
+
+    @Override
+    public float getAmount() {
+        return PAYMENT_TOTAL;
+    }
+
+    @Override
+    public Currency getCurrency() {
+        return Currency.EUR; // not entirely true, 3 out of the hundreds are in USD
+    }
+
+    @Override
+    public boolean moneySent() {
+        return WALLET_CHANGE != 0 ? WALLET_CHANGE < 0 : true;
     }
 
     public static enum Type {
@@ -73,11 +92,11 @@ public class SteamStoreEvent extends SteamEvent {
             String[] items;
             if (itemsE.size() == 0) {
                 items = new String[1];
-                items[0] = itemE.text().intern();
+                items[0] = itemE.text();
             } else {
                 items = new String[itemsE.size()];
                 for (int j = 0; j < itemsE.size(); j++) {
-                    items[j] = itemsE.get(j).text().intern();
+                    items[j] = itemsE.get(j).text();
                 }
             }
 
@@ -110,7 +129,16 @@ public class SteamStoreEvent extends SteamEvent {
             Element walletBalanceE = tableRow.selectFirst("td.wht_wallet_balance");
             float walletBalance = walletBalanceE.text().isEmpty() ? 0 : parseCurrency(walletBalanceE.text());
 
-            SteamStoreEvent s = new SteamStoreEvent(date, tranId, items, type, paymentMethod, total, walletChange,
+            SteamGame[] itemsGames = null;
+            if (type == Type.STORE_PURCHASE) {
+                itemsGames = new SteamGame[items.length];
+                for (int j = 0; j < items.length; j++) {
+                    itemsGames[j] = SteamGame.get(items[j], true);
+                }
+            }
+
+            SteamStoreEvent s = new SteamStoreEvent(date, tranId, items, itemsGames, type, paymentMethod, total,
+                    walletChange,
                     walletBalance);
             output.add(s);
         }
