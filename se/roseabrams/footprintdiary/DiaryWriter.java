@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import se.roseabrams.footprintdiary.entries.TinderSwipe;
 import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
 import se.roseabrams.footprintdiary.entries.apple.DailyActivity;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
@@ -103,6 +104,8 @@ public class DiaryWriter {
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
                 DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
                 DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
+                DW.add(TinderSwipe.createFromJson(
+                        new File("D:\\Dropbox\\Privat\\postGym program\\gasoline\\final data\\tinder dataset.json")));
                 DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
             }
         } catch (IOException e) {

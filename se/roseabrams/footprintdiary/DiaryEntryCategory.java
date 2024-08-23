@@ -313,6 +313,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             output.append(".");
             return output.toString();
         }
+    },
+    TINDER {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+            return "I swiped on " + fl.size() + " profile" + p(fl) + " on Tinder.";
+        }
     };
 
     public abstract String describeInProse(List<DiaryEntry> filteredList);
