@@ -81,6 +81,7 @@ public class DiaryWriter {
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
             } else {
+                // TODO all Facebook needs a lookthrough before debug, media handling looks incomplete
                 DW.add(FacebookPost
                         .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
                 DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
@@ -93,8 +94,8 @@ public class DiaryWriter {
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
                 DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
-                DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
                 DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
+                DW.add(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
             }
         } catch (IOException e) {
             System.err.println(e);
