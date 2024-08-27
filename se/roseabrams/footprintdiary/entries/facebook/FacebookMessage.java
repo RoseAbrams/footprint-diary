@@ -16,26 +16,22 @@ import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.common.Message;
 
 public class FacebookMessage extends DiaryEntry implements Message {
-    /*
-     * "inbox/",
-     * "archived_threads/"
-     */
 
-    public final String TEXT;
+    public final String BODY;
     public final String CHANNEL;
     public final String SENDER;
 
-    public FacebookMessage(DiaryDate dd, String text, String channel, String sender) {
+    public FacebookMessage(DiaryDate dd, String body, String channel, String sender) {
         super(DiaryEntryCategory.FACEBOOK_MESSAGE, dd);
-        assert text != null && !text.isBlank();
-        TEXT = text;
+        assert body != null;
+        BODY = body;
         CHANNEL = channel.intern();
-        SENDER = sender.intern();
+        SENDER = sender != null ? sender.intern() : null;
     }
 
     @Override
     public String getStringSummary() {
-        return SENDER + ": " + TEXT;
+        return SENDER + ": " + BODY;
     }
 
     @Override
@@ -56,9 +52,9 @@ public class FacebookMessage extends DiaryEntry implements Message {
     public static FacebookMessage[] createFromFolder(File messageParentFolder) throws IOException {
         ArrayList<FacebookMessage> output = new ArrayList<>(100000);
         for (File messageFolder : messageParentFolder.listFiles()) {
-            assert messageFolder.listFiles(pathname -> !pathname.isDirectory()).length == 1;
-            File messageFile = new File(messageFolder, "message_1.html");
-            output.addAll(createFromHtml(messageFile));
+            for (File messageFile : messageFolder.listFiles(pathname -> !pathname.isDirectory())) {
+                output.addAll(createFromHtml(messageFile));
+            }
         }
         return output.toArray(new FacebookMessage[output.size()]);
     }
@@ -66,29 +62,61 @@ public class FacebookMessage extends DiaryEntry implements Message {
     public static ArrayList<FacebookMessage> createFromHtml(File messageFile) throws IOException {
         ArrayList<FacebookMessage> output = new ArrayList<>(1000);
         Document d = Jsoup.parse(messageFile);
-        String channel = d.title();
+        String channel;
+        if (d.title().startsWith("Participants:"))
+            if (d.title().contains("Facebook user")) {
+                channel = messageFile.getParent();
+                channel = channel.substring(channel.lastIndexOf("\\") + 1);
+            } else
+                throw new AssertionError();
+        else
+            channel = d.title();
+
         Elements messagesE = d.select("div._a706 > div._3-95._a6-g");
-        for (Element messageE : messagesE) {
-            String sender = messageE.selectFirst("div._a6-h._a6-i").text();
-            String text = messageE.selectFirst("div._2ph_._a6-p").text();
-            String dateS = messageE.selectFirst("div._3-94._a6-o > div._a72d").text();
-
-            File media = null;
-            /*
-             * if (messageE.selectFirst("img") != null) {
-             * //...
-             * } else if (messageE.selectFirst("video") != null) {
-             * //...
-             * }
-             */
-            // guard until media handling is implemented
-            assert messageE.selectFirst("img") == null && messageE.selectFirst("video") == null;
-
-            if (media == null) {
-                output.add(new FacebookMessage(FacebookWallEvent.parseDate(dateS), text, channel, sender));
-            } else {
-                output.add(new FacebookMediaMessage(FacebookWallEvent.parseDate(dateS), text, channel, sender, media));
+        for (int i = 0; i < messagesE.size(); i++) {
+            Element messageE = messagesE.get(i);
+            if (messageE.text().startsWith("Participants: ") || messageE.text().startsWith("Group Invite Link: ")) {
+                while (messagesE.get(i + 1).text().startsWith("Group")) {
+                    i++;
+                }
+                continue;
             }
+
+            Element senderQ = messageE.selectFirst("div._a6-h._a6-i");
+            String sender;
+            if (senderQ != null)
+                sender = senderQ.text();
+            else
+                sender = null; // deleted user
+            String body = messageE.selectFirst("div._2ph_._a6-p").text();
+            String dateS = messageE.selectFirst("div._3-94._a6-o div._a72d").text();
+
+            Element mediaE = messageE.selectFirst("img");
+            if (mediaE == null)
+                mediaE = messageE.selectFirst("video");
+
+            String mediaS;
+            if (mediaE != null) {
+                mediaS = mediaE.attr("src");
+                if (mediaS.contains("/stickers_used/"))
+                    mediaS = null; // TODO
+                else
+                    mediaS = messageFile.getParent() + mediaS.substring(
+                            mediaS.indexOf("/", mediaS.lastIndexOf("/") - 20));
+            } else
+                mediaS = null;
+
+            if (body.equals("You missed a call from a Messenger user.") ||
+                    body.equals("You are now connected on Messenger") ||
+                    (body.endsWith(" to the group.") && body.startsWith(sender)))
+                sender = "SYSTEM";
+
+            FacebookMessage m;
+            if (mediaS == null)
+                m = new FacebookMessage(FacebookWallEvent.parseDate(dateS), body, channel, sender);
+            else
+                m = new FacebookMediaMessage(FacebookWallEvent.parseDate(dateS), body, channel, sender, mediaS);
+            output.add(m);
         }
         return output;
     }

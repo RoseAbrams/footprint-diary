@@ -11,9 +11,9 @@ public class FacebookMediaMessage extends FacebookMessage implements ContentCont
 
     public final LocalContent MEDIA;
 
-    public FacebookMediaMessage(DiaryDateTime date, String text, String channel, String sender, File media) {
+    public FacebookMediaMessage(DiaryDateTime date, String text, String channel, String sender, String mediaS) {
         super(date, text, channel, sender);
-        MEDIA = new LocalContent(media);
+        MEDIA = new LocalContent(new File(mediaS));
     }
 
     @Override
