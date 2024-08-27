@@ -87,6 +87,7 @@ public class DiaryWriter {
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
+                DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
 
                 Util.serialize(DW.D, new File(O + "diary.ser"));
 
@@ -100,7 +101,6 @@ public class DiaryWriter {
                 DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 DW.add(SteamAchievment.createFromWebsite());*/
-                DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
                 DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
                 DW.add(TinderSwipe.createFromJson(
                         new File("D:\\Dropbox\\Privat\\postGym program\\gasoline\\final data\\tinder dataset.json")));
