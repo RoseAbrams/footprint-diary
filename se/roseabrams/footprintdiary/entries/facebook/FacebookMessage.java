@@ -63,14 +63,16 @@ public class FacebookMessage extends DiaryEntry implements Message {
         ArrayList<FacebookMessage> output = new ArrayList<>(1000);
         Document d = Jsoup.parse(messageFile);
         String channel;
+boolean isUnknownUserDM;
         if (d.title().startsWith("Participants:"))
             if (d.title().contains("Facebook user")) {
                 channel = messageFile.getParent();
                 channel = channel.substring(channel.lastIndexOf("\\") + 1);
+isUnknownUserDM = true;
             } else
                 throw new AssertionError();
         else
-            channel = d.title();
+            {channel = d.title();isUnknownUserDM=false;}
 
         Elements messagesE = d.select("div._a706 > div._3-95._a6-g");
         for (int i = 0; i < messagesE.size(); i++) {
@@ -87,7 +89,10 @@ public class FacebookMessage extends DiaryEntry implements Message {
             if (senderQ != null)
                 sender = senderQ.text();
             else
-                sender = null; // deleted user
+                if (isUnknownUserDM) 
+sender = null; // deleted user
+else
+throw new AssertionError(); // investigate – probably indicator of system measage?
             String body = messageE.selectFirst("div._2ph_._a6-p").text();
             String dateS = messageE.selectFirst("div._3-94._a6-o div._a72d").text();
 
