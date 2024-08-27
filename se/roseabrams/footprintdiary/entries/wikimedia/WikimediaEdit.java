@@ -109,7 +109,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         return output.toArray(new WikimediaEdit[output.size()]);
     }
 
-    private static final int EDIT_LIMIT = 100;//10000;
+    private static final int EDIT_LIMIT = 1000;//10000;
 
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
         Connection c = Jsoup.newSession();
@@ -119,13 +119,14 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         Document d = c.get();
 
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
-        Elements edits = d.body().select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list");
+        Elements edits = d.body().select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list > li");
         for (Element edit : edits) {
             String oldidS = edit.select("li").first().attr("data-mw-revid");
             int oldid = Integer.parseInt(oldidS);
             String editSizeS = edit.select(".mw-diff-bytes").first().text();
-            int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", ""));
-            String dateS = edit.select("a.mw-changeslist-date").first().text();
+            int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", "").replace(" ", ""));
+            Elements dateQ = edit.select(".mw-changeslist-date");
+            String dateS = dateQ.first().text();
             DiaryDateTime date = parseDate(dateS);
             String pageTitle = edit.select("a.mw-contributions-title").first().text();
             String editSummary = edit.select("span.comment").first().text();

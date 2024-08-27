@@ -59,7 +59,7 @@ public class DiaryWriter {
                 //steam
                 DW.add(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 DW.add(SkypeMessage.createAllFromTxt(new File(I + "skype")));
-                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
+                DW.add(WikimediaEdit.createFromWebsites());
                 DW.add(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs further work
                 DW.add(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs further work
                 DW.add(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
@@ -85,12 +85,10 @@ public class DiaryWriter {
                 DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
                 DW.writeProseSummary(new File(O + "diaryProse.rtf"));
             } else {
-                SteamGame.cacheFromWebsite();
+                /*SteamGame.cacheFromWebsite();
                 DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
-                DW.add(SteamAchievment.createFromWebsite());
-                DW.add(WikimediaEdit.createFromWebsites());//needs redebug
-                // TODO all Facebook needs a lookthrough before debug, media handling looks incomplete
+                DW.add(SteamAchievment.createFromWebsite());*/
                 DW.add(FacebookPost
                         .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
                 DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));

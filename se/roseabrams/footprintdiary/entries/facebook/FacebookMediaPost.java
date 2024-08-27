@@ -12,9 +12,9 @@ public class FacebookMediaPost extends FacebookPost implements ContentContainer 
 
     public final LocalContent MEDIA;
 
-    public FacebookMediaPost(DiaryDateTime date, String text, Type type, String timeline, File media) {
+    public FacebookMediaPost(DiaryDateTime date, String text, Type type, String timeline, String media) {
         super(date, text, type, timeline);
-        MEDIA = new LocalContent(media);
+        MEDIA = new LocalContent(new File(media));
     }
 
     @Override

@@ -53,8 +53,9 @@ public class FacebookPost extends FacebookWallEvent {
         Document d = Jsoup.parse(postFile);
         Elements postsE = d.select("div._a706 > div._3-95._a6-g");
         for (Element postE : postsE) {
-            String description = postE.selectFirst("div._a6-h._a6-i").text();
-            File media = null;
+            Element descriptionE = postE.selectFirst("div._a6-h._a6-i");
+            String description = descriptionE != null ? descriptionE.text() : "";
+            String media;
             String typeS;
             Type type;
             String timeline;
@@ -79,15 +80,12 @@ public class FacebookPost extends FacebookWallEvent {
             text = text.substring(0, text.lastIndexOf("Updated "));
             String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
 
-            /*
-             * if (postE.selectFirst("img") != null) {
-             * //...
-             * } else if (postE.selectFirst("video") != null) {
-             * //...
-             * }
-             */
-            // guard until media handling is implemented
-            assert postE.selectFirst("img") == null && postE.selectFirst("video") == null;
+            Element mediaE = postE.selectFirst("img");
+            if (mediaE == null)
+                mediaE = postE.selectFirst("video");
+
+            media = mediaE.attr("src");
+            media = postFile.getParent() + media.substring(media.indexOf("/media/"));
 
             type = Type.parse(typeS);
             assert type == Type.TEXT || media != null;
