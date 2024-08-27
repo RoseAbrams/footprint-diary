@@ -81,6 +81,9 @@ public class DiaryWriter {
                 //DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html"))); // not working, is it worth fixing with so little data?
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
+                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
 
                 Util.serialize(DW.D, new File(O + "diary.ser"));
 
@@ -94,9 +97,6 @@ public class DiaryWriter {
                 DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 DW.add(SteamAchievment.createFromWebsite());*/
-                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
-                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
-                DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
                 DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));

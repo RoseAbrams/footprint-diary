@@ -10,30 +10,29 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.PersonalConstants;
 
 public class FacebookReaction extends FacebookWallEvent {
-    /*
-     * "likes_and_reactions_1.html",
-     * "likes_and_reactions_2.html",
-     * "likes_and_reactions_3.html"
-     */
 
-    public final Type TYPE;
+    public final Reaction REACTION;
     public final String PARENT_OP;
+    public final FacebookPost.Type PARENT_TYPE;
 
-    public FacebookReaction(DiaryDateTime date, String op, Type type) {
+    public FacebookReaction(DiaryDateTime date, Reaction reaction, String op, FacebookPost.Type opType) {
         super(date);
-        assert op != null && !op.isBlank() && type != null;
-        PARENT_OP = op.intern();
-        TYPE = type;
+        assert op == null || !op.isBlank();
+        assert opType != null;
+        REACTION = reaction;
+        PARENT_OP = op != null ? op.intern() : null;
+        PARENT_TYPE = opType;
     }
 
     @Override
     public String getStringSummary() {
-        return TYPE.emoji();
+        return REACTION.emoji();
     }
 
-    public static enum Type {
+    public static enum Reaction {
 
         LIKE {
             @Override
@@ -76,6 +75,12 @@ public class FacebookReaction extends FacebookWallEvent {
             public String emoji() {
                 return "😠";
             }
+        },
+        DOROTHY {
+            @Override
+            public String emoji() {
+                return "🌼";
+            }
         };
 
         public abstract String emoji();
@@ -86,18 +91,39 @@ public class FacebookReaction extends FacebookWallEvent {
         Document d = Jsoup.parse(reaction);
         Elements reactionsE = d.select("div._a706 > div._3-95._a6-g");
         for (Element reactionE : reactionsE) {
-            String opES = reactionE.selectFirst("div._a6-h._a6-i").text();
-            String dateS = reactionE.selectFirst("div._3-94._a6-o > div._a72d").text();
-            int opIndexStart = -1;
-            if (opES.contains("liked ")) {
-                opIndexStart = opES.indexOf("liked ") + "liked ".length();
+            String description = reactionE.selectFirst("div._a6-h._a6-i").text();
+            String dateS = reactionE.selectFirst("div._3-94._a6-o div._a72d").text();
+            String op;
+            String opTypeS;
+            if (description.contains(" own ")) {
+                op = PersonalConstants.FACEBOOK_NAME;
+                opTypeS = description.substring(description.lastIndexOf(" ") + 1, description.lastIndexOf("."));
+            } else if (description.contains(" a ") || description.contains(" an ")) {
+                // OP is deleted or accessdenied
+                op = null;
+                opTypeS = description.substring(description.lastIndexOf(" ") + 1, description.lastIndexOf("."));
             } else {
-                opIndexStart = opES.indexOf("reacted to ") + "reacted to ".length();
+                int opIndexStart = -1;
+                if (description.contains("liked "))
+                    opIndexStart = description.indexOf("liked ") + "liked ".length();
+                else
+                    opIndexStart = description.indexOf("reacted to ") + "reacted to ".length();
+                int opIndexEnd = description.lastIndexOf("'s ");
+                op = description.substring(opIndexStart, opIndexEnd);
+                opTypeS = description.substring(opIndexEnd + "'s ".length(), description.lastIndexOf("."));
             }
-            int opIndexEnd = opES.lastIndexOf("'s ");
-            String op = opES.substring(opIndexStart, opIndexEnd);
-            String typeS = opES.substring(opIndexEnd + "'s ".length(), opES.lastIndexOf("."));
-            output.add(new FacebookReaction(parseDate(dateS), op, Type.valueOf(typeS.toUpperCase())));
+            String reactionL = reactionE.selectFirst("div._2ph_._a6-p img").attr("src");
+            String reactionS = reactionL.substring(reactionL.lastIndexOf("/") + 1, reactionL.lastIndexOf("."));
+            if (reactionS.equals("none"))
+                reactionS = "like"; // go default
+            if (reactionS.equals("sorry"))
+                reactionS = "sad";
+            if (reactionS.equals("anger"))
+                reactionS = "angry";
+
+            FacebookReaction f = new FacebookReaction(parseDate(dateS), Reaction.valueOf(reactionS.toUpperCase()),
+                    op, FacebookPost.Type.parse(opTypeS.replace(" ", "_")));
+            output.add(f);
         }
         return output.toArray(new FacebookReaction[output.size()]);
     }

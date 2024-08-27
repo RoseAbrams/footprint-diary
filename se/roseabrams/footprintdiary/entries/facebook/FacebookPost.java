@@ -40,12 +40,16 @@ public class FacebookPost extends FacebookWallEvent {
     }
 
     public static enum Type {
-        TEXT, PHOTO, VIDEO, LINK, CHECKIN, PAGE, EVENT, MEMORY, RECOMMENDATION, LIFE_EVENT;
+        TEXT, PHOTO, VIDEO, LINK, COMMENT, NOTE, CHECKIN, PAGE, EVENT, MEMORY, RECOMMENDATION, ALBUM, LIFE_EVENT;
 
         public static Type parse(String s) {
             switch (s) {
                 case "post":
                     return TEXT;
+                case "GIF":
+                    return PHOTO;
+                case "live_video":
+                    return VIDEO;
                 default:
                     return valueOf(s.toUpperCase());
             }
@@ -64,7 +68,7 @@ public class FacebookPost extends FacebookWallEvent {
             String body = null;
             String timeline;
             String app = null;
-            if (description.endsWith("timeline.") || description.contains(" in ") ) {
+            if (description.endsWith("timeline.") || description.contains(" in ")) {
                 // other timeline
                 int opIndexStart;
                 if (description.contains("wrote on ")) {
