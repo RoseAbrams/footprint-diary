@@ -76,6 +76,11 @@ public class DiaryWriter {
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
+                DW.add(FacebookPost
+                        .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
+                //DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html"))); // not working, is it worth fixing with so little data?
+                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
+                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
 
                 Util.serialize(DW.D, new File(O + "diary.ser"));
 
@@ -89,11 +94,6 @@ public class DiaryWriter {
                 DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 DW.add(SteamAchievment.createFromWebsite());*/
-                DW.add(FacebookPost
-                        .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
-                DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html")));
-                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
-                DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));

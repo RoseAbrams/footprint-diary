@@ -12,9 +12,9 @@ public class FacebookMediaPost extends FacebookPost implements ContentContainer 
 
     public final LocalContent MEDIA;
 
-    public FacebookMediaPost(DiaryDateTime date, String text, Type type, String timeline, String media) {
-        super(date, text, type, timeline);
-        MEDIA = new LocalContent(new File(media));
+    public FacebookMediaPost(DiaryDateTime date, String text, Type type, String timeline, String app, String media) {
+        super(date, text, type, timeline, app);
+        MEDIA = media != null ? new LocalContent(new File(media)) : null; // sometimes the picture simply isn't there, nothing i can do🙁
     }
 
     @Override

@@ -18,32 +18,36 @@ public class FacebookPost extends FacebookWallEvent {
      * "group_posts_and_comments.html"
      */
 
-    public final String TEXT;
+    public final String BODY;
     public final Type TYPE;
     public final String TIMELINE;
+    public final String APP;
 
-    public FacebookPost(DiaryDateTime dd, String text, Type type, String timeline) {
+    public FacebookPost(DiaryDateTime dd, String body, Type type, String timeline, String app) {
         super(dd);
-        assert text != null && !text.isBlank() && type != null && timeline != null && !timeline.isBlank();
-        TEXT = text;
+        assert body != null;// && (!body.isBlank() || type != Type.TEXT); // it's simply blank when sharing other's text posts
+        assert type != null;
+        assert timeline != null && !timeline.isBlank();
+        BODY = body;
         TYPE = type;
         TIMELINE = timeline.intern();
+        APP = app;
     }
 
     @Override
     public String getStringSummary() {
-        return TEXT;
+        return BODY;
     }
 
     public static enum Type {
-        TEXT, PHOTO, VIDEO, LINK;
+        TEXT, PHOTO, VIDEO, LINK, CHECKIN, PAGE, EVENT, MEMORY, RECOMMENDATION, LIFE_EVENT;
 
         public static Type parse(String s) {
-            switch (s.toUpperCase()) {
-                case "POST":
+            switch (s) {
+                case "post":
                     return TEXT;
                 default:
-                    return valueOf(s);
+                    return valueOf(s.toUpperCase());
             }
         }
     }
@@ -56,44 +60,74 @@ public class FacebookPost extends FacebookWallEvent {
             Element descriptionE = postE.selectFirst("div._a6-h._a6-i");
             String description = descriptionE != null ? descriptionE.text() : "";
             String media;
-            String typeS;
-            Type type;
+            Type type = null;
+            String body = null;
             String timeline;
-            if (description.endsWith("timeline.")) {
+            String app = null;
+            if (description.endsWith("timeline.") || description.contains(" in ") ) {
                 // other timeline
                 int opIndexStart;
                 if (description.contains("wrote on ")) {
                     opIndexStart = description.indexOf("wrote on ") + "wrote on ".length();
-                    typeS = "POST";
+                    type = Type.TEXT;
                 } else {
                     opIndexStart = description.indexOf(" to ") + " to ".length();
-                    typeS = description.substring(description.indexOf("shared a ") + "shared a ".length(),
-                            opIndexStart - " to ".length());
+                    type = Type.parse(description.substring(description.indexOf("shared a ") + "shared a ".length(),
+                            opIndexStart - " to ".length()));
                 }
-                timeline = description.substring(opIndexStart, description.lastIndexOf("'s'"));
+                timeline = description.substring(opIndexStart, description.lastIndexOf("'s"));
             } else {
                 // own timeline
                 timeline = PersonalConstants.FACEBOOK_NAME;
-                typeS = description.substring(description.lastIndexOf(" ") + 1);
+                if (description.isEmpty())
+                    type = Type.TEXT; // TODO not always textpost
+                else if (description.contains(" via ")) {
+                    type = Type.TEXT;
+                    app = description.substring(description.lastIndexOf(" ") + 1, description.length() - 1);
+                } else if (description.contains(" recommends "))
+                    type = Type.RECOMMENDATION;
+                else if (description.startsWith("Started") || description.startsWith("Left")) {
+                    type = Type.LIFE_EVENT;
+                    body = description;
+                } else if (description.equals("Moved"))
+                    type = Type.LIFE_EVENT;
+                else if (description.contains(" from the playlist "))
+                    type = Type.VIDEO;
+                else if (description.contains(" was with "))
+                    type = Type.CHECKIN; // TODO specify person(s) in some field?
+                else
+                    type = Type.parse(
+                            description.substring(description.lastIndexOf(" ") + 1, description.length() - 1));
             }
-            String text = postE.selectFirst("div._2ph_._a6-p").text();
-            text = text.substring(0, text.lastIndexOf("Updated "));
+            // TODO preserve newlines (gotta solve div jungle)
+            // TODO remove alttext of media, like albumname or mediadesc
+            if (body == null) {
+                body = postE.selectFirst("div._2ph_._a6-p").text();
+                if (body.contains("Updated "))
+                    if (body.startsWith("Updated "))
+                        body = "";
+                    else
+                        body = body.substring(0, body.lastIndexOf("Updated ") - 1);
+            }
             String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
 
             Element mediaE = postE.selectFirst("img");
             if (mediaE == null)
                 mediaE = postE.selectFirst("video");
 
-            media = mediaE.attr("src");
-            media = postFile.getParent() + media.substring(media.indexOf("/media/"));
+            if (mediaE != null) {
+                media = mediaE.attr("src");
+                media = postFile.getParent() + media.substring(media.indexOf("/media/"));
+            } else
+                media = null;
 
-            type = Type.parse(typeS);
-            assert type == Type.TEXT || media != null;
-            if (media == null) {
-                output.add(new FacebookPost(parseDate(dateS), text, type, timeline));
-            } else {
-                output.add(new FacebookMediaPost(parseDate(dateS), text, type, timeline, media));
-            }
+            FacebookPost f;
+            if (media != null || (type == Type.PHOTO || type == Type.VIDEO))
+                f = new FacebookMediaPost(parseDate(dateS), body, type, timeline, app, media);
+            else
+                f = new FacebookPost(parseDate(dateS), body, type, timeline, app);
+            // TODO FacebookLinkPost
+            output.add(f);
         }
         return output.toArray(new FacebookPost[output.size()]);
     }
