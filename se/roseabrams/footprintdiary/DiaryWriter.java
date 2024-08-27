@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import se.roseabrams.footprintdiary.entries.TinderSwipe;
 import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
 import se.roseabrams.footprintdiary.entries.apple.DailyActivity;
 import se.roseabrams.footprintdiary.entries.banking.BankEvent;
@@ -28,6 +27,7 @@ import se.roseabrams.footprintdiary.entries.steam.SteamAchievment;
 import se.roseabrams.footprintdiary.entries.steam.SteamGame;
 import se.roseabrams.footprintdiary.entries.steam.SteamLicenseEvent;
 import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
+import se.roseabrams.footprintdiary.entries.tinder.TinderSwipe;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;

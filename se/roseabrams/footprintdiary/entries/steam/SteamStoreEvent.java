@@ -138,8 +138,7 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
             }
 
             SteamStoreEvent s = new SteamStoreEvent(date, tranId, items, itemsGames, type, paymentMethod, total,
-                    walletChange,
-                    walletBalance);
+                    walletChange, walletBalance);
             output.add(s);
         }
 

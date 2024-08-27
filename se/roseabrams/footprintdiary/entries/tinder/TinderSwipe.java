@@ -1,4 +1,4 @@
-package se.roseabrams.footprintdiary.entries;
+package se.roseabrams.footprintdiary.entries.tinder;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +29,8 @@ public class TinderSwipe extends DiaryEntry {
 
     @Override
     public String getStringSummary() {
-        return "swiped " + RESULT.toString().toLowerCase()
-                + (REASON != null ? " (because " + REASON.toString().toLowerCase() + ")" : "") + " on " + NAME;
+        return "swiped " + RESULT.toString() + (REASON != null ? " (because " + REASON.toString() + ")" : "")
+                + " on " + NAME;
     }
 
     public static enum SwipeResult {
@@ -46,7 +46,8 @@ public class TinderSwipe extends DiaryEntry {
         JSONArray swipes = Util.readJsonArrayFile(tinderJson);
         for (Object swipeO : swipes) {
             JSONObject swipe = (JSONObject) swipeO;
-            if (swipe.getString("name").isEmpty() || !swipe.getString("agent").isEmpty())
+            if (swipe.getString("name").isEmpty() || swipe.getString("swipe_result").equals("UNDEFINED")
+                    || !swipe.getString("agent").isEmpty())
                 continue;
 
             long id = swipe.getLong("timestamp");

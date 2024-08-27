@@ -2,7 +2,7 @@ package se.roseabrams.footprintdiary.common;
 
 public interface MoneyTransaction { // banking, credit cards, purchases, etc...
 
-    public float getAmount();
+    public float getAmount(); // intent: no negative value, instead use moneySent() to determine direction
 
     public Currency getCurrency();
 

@@ -10,6 +10,7 @@ public class PersonalConstants {
             "www.wikidata", "sv.wikipedia", "sv.wiktionary", "en.wikiquote", "en.wikisource", "meta.wikimedia" };
     public static final String FACEBOOK_NAME = "Rosa Luna Abr";
     public static final String STEAM_USERNAME = "roseabrams96";
+    public static final long STEAM_USERID = 76561198039419970L;
 
     private PersonalConstants() {
     }
