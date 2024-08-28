@@ -11,6 +11,8 @@ public class PersonalConstants {
     public static final String FACEBOOK_NAME = "Rosa Luna Abr";
     public static final String STEAM_USERNAME = "roseabrams96";
     public static final long STEAM_USERID = 76561198039419970L;
+    public static final int TWITCH_USERID = 233354999;
+    public static final String TWITCH_USERNAME = "RoseAbrams";
 
     private PersonalConstants() {
     }
