@@ -23,10 +23,8 @@ import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
 import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
-import se.roseabrams.footprintdiary.entries.steam.SteamAchievment;
-import se.roseabrams.footprintdiary.entries.steam.SteamGame;
-import se.roseabrams.footprintdiary.entries.steam.SteamLicenseEvent;
-import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
+import se.roseabrams.footprintdiary.entries.steam2.SteamAchievment;
+import se.roseabrams.footprintdiary.entries.steam2.SteamFetcher;
 import se.roseabrams.footprintdiary.entries.tinder.TinderSwipe;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
@@ -103,6 +101,8 @@ public class DiaryWriter {
                 DW.add(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 DW.add(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 DW.add(SteamAchievment.createFromWebsite());*/
+                SteamFetcher steamApi = new SteamFetcher(Util.readFile(new File(I + "steam api key.txt")));
+                DW.add(SteamAchievment.createFromApi(steamApi));
                 DW.add(MedicalRecord.createFromHtml(new File(I + "1177.html")));
                 DW.add(TinderSwipe.createFromJson(
                         new File("D:\\Dropbox\\Privat\\postGym program\\gasoline\\final data\\tinder dataset.json")));

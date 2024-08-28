@@ -34,7 +34,7 @@ public class DiaryDateTime extends DiaryDate {
     }
 
     public DiaryDateTime(long unixMs) {
-        this(new Date(unixMs).toInstant().atZone(ZoneId.systemDefault()));
+        this(new Date(unixMs > 10000000000L ? unixMs : unixMs * 1000).toInstant().atZone(ZoneId.systemDefault()));
     }
 
     public DiaryDateTime(GregorianCalendar c) {

@@ -1,7 +1,6 @@
 package se.roseabrams.footprintdiary.entries.steam2;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -10,18 +9,13 @@ import java.net.URL;
 import org.json.JSONObject;
 
 import se.roseabrams.footprintdiary.PersonalConstants;
-import se.roseabrams.footprintdiary.Util;
 
 public class SteamFetcher {
 
     private final String API_KEY;
 
-    public SteamFetcher(File apiKey) {
-        try {
-            API_KEY = Util.readFile(apiKey);
-        } catch (IOException e) {
-            throw new AssertionError("API key file could not be read.", e);
-        }
+    public SteamFetcher(String apiKey) {
+        API_KEY = apiKey;
     }
 
     /// https://developer.valvesoftware.com/wiki/Steam_Web_API
@@ -54,7 +48,7 @@ public class SteamFetcher {
         }
     }
 
-    private JSONObject call(Endpoint endpoint, int appId) throws IOException {
+    public JSONObject call(Endpoint endpoint, int appId) throws IOException {
         StringBuilder urlS = new StringBuilder(150);
         urlS.append("http://api.steampowered.com/").append(endpoint.toString())
                 .append("/?key=").append(API_KEY)
