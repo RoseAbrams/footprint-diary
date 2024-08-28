@@ -8,7 +8,6 @@ import se.roseabrams.footprintdiary.common.ContentContainer;
 import se.roseabrams.footprintdiary.common.LocalContent;
 
 public class FacebookMediaPost extends FacebookPost implements ContentContainer {
-    /* "your_photos.html", "your_videos.html", "your_uncategorized_photos.html" */
 
     public final LocalContent MEDIA;
 

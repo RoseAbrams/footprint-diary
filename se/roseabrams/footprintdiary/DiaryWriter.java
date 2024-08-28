@@ -76,17 +76,19 @@ public class DiaryWriter {
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem1.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
                 DW.add(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
-                DW.add(FacebookPost
-                        .createFromHtml(new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
+                DW.add(FacebookPost.createFromHtml(
+                        new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html"))); // needs redebug
                 //DW.add(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html"))); // not working, is it worth fixing with so little data?
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
                 DW.add(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
                 DW.add(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
-                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
-                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
-                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
+                /* "your_photos.html", "your_videos.html", "your_uncategorized_photos.html" */
+                /* "profile_update_history.html", "pages_you've_liked.html" */
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox"))); // needs redebug
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads"))); // needs redebug
+                DW.add(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads"))); // needs redebug
                 DW.add(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
 
                 Util.serialize(DW.D, new File(O + "diary.ser"));

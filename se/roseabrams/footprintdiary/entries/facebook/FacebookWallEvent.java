@@ -1,5 +1,8 @@
 package se.roseabrams.footprintdiary.entries.facebook;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
@@ -11,11 +14,22 @@ public abstract class FacebookWallEvent extends DiaryEntry {
         super(DiaryEntryCategory.FACEBOOK_WALL, dd);
     }
 
-    /*
-     * TODO future ingest:
-     * profile_update_history.html
-     * pages_you've_liked.html
-     */
+    public static enum Type {
+        TEXT, PHOTO, VIDEO, LINK, COMMENT, NOTE, CHECKIN, PAGE, EVENT, MEMORY, RECOMMENDATION, ALBUM, LIFE_EVENT;
+
+        public static Type parse(String s) {
+            switch (s) {
+                case "post":
+                    return TEXT;
+                case "GIF":
+                    return PHOTO;
+                case "live_video":
+                    return VIDEO;
+                default:
+                    return valueOf(s.toUpperCase());
+            }
+        }
+    }
 
     static DiaryDateTime parseDate(String dateS) {
         boolean pm = dateS.substring(dateS.length() - 2).equals("pm");
@@ -33,5 +47,19 @@ public abstract class FacebookWallEvent extends DiaryEntry {
         byte second = Byte.parseByte(dateS.substring(dateS.lastIndexOf(":") + 1, dateS.lastIndexOf(":") + 3));
 
         return new DiaryDateTime(year, month, day, hour, minute, second);
+    }
+
+    static String textWithNewlines(Element e) {
+        String output = "";
+        for (Node child : e.childNodes()) {
+            if (child instanceof Element childE)
+                if (childE.normalName().equals("br"))
+                    output += "\n";
+                else
+                    output += textWithNewlines(childE);
+            else
+                output += child;
+        }
+        return output;
     }
 }

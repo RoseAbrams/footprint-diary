@@ -13,7 +13,6 @@ import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.PersonalConstants;
 
 public class FacebookComment extends FacebookWallEvent {
-    /* "comments.html", "your_comments_in_groups.html" */
 
     public final String BODY;
     public final String PARENT_OP;

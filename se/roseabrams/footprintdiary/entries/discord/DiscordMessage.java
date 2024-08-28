@@ -22,15 +22,18 @@ public class DiscordMessage extends DiaryEntry implements Message {
 
     public final long ID;
     public final String RECIPIENT;
-    public final ChannelType TYPE;
+    public final boolean IS_GROUP_CHANNEL;
+    public final boolean IS_UNKNOWN_CHANNEL;
     public final String CONTENTS;
     private static final String DM_CHANNEL_PREFIX = "Direct Message with ";
 
-    public DiscordMessage(DiaryDate date, long id, String contents, String recipient, ChannelType type) {
+    public DiscordMessage(DiaryDate date, long id, String contents, String recipient, boolean isGroupChannel,
+            boolean isUnknownChannel) {
         super(DiaryEntryCategory.DISCORD, date);
         ID = id;
         CONTENTS = contents;
-        TYPE = type;
+        IS_GROUP_CHANNEL = isGroupChannel;
+        IS_UNKNOWN_CHANNEL = isUnknownChannel;
         RECIPIENT = recipient.intern();
     }
 
@@ -46,9 +49,9 @@ public class DiscordMessage extends DiaryEntry implements Message {
 
     @Override
     public String getRecipient() {
-        if (TYPE == null)
+        if (IS_UNKNOWN_CHANNEL)
             return "unknown channel " + RECIPIENT;
-        else if (TYPE == ChannelType.SERVER)
+        else if (IS_GROUP_CHANNEL)
             return "server channel " + RECIPIENT;
         else
             return RECIPIENT;
@@ -71,17 +74,19 @@ public class DiscordMessage extends DiaryEntry implements Message {
             File conversationFile = new File(messagesDirectory + "\\c" + conversationCode, "messages.csv");
             CSVParser s = new CSVParser(conversationFile);
 
-            ChannelType type;
+            boolean isGroupChannel;
+            boolean isUnknownChannel = false;
             String recipient;
             if (conversationName == null) {
                 // index.json gives the channelname as null, so not much else can be discerned
-                type = null;
+                isUnknownChannel = true;
+                isGroupChannel = false;
                 recipient = conversationCode;
             } else if (conversationName.startsWith(DM_CHANNEL_PREFIX)) {
-                type = ChannelType.DM;
+                isGroupChannel = false;
                 recipient = conversationName.substring(DM_CHANNEL_PREFIX.length());
             } else {
-                type = ChannelType.SERVER;
+                isGroupChannel = true;
                 recipient = conversationName;
             }
 
@@ -112,18 +117,15 @@ public class DiscordMessage extends DiaryEntry implements Message {
                 DiaryDateTime date = new DiaryDateTime(dateS.substring(0, 20));
                 DiscordMessage d;
                 if (attachments != null && !attachments.isBlank())
-                    d = new DiscordFileMessage(date, id, contents, recipient, type, attachmentUrls);
+                    d = new DiscordFileMessage(date, id, contents, recipient, isGroupChannel, isUnknownChannel,
+                            attachmentUrls);
                 else
-                    d = new DiscordMessage(date, id, contents, recipient, type);
+                    d = new DiscordMessage(date, id, contents, recipient, isGroupChannel, isUnknownChannel);
                 output.add(d);
             }
             s.close();
         }
         return output.toArray(new DiscordMessage[output.size()]);
-    }
-
-    public static enum ChannelType {
-        DM, SERVER
     }
     /*
      * @Override

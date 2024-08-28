@@ -16,9 +16,9 @@ public class FacebookReaction extends FacebookWallEvent {
 
     public final Reaction REACTION;
     public final String PARENT_OP;
-    public final FacebookPost.Type PARENT_TYPE;
+    public final FacebookWallEvent.Type PARENT_TYPE;
 
-    public FacebookReaction(DiaryDateTime date, Reaction reaction, String op, FacebookPost.Type opType) {
+    public FacebookReaction(DiaryDateTime date, Reaction reaction, String op, FacebookWallEvent.Type opType) {
         super(date);
         assert op == null || !op.isBlank();
         assert opType != null;
@@ -34,56 +34,30 @@ public class FacebookReaction extends FacebookWallEvent {
 
     public static enum Reaction {
 
-        LIKE {
-            @Override
-            public String emoji() {
-                return "👍";
-            }
-        },
-        LOVE {
-            @Override
-            public String emoji() {
-                return "❤";
-            }
-        },
-        CARE {
-            @Override
-            public String emoji() {
-                return "🤗";
-            }
-        },
-        HAHA {
-            @Override
-            public String emoji() {
-                return "😆";
-            }
-        },
-        WOW {
-            @Override
-            public String emoji() {
-                return "😲";
-            }
-        },
-        SAD {
-            @Override
-            public String emoji() {
-                return "😢";
-            }
-        },
-        ANGRY {
-            @Override
-            public String emoji() {
-                return "😠";
-            }
-        },
-        DOROTHY {
-            @Override
-            public String emoji() {
-                return "🌼";
-            }
-        };
+        LIKE, LOVE, CARE, HAHA, WOW, SAD, ANGRY, DOROTHY;
 
-        public abstract String emoji();
+        public String emoji() {
+            switch (this) {
+                case LIKE:
+                    return "👍";
+                case LOVE:
+                    return "❤";
+                case CARE:
+                    return "🤗";
+                case HAHA:
+                    return "😆";
+                case WOW:
+                    return "😲";
+                case SAD:
+                    return "😢";
+                case ANGRY:
+                    return "😠";
+                case DOROTHY:
+                    return "🌼";
+                default:
+                    throw new AssertionError();
+            }
+        }
     }
 
     public static FacebookReaction[] createFromHtml(File reaction) throws IOException {
@@ -99,7 +73,7 @@ public class FacebookReaction extends FacebookWallEvent {
                 op = PersonalConstants.FACEBOOK_NAME;
                 opTypeS = description.substring(description.lastIndexOf(" ") + 1, description.lastIndexOf("."));
             } else if (description.contains(" a ") || description.contains(" an ")) {
-                // OP is deleted or accessdenied
+                // OP is deleted or unaccessable
                 op = null;
                 opTypeS = description.substring(description.lastIndexOf(" ") + 1, description.lastIndexOf("."));
             } else {
@@ -122,7 +96,7 @@ public class FacebookReaction extends FacebookWallEvent {
                 reactionS = "angry";
 
             FacebookReaction f = new FacebookReaction(parseDate(dateS), Reaction.valueOf(reactionS.toUpperCase()),
-                    op, FacebookPost.Type.parse(opTypeS.replace(" ", "_")));
+                    op, FacebookWallEvent.Type.parse(opTypeS.replace(" ", "_")));
             output.add(f);
         }
         return output.toArray(new FacebookReaction[output.size()]);
