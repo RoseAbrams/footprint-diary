@@ -7,17 +7,19 @@ import java.util.List;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 
-public class TwitchFollow extends TwitchEvent {
+public class TwitchFollow extends DiaryEntry {
 
     public final boolean FOLLOWING; // as opposed to unfollowing
     public final String CHANNEL;
     public final String CURRENT_GAME;
 
     public TwitchFollow(DiaryDateTime date, boolean following, String channel, String currentGame) {
-        super(date);
+        super(DiaryEntryCategory.TWITCH_FOLLOW, date);
         FOLLOWING = following;
         CHANNEL = channel.intern();
         CURRENT_GAME = currentGame.intern();
@@ -25,6 +27,7 @@ public class TwitchFollow extends TwitchEvent {
 
     @Override
     public String getStringSummary() {
+        return (FOLLOWING ? "" : "un") + "followed " + CHANNEL;
     }
 
     @SuppressWarnings("unused")
@@ -81,6 +84,7 @@ public class TwitchFollow extends TwitchEvent {
                     String vodId = s.next();
                     boolean ctaVisible = s.nextBoolean();
                 }
+                String followCount;
                 if (i == 1) {
                     hostChannel = s.next();
                     followCount = s.next();
@@ -91,7 +95,7 @@ public class TwitchFollow extends TwitchEvent {
                 int channelId = s.nextInt();
                 String appVersion;
                 String player;
-                String game;
+                String game = "";
                 if (i == 0) {
                     appVersion = s.next();
                     player = s.next();
@@ -118,7 +122,7 @@ public class TwitchFollow extends TwitchEvent {
                 s.close();
 
                 DiaryDateTime date = new DiaryDateTime(time);
-                assert channelGame.isBlank() || game.isBlank(); // one or both may be empty, but both must not be non-empty
+                assert channelGame.isBlank() || game.isBlank(); // one or both may be empty, but both should never be non-empty
                 String bestGame = game.isBlank() ? channelGame : game;
 
                 TwitchFollow t = new TwitchFollow(date, isFollow, channel, bestGame);

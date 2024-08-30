@@ -1,4 +1,6 @@
 package se.roseabrams.footprintdiary.entries.twitch;
 
-public class TwitchPlayback extends TwitchEvent {
+import se.roseabrams.footprintdiary.DiaryEntry;
+
+public class TwitchPlayback extends DiaryEntry {
 }

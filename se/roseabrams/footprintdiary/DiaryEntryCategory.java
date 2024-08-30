@@ -140,15 +140,20 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 else if (e instanceof SpotifyPlaylisting)
                     nPlaylisted++;
             }
-            return "I listened to " + nPlayed + " song" + p(nPlayed) + " on Spotify and added " + nPlaylisted + " song"
+            return "I listened to " + nPlayed + " song" + p(nPlayed) + " on Spotify, and added " + nPlaylisted + " song"
                     + p(nPlaylisted) + " to my playlists.";
         }
     },
-    STEAM {
+    STEAM_PURCHASE {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            throw new UnsupportedOperationException(); // update and reshame for all new classes
             return "I bought " + fl.size() + " game" + p(fl) + " on Steam.";
+        }
+    },
+    STEAM_ACHIEVMENT {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+            return "I got " + fl.size() + " new achievment" + p(fl) + " on Steam.";
         }
     },
     REDDIT {
@@ -193,9 +198,10 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             StringBuilder output = new StringBuilder(50);
             output.append("By the way...");
             for (DiaryEntry e : fl) {
-                DiaryEntrySpanBoundary d = (DiaryEntrySpanBoundary) e;
-                output.append(" Today is the " + (d.IS_START ? "first" : "last") + " day I have information about "
-                        + d.DESCRIPTION + ".");
+                DiaryDataBoundary d = (DiaryDataBoundary) e;
+                output.append(" Today is the ").append((d.IS_START ? "first" : "last"))
+                        .append(" day I have information about ")
+                        .append(d.C).append(".");
             }
             return output.toString();
         }
@@ -320,7 +326,17 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return "I swiped on " + fl.size() + " profile" + p(fl) + " on Tinder.";
         }
     },
-    TWITCH {
+    TWITCH_CHAT {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+        }
+    },
+    TWITCH_FOLLOW {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+        }
+    },
+    TWITCH_PLAYBACK {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
         }
@@ -331,7 +347,6 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     /// quick debug swapping of what's being printed
     public final boolean enabled() {
         switch (this) {
-            case SPAN_BOUNDARY:
             case WEB_HISTORY:
                 return false;
             default:
@@ -339,12 +354,20 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         }
     }
 
+    private static class CustomOrder implements Comparator<DiaryEntryCategory> {
+
+        @Override
+        public int compare(DiaryEntryCategory o1, DiaryEntryCategory o2) {
+            return Integer.compare(o1.customOrder(), o2.customOrder());
+        }
+    }
+
     public final int customOrder() {
         switch (this) {
             case SPAN_BOUNDARY:
-                return Integer.MAX_VALUE;
-            case MANUAL:
                 return Integer.MAX_VALUE - 1;
+            case MANUAL:
+                return Integer.MAX_VALUE;
             default:
                 return ordinal();
         }
@@ -376,13 +399,5 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         DiaryEntryCategory[] output = values().clone();
         Arrays.sort(output, new CustomOrder());
         return output;
-    }
-
-    private static class CustomOrder implements Comparator<DiaryEntryCategory> {
-
-        @Override
-        public int compare(DiaryEntryCategory o1, DiaryEntryCategory o2) {
-            return Integer.compare(o1.customOrder(), o2.customOrder());
-        }
     }
 }
