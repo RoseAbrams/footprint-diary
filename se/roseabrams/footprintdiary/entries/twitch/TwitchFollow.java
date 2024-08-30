@@ -7,22 +7,19 @@ import java.util.List;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
-import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 
-public class TwitchFollow extends DiaryEntry {
+public class TwitchFollow extends TwitchEvent {
 
     public final boolean FOLLOWING; // as opposed to unfollowing
-    public final String CHANNEL;
-    public final String CURRENT_GAME;
+    public final String STREAM_CATEGORY;
 
-    public TwitchFollow(DiaryDateTime date, boolean following, String channel, String currentGame) {
-        super(DiaryEntryCategory.TWITCH_FOLLOW, date);
+    public TwitchFollow(DiaryDateTime date, boolean following, String channel, String streamCategory) {
+        super(DiaryEntryCategory.TWITCH_FOLLOW, date, channel);
         FOLLOWING = following;
-        CHANNEL = channel.intern();
-        CURRENT_GAME = currentGame.intern();
+        STREAM_CATEGORY = streamCategory.intern();
     }
 
     @Override

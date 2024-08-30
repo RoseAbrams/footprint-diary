@@ -27,6 +27,7 @@ public class RedditPost extends RedditSubmission {
     }
 
     /// TODO needs multiline support
+    @SuppressWarnings("unused")
     public static List<RedditPost> createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
         List<String> postsLines = Util.readFileLines(postsFile);

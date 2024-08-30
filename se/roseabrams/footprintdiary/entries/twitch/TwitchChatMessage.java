@@ -7,24 +7,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
-import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.common.Message;
 
-public class TwitchChatMessage extends DiaryEntry implements Message {
+public class TwitchChatMessage extends TwitchEvent implements Message {
 
-    public final String CHANNEL;
     public final String BODY;
     public final boolean IS_REPLY;
     public final String CHANNEL_POINT_REWARD;
 
     public TwitchChatMessage(DiaryDateTime date, String channel, String body, boolean isReply,
             String channelPointReward) {
-        super(DiaryEntryCategory.TWITCH_CHAT, date);
+        super(DiaryEntryCategory.TWITCH_CHAT, date, channel);
         assert body != null && !body.isBlank();
-        CHANNEL = channel.intern();
         BODY = body;
         IS_REPLY = isReply;
         CHANNEL_POINT_REWARD = channelPointReward.intern();

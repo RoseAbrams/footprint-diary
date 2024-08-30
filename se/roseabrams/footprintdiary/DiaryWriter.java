@@ -3,7 +3,6 @@ package se.roseabrams.footprintdiary;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import se.roseabrams.footprintdiary.entries.apple.CalendarEvent;
@@ -174,6 +173,7 @@ public class DiaryWriter {
                         new File(I + "twitch\\community\\follows\\follow.csv"),
                         new File(I + "twitch\\community\\follows\\unfollow.csv")));
                 output.addAll(TwitchPlayback.createFromCsv(new File(I + "twitch\\site_history\\minute_watched.csv")));
+                // TwitchSession ...
                 break;
             default:
                 System.err.println("DiaryIngestCategory not implemented:" + c);

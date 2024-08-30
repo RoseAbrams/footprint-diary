@@ -39,6 +39,7 @@ public class MedicalRecord extends DiaryEntry {
     public static enum Type {
     }
 
+    @SuppressWarnings("unused")
     public static List<MedicalRecord> createFromHtml(File recordsFile) throws IOException {
         ArrayList<MedicalRecord> output = new ArrayList<>(500);
         Document d = Jsoup.parse(recordsFile);
