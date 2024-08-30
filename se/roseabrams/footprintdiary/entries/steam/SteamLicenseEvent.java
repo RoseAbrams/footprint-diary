@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.steam;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +19,7 @@ public class SteamLicenseEvent extends SteamEvent {
     public final Method METHOD;
 
     public SteamLicenseEvent(DiaryDate date, String name, Method method) {
-        super(DiaryEntryCategory.STEAM, date);
+        super(DiaryEntryCategory.STEAM_PURCHASE, date);
         NAME = name;
         METHOD = method;
     }
@@ -32,7 +33,7 @@ public class SteamLicenseEvent extends SteamEvent {
         STORE, FREE, GIFT, RETAIL;
     }
 
-    public static SteamLicenseEvent[] createFromHtml(File licenses) throws IOException {
+    public static List<SteamLicenseEvent> createFromHtml(File licenses) throws IOException {
         ArrayList<SteamLicenseEvent> output = new ArrayList<>(300);
         Document d = Jsoup.parse(licenses);
         Elements tableRows = d.select("tbody > tr[data-panel]");
@@ -66,6 +67,6 @@ public class SteamLicenseEvent extends SteamEvent {
             SteamLicenseEvent s = new SteamLicenseEvent(date, licenseName, method);
             output.add(s);
         }
-        return output.toArray(new SteamLicenseEvent[output.size()]);
+        return output;
     }
 }

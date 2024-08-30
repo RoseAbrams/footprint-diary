@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.discord;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -62,7 +63,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
         return true;
     }
 
-    public static DiscordMessage[] createAllFromCsv(File messagesDirectory) throws IOException {
+public static List<DiscordMessage> createAllFromCsv(File messagesDirectory) throws IOException {
         ArrayList<DiscordMessage> output = new ArrayList<>(10000);
         File indexFile = new File(messagesDirectory, "index.json");
         JSONObject index = Util.readJsonObjectFile(indexFile);
@@ -125,7 +126,7 @@ public class DiscordMessage extends DiaryEntry implements Message {
             }
             s.close();
         }
-        return output.toArray(new DiscordMessage[output.size()]);
+        return output;
     }
     /*
      * @Override

@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.apple;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryEntry;
@@ -41,9 +42,9 @@ public class DailyActivity extends DiaryEntry implements CustomCountable {
         return Math.round(kmWalked);
     }
 
-    public static DailyActivity[] createDays(File exportFile) throws IOException {
+    public static List<DailyActivity> createDays(File exportFile) throws IOException {
         ArrayList<DailyActivity> output = new ArrayList<>();
-        HealthData[] h = HealthData.createAllFromXml(exportFile);
+        List<HealthData> h = HealthData.createAllFromXml(exportFile);
         for (HealthData d : h) {
             DailyActivity foundA = null;
             for (DailyActivity iA : output) {
@@ -69,6 +70,6 @@ public class DailyActivity extends DiaryEntry implements CustomCountable {
                     break;
             }
         }
-        return output.toArray(new DailyActivity[output.size()]);
+        return output;
     }
 }

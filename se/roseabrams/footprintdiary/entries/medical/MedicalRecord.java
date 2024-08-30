@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.medical;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,7 +39,7 @@ public class MedicalRecord extends DiaryEntry {
     public static enum Type {
     }
 
-    public static MedicalRecord[] createFromHtml(File recordsFile) throws IOException {
+    public static List<MedicalRecord> createFromHtml(File recordsFile) throws IOException {
         ArrayList<MedicalRecord> output = new ArrayList<>(500);
         Document d = Jsoup.parse(recordsFile);
         for (Element recordE : d.select("li.ic-block-list__item")) {
@@ -83,6 +84,6 @@ public class MedicalRecord extends DiaryEntry {
             MedicalRecord m = new MedicalRecord(timestamp, type, author, provider, payloadText);
             output.add(m);
         }
-        return output.toArray(new MedicalRecord[output.size()]);
+        return output;
     }
 }

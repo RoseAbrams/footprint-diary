@@ -1,6 +1,14 @@
 package se.roseabrams.footprintdiary.entries.twitch;
 
-import se.roseabrams.footprintdiary.DiaryEntry;
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
-public class TwitchPlayback extends DiaryEntry {
+import se.roseabrams.footprintdiary.DiaryEntry;
+import se.roseabrams.footprintdiary.common.CustomCountable;
+
+public class TwitchPlayback extends DiaryEntry implements CustomCountable {
+
+    public static List<TwitchPlayback> createFromCsv(File watchFile) {
+    }
 }

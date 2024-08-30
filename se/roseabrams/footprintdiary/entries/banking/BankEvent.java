@@ -53,7 +53,7 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
         return AMOUNT < 0;
     }
 
-    public static BankEvent[] createFromCsv(File transactionsFile) throws IOException {
+    public static List<BankEvent> createFromCsv(File transactionsFile) throws IOException {
         ArrayList<BankEvent> output = new ArrayList<>();
         List<String> transations = Util.readFileLines(transactionsFile);
         for (String transaction : transations) {
@@ -80,6 +80,6 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
             output.add(b);
             s.close();
         }
-        return output.toArray(new BankEvent[output.size()]);
+        return output;
     }
 }

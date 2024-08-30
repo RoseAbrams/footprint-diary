@@ -51,7 +51,7 @@ public class TwitchChatMessage extends DiaryEntry implements Message {
     }
 
     @SuppressWarnings("unused")
-    public static TwitchChatMessage[] createFromCsv(File twitchChatFile) throws IOException {
+    public static List<TwitchChatMessage> createFromCsv(File twitchChatFile) throws IOException {
         ArrayList<TwitchChatMessage> output = new ArrayList<>();
         List<String> chatMessages = Util.readFileLines(twitchChatFile);
         for (String chatMessage : chatMessages) {
@@ -101,6 +101,6 @@ public class TwitchChatMessage extends DiaryEntry implements Message {
             TwitchChatMessage t = new TwitchChatMessage(date, channel, body, isReply, channelPointReward);
             output.add(t);
         }
-        return output.toArray(new TwitchChatMessage[output.size()]);
+        return output;
     }
 }

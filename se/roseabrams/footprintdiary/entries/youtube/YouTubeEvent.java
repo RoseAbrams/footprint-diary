@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.youtube;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +21,7 @@ public abstract class YouTubeEvent extends DiaryEntry {
         super(DiaryEntryCategory.YOUTUBE, dd);
     }
 
-    public static YouTubeEvent[] createFromHtml(File watchedFile) throws IOException {
+    public static List<YouTubeEvent> createHistoryFromHtml(File watchedFile) throws IOException {
         ArrayList<YouTubeEvent> output = new ArrayList<>(100000);
         Document d = Jsoup.parse(watchedFile);
         Elements playbackEs = d.body().select("div.outer-cell div.content-cell.mdl-typography--body-1");
@@ -94,6 +95,6 @@ public abstract class YouTubeEvent extends DiaryEntry {
             }
             output.add(newEvent);
         }
-        return output.toArray(new YouTubeEvent[output.size()]);
+        return output;
     }
 }

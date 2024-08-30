@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary.entries.resfiles;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.DiaryEntry;
@@ -46,49 +47,52 @@ public class ResFile extends DiaryEntry implements ContentContainer {
         return CONTENT;
     }
 
-    public static DiaryEntry[] createFromFiles() {
+    public static List<DiaryEntry> createFromFiles() {
         ArrayList<DiaryEntry> output = createFromFilesRecursion(new File(RES_PATH), 1, null);
-        return output.toArray(new DiaryEntry[output.size()]);
+        return output;
     }
 
     private static ArrayList<DiaryEntry> createFromFilesRecursion(File folder, int depth, String subfolder) {
         ArrayList<DiaryEntry> output = new ArrayList<>();
-        for (File file : folder.listFiles()) {
-            if (depth == 1) {
-                subfolder = file.getName();
+        DiaryEntryCategory c = null;
+        if (subfolder != null) {
+            switch (subfolder) {
+                case "lol":
+                    c = DiaryEntryCategory.MEME_SAVED;
+                    break;
+                case "oc":
+                    c = DiaryEntryCategory.MEME_CREATED;
+                    break;
+                case "wp":
+                    c = DiaryEntryCategory.WALLPAPER_SAVED;
+                    break;
+                case "anart":
+                    c = DiaryEntryCategory.ARTWORK_SAVED;
+                    break;
+                case "t":
+                    c = DiaryEntryCategory.TORRENT;
+                    break;
+                case "ai":
+                case "fl":
+                case "mus":
+                case "snd":
+                case "omgl":
+                    return output;
+                default:
+                    c = DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
+                    break;
             }
-            if (file.isDirectory()) {
+        }
+        for (File file : folder.listFiles()) {
+            if (depth == 1)
+                subfolder = file.getName();
+
+            if (file.isDirectory())
                 output.addAll(createFromFilesRecursion(file, depth + 1, subfolder));
-            } else {
+            else {
+                assert c != null;
                 DiaryDateTime dd = new DiaryDateTime(file.lastModified());
-                DiaryEntryCategory c;
-                switch (subfolder) {
-                    case "lol":
-                        c = DiaryEntryCategory.MEME_SAVED;
-                        break;
-                    case "oc":
-                        c = DiaryEntryCategory.MEME_CREATED;
-                        break;
-                    case "wp":
-                        c = DiaryEntryCategory.WALLPAPER_SAVED;
-                        break;
-                    case "anart":
-                        c = DiaryEntryCategory.ARTWORK_SAVED;
-                        break;
-                    case "t":
-                        c = DiaryEntryCategory.TORRENT;
-                        break;
-                    case "ai":
-                    case "fl":
-                    case "mus":
-                    case "snd":
-                    case "omgl":
-                        continue;
-                    default:
-                        c = DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
-                        break;
-                }
-                DiaryEntry r = new ResFile(c, dd, file);
+                ResFile r = new ResFile(c, dd, file);
                 output.add(r);
             }
         }

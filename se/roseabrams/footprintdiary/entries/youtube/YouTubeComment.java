@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.youtube;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -47,7 +48,7 @@ public class YouTubeComment extends YouTubeVideoEvent {
         return o instanceof YouTubeComment c2 && ID.equals(c2.ID); // is this reliable? better check during debug
     }
 
-    public static YouTubeComment[] createFromHtml(File commentsFile) throws IOException {
+    public static List<YouTubeComment> createFromHtml(File commentsFile) throws IOException {
         ArrayList<YouTubeComment> output = new ArrayList<>(1000);
         Document d = Jsoup.parse(commentsFile);
         // Elements commentsEs = d.select("c-wiz.xDtZAf div.uUy2re");
@@ -118,10 +119,10 @@ public class YouTubeComment extends YouTubeVideoEvent {
                 throw new AssertionError();
             }
         }
-        return output.toArray(new YouTubeComment[output.size()]);
+        return output;
     }
 
-    public static YouTubeComment[] createFromCsv(File commentsFile) throws IOException {
+    public static List<YouTubeComment> createFromCsv(File commentsFile) throws IOException {
         final Pattern JSON_OBJECT_DELIM = Pattern.compile("(?:\\\"}),(?:{\\\")");
         ArrayList<YouTubeComment> output = new ArrayList<>(1000);
         Scanner s = new Scanner(commentsFile);
@@ -172,6 +173,6 @@ public class YouTubeComment extends YouTubeVideoEvent {
             output.add(c);
         }
         s.close();
-        return output.toArray(new YouTubeComment[output.size()]);
+        return output;
     }
 }

@@ -65,7 +65,7 @@ public class Email extends DiaryEntry implements Message {
 
     //public enum EmailType {...}
 
-    public static Email[] createFromMbox(File emailFile) throws IOException {
+    public static List<Email> createFromMbox(File emailFile) throws IOException {
         ArrayList<Email> output = new ArrayList<>();
         List<String> mboxLines = Util.readFileLines(emailFile);
         for (int i = 0; i < mboxLines.size(); i++) {
@@ -162,7 +162,7 @@ public class Email extends DiaryEntry implements Message {
         }
     }
 
-    public static Email[] createFromPstJson(File emailFile) {
+    public static List<Email> createFromPstJson(File emailFile) {
     }
 
     private static DiaryDateTime parseDate(String substring) {

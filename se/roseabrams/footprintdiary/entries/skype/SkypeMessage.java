@@ -45,12 +45,12 @@ public class SkypeMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.SKYPE_USERNAME);
     }
 
-    public static DiaryEntry[] createAllFromTxt(File directory) throws IOException {
+    public static List<SkypeMessage> createAllFromTxt(File directory) throws IOException {
         ArrayList<SkypeMessage> output = new ArrayList<>(50000);
         for (File convFile : directory.listFiles()) {
             output.addAll(createFromTxt(convFile));
         }
-        return output.toArray(new DiaryEntry[output.size()]);
+        return output;
     }
 
     public static ArrayList<SkypeMessage> createFromTxt(File skypeTxt) throws IOException {

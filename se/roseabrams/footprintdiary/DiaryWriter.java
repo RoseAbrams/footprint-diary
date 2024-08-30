@@ -37,7 +37,7 @@ import se.roseabrams.footprintdiary.entries.youtube.YouTubeEvent;
 
 public class DiaryWriter {
 
-    private final DiaryBook D;
+    private final DiaryBook D = new DiaryBook();
     private static final String I = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\data\\";
     private static final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
@@ -73,7 +73,7 @@ public class DiaryWriter {
         }
     }
 
-    private static List<DiaryEntry> ingest(DiaryIngestCategory c) {
+    private static List<DiaryEntry> ingest(DiaryIngestCategory c) throws IOException {
         File categorySer = new File(O + c.serializationFilename());
         if (categorySer.exists())
             return (List<DiaryEntry>) Util.deserialize(categorySer);
@@ -122,10 +122,10 @@ public class DiaryWriter {
                 output.addAll(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs further work
                 break;
             case YOUTUBE:
-                output.addAll(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old watch.html")));
-                output.addAll(YouTubeEvent.createFromHtml(new File(I + "google\\youtube watch.html")));
-                output.addAll(YouTubeEvent.createFromHtml(new File(I + "google\\youtube search and ads.html")));
-                output.addAll(YouTubeEvent.createFromHtml(new File(I + "google\\youtube old search and ads.html")));
+                output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old watch.html")));
+                output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube watch.html")));
+                output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube search and ads.html")));
+                output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old search and ads.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
                 //output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
@@ -186,7 +186,6 @@ public class DiaryWriter {
     }
 
     public DiaryWriter() {
-        D = new DiaryBook();
     }
 
     public void add(List<DiaryEntry> de, DiaryIngestCategory c) {
@@ -218,11 +217,10 @@ public class DiaryWriter {
     private static ArrayList<YouTubeComment> youtubeCommentHack() throws IOException {
         ArrayList<YouTubeComment> unsorted = new ArrayList<>();
         ArrayList<YouTubeComment> sorted = new ArrayList<>();
-        unsorted.addAll(Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html"))));
-        unsorted.addAll(
-                Arrays.asList(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html"))));
-        unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv"))));
-        unsorted.addAll(Arrays.asList(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv"))));
+        unsorted.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
+        unsorted.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
+        unsorted.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
+        unsorted.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
         for (YouTubeComment c1 : unsorted) {
             YouTubeComment better = null;
             for (YouTubeComment c2 : unsorted) {

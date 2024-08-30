@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.facebook;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,7 +31,7 @@ public class FacebookComment extends FacebookWallEvent {
         return BODY;
     }
 
-    public static FacebookComment[] createFromHtml(File commentsFile) throws IOException {
+    public static List<FacebookComment> createFromHtml(File commentsFile) throws IOException {
         ArrayList<FacebookComment> output = new ArrayList<>();
         Document d = Jsoup.parse(commentsFile);
         Elements commentsE = d.select("div._a706 > div._3-95._a6-g");
@@ -54,6 +55,6 @@ public class FacebookComment extends FacebookWallEvent {
             FacebookComment f = new FacebookComment(parseDate(dateS), body, op);
             output.add(f);
         }
-        return output.toArray(new FacebookComment[output.size()]);
+        return output;
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -101,12 +102,12 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
                 + ")";
     }
 
-    public static WikimediaEdit[] createFromWebsites() throws IOException {
+    public static List<WikimediaEdit> createFromWebsites() throws IOException {
         ArrayList<WikimediaEdit> output = new ArrayList<>(7000);
         for (String wiki : PersonalConstants.WIKIS_WITH_EDITS) {
             output.addAll(createFromWebsite(wiki.intern()));
         }
-        return output.toArray(new WikimediaEdit[output.size()]);
+        return output;
     }
 
     private static final int EDIT_LIMIT = 1000;//10000;

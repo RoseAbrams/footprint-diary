@@ -49,7 +49,7 @@ public class CalendarEvent extends DiaryEntry {
             return SUMMARY + " (" + START_DATE.reduce() + ")";
     }
 
-    public static CalendarEvent[] createFromIcs(File calendarIcs) throws IOException {
+    public static List<CalendarEvent> createFromIcs(File calendarIcs) throws IOException {
         ArrayList<CalendarEvent> output = new ArrayList<>(1000);
         List<String> icsLines = Util.readFileLines(calendarIcs);
 
@@ -135,7 +135,7 @@ public class CalendarEvent extends DiaryEntry {
                 continue;
             }
         }
-        return output.toArray(new CalendarEvent[output.size()]);
+        return output;
     }
 
     private static DiaryDate parseDate(String s) {

@@ -27,7 +27,7 @@ public class RedditPost extends RedditSubmission {
     }
 
     /// TODO needs multiline support
-    public static RedditPost[] createFromCsv(File postsFile) throws IOException {
+    public static List<RedditPost> createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
         List<String> postsLines = Util.readFileLines(postsFile);
         for (int i = 1; i < postsLines.size(); i++) {
@@ -70,7 +70,7 @@ public class RedditPost extends RedditSubmission {
             s.close();
         }
 
-        return output.toArray(new RedditPost[output.size()]);
+        return output;
     }
     /*
      * @Override

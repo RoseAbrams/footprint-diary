@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.spotify;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +25,7 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
         return super.toString() + " --> " + PLAYLIST;
     }
 
-    public static SpotifyPlaylisting[] createFromJson(File playlistFile) throws IOException {
+    public static List<SpotifyPlaylisting> createFromJson(File playlistFile) throws IOException {
         ArrayList<SpotifyPlaylisting> output = new ArrayList<>(5000);
 
         JSONObject playlistsO = Util.readJsonObjectFile(playlistFile);
@@ -60,6 +61,6 @@ public class SpotifyPlaylisting extends SpotifyTrackEvent {
             }
         }
 
-        return output.toArray(new SpotifyPlaylisting[output.size()]);
+        return output;
     }
 }

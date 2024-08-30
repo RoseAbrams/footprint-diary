@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.facebook;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,7 +36,7 @@ public class FacebookPost extends FacebookWallEvent {
         return BODY;
     }
 
-    public static FacebookPost[] createFromHtml(File postFile) throws IOException {
+    public static List<FacebookPost> createFromHtml(File postFile) throws IOException {
         ArrayList<FacebookPost> output = new ArrayList<>();
         Document d = Jsoup.parse(postFile);
         Elements postsE = d.select("div._a706 > div._3-95._a6-g");
@@ -121,6 +122,6 @@ public class FacebookPost extends FacebookWallEvent {
                 f = new FacebookPost(parseDate(dateS), body, type, timeline, app);
             output.add(f);
         }
-        return output.toArray(new FacebookPost[output.size()]);
+        return output;
     }
 }

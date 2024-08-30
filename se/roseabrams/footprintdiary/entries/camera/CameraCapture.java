@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.camera;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.ImagingException;
@@ -45,9 +46,9 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
         return FILE;
     }
 
-    public static CameraCapture[] createFromFiles(File folder) throws IOException {
+    public static List<CameraCapture> createFromFiles(File folder) throws IOException {
         ArrayList<CameraCapture> output = createFromFilesRecursion(folder);
-        return output.toArray(new CameraCapture[output.size()]);
+        return output;
     }
 
     // TODO make generic for all kinds of file collection?

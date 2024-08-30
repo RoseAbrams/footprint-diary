@@ -48,7 +48,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.WHATSAPP_NAME);
     }
 
-    public static DiaryEntry[] createAllFromFolder(File chatsFolder) throws IOException {
+    public static List<WhatsAppMessage> createAllFromFolder(File chatsFolder) throws IOException {
         ArrayList<WhatsAppMessage> output = new ArrayList<>(10000);
 
         File[] chatFolders = chatsFolder.listFiles();
@@ -59,7 +59,7 @@ public class WhatsAppMessage extends DiaryEntry implements Message {
             }
         }
 
-        return output.toArray(new WhatsAppMessage[output.size()]);
+        return output;
     }
 
     public static ArrayList<WhatsAppMessage> createFromTxt(File chatFile, File parent) throws IOException {

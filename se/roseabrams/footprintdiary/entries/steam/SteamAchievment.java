@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary.entries.steam;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -21,7 +22,7 @@ public class SteamAchievment extends SteamEvent {
     public final TitledString TEXT;
 
     public SteamAchievment(DiaryDateTime date, SteamGame game, TitledString text) {
-        super(DiaryEntryCategory.STEAM, date);
+        super(DiaryEntryCategory.STEAM_ACHIEVMENT, date);
         GAME = game;
         TEXT = text;
     }
@@ -31,7 +32,7 @@ public class SteamAchievment extends SteamEvent {
         return TEXT.TITLE + " (" + GAME.NAME + ")";
     }
 
-    public static SteamAchievment[] createFromWebsite() throws IOException {
+    public static List<SteamAchievment> createFromWebsite() throws IOException {
         ArrayList<SteamAchievment> output = new ArrayList<>(1000);
         Connection c = Jsoup.newSession();
         c.timeout(120000);
@@ -62,6 +63,6 @@ public class SteamAchievment extends SteamEvent {
                 output.add(a);
             }
         }
-        return output.toArray(new SteamAchievment[output.size()]);
+        return output;
     }
 }

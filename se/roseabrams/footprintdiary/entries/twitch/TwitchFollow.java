@@ -31,7 +31,7 @@ public class TwitchFollow extends DiaryEntry {
     }
 
     @SuppressWarnings("unused")
-    public static TwitchFollow[] createFromCsv(File twitchFollowFile, File twitchUnfollowFile) throws IOException {
+    public static List<TwitchFollow> createFromCsv(File twitchFollowFile, File twitchUnfollowFile) throws IOException {
         ArrayList<TwitchFollow> output = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             boolean isFollow;
@@ -129,6 +129,6 @@ public class TwitchFollow extends DiaryEntry {
                 output.add(t);
             }
         }
-        return output.toArray(new TwitchFollow[output.size()]);
+        return output;
     }
 }

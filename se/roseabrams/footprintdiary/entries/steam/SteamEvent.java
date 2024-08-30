@@ -7,6 +7,6 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 public abstract class SteamEvent extends DiaryEntry {
 
     public SteamEvent(DiaryEntryCategory source, DiaryDate dd) {
-        super(DiaryEntryCategory.STEAM, dd);
+        super(source, dd);
     }
 }

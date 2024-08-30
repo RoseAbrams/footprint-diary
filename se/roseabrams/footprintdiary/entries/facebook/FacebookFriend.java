@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.facebook;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,7 +35,7 @@ public class FacebookFriend extends DiaryEntry {
         ACCEPTED, SENT, REMOVED, REJECTED, RECIEVED;
     }
 
-    public static FacebookFriend[] createFromFolder(File friendsFolder) throws IOException {
+    public static List<FacebookFriend> createFromFolder(File friendsFolder) throws IOException {
         ArrayList<FacebookFriend> output = new ArrayList<>();
         for (File friendsFile : friendsFolder.listFiles()) {
             if (!friendsFile.getName().endsWith(".html")) {
@@ -70,6 +71,6 @@ public class FacebookFriend extends DiaryEntry {
                 output.add(f);
             }
         }
-        return output.toArray(new FacebookFriend[output.size()]);
+        return output;
     }
 }

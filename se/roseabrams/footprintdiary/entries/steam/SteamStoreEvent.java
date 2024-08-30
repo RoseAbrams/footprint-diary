@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.steam;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -25,7 +26,7 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
     public SteamStoreEvent(DiaryDate dd, long transactionId, String[] items, SteamGame[] games, Type type,
             String paymentMethod,
             float paymentTotal, float walletChange, float walletBalance) {
-        super(DiaryEntryCategory.STEAM, dd);
+        super(DiaryEntryCategory.STEAM_PURCHASE, dd);
         assert dd != null;
 
         assert items != null && items.length != 0;
@@ -71,7 +72,7 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
         STORE_PURCHASE, MARKET_TRANSACTION, IN_GAME_PURCHASE, GIFT_PURCHASE, REFUND;
     }
 
-    public static SteamStoreEvent[] createFromHtml(File purchaseHistory) throws IOException {
+    public static List<SteamStoreEvent> createFromHtml(File purchaseHistory) throws IOException {
         ArrayList<SteamStoreEvent> output = new ArrayList<>(1000);
         org.jsoup.nodes.Document d = Jsoup.parse(purchaseHistory);
         Elements tableRows = d.select("tbody > tr.wallet_table_row");
@@ -142,7 +143,7 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
             output.add(s);
         }
 
-        return output.toArray(new SteamStoreEvent[output.size()]);
+        return output;
     }
 
     public static float parseCurrency(String s) {

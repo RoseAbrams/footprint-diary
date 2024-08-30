@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.tinder;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ public class TinderSwipe extends DiaryEntry {
         APPEARANCE, PERSONALITY, BOTH, HORNY, CURIOUS;
     }
 
-    public static TinderSwipe[] createFromJson(File tinderJson) throws IOException {
+    public static List<TinderSwipe> createFromJson(File tinderJson) throws IOException {
         ArrayList<TinderSwipe> output = new ArrayList<>();
         JSONArray swipes = Util.readJsonArrayFile(tinderJson);
         for (Object swipeO : swipes) {
@@ -62,6 +63,6 @@ public class TinderSwipe extends DiaryEntry {
             TinderSwipe t = new TinderSwipe(date, id, name, swipeResult, swipeReason);
             output.add(t);
         }
-        return output.toArray(new TinderSwipe[output.size()]);
+        return output;
     }
 }

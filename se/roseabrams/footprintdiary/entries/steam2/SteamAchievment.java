@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary.entries.steam2;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ public class SteamAchievment extends SteamEvent {
     public final TitledString TEXT;
 
     public SteamAchievment(DiaryDateTime date, int gameId, String gameName, TitledString text) {
-        super(DiaryEntryCategory.STEAM, date);
+        super(DiaryEntryCategory.STEAM_ACHIEVMENT, date);
         GAME_ID = gameId;
         GAME_NAME = gameName;
         TEXT = text;
@@ -30,7 +31,7 @@ public class SteamAchievment extends SteamEvent {
         return TEXT.TITLE + " (" + GAME_NAME + ")";
     }
 
-    public static SteamAchievment[] createFromApi(SteamFetcher api) throws IOException {
+    public static List<SteamAchievment> createFromApi(SteamFetcher api) throws IOException {
         ArrayList<SteamAchievment> output = new ArrayList<>(1000);
         JSONObject games = api.call(Endpoint.PLAYER_OWNED_GAMES, 0).getJSONObject("response");
         for (Object gameO : games.getJSONArray("games")) {
@@ -61,6 +62,6 @@ public class SteamAchievment extends SteamEvent {
                 throw new AssertionError(e);
             }
         }
-        return output.toArray(new SteamAchievment[output.size()]);
+        return output;
     }
 }

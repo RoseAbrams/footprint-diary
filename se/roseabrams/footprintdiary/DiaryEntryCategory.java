@@ -326,19 +326,21 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return "I swiped on " + fl.size() + " profile" + p(fl) + " on Tinder.";
         }
     },
+    TWITCH_PLAYBACK {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+        }
+    },
     TWITCH_CHAT {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
+            return "I sent " + fl.size() + " messages" + p(fl) + " on Twitch.";
         }
     },
     TWITCH_FOLLOW {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-        }
-    },
-    TWITCH_PLAYBACK {
-        @Override
-        public String describeInProse(List<DiaryEntry> fl) {
+            return "I sent " + fl.size() + " messages" + p(fl) + " on Twitch.";
         }
     };
 

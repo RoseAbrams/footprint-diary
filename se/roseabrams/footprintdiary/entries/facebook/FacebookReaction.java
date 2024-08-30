@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.facebook;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -60,7 +61,7 @@ public class FacebookReaction extends FacebookWallEvent {
         }
     }
 
-    public static FacebookReaction[] createFromHtml(File reaction) throws IOException {
+    public static List<FacebookReaction> createFromHtml(File reaction) throws IOException {
         ArrayList<FacebookReaction> output = new ArrayList<>();
         Document d = Jsoup.parse(reaction);
         Elements reactionsE = d.select("div._a706 > div._3-95._a6-g");
@@ -99,6 +100,6 @@ public class FacebookReaction extends FacebookWallEvent {
                     op, FacebookWallEvent.Type.parse(opTypeS.replace(" ", "_")));
             output.add(f);
         }
-        return output.toArray(new FacebookReaction[output.size()]);
+        return output;
     }
 }

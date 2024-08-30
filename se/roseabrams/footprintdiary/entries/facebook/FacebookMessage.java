@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.facebook;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -59,14 +60,14 @@ public class FacebookMessage extends DiaryEntry implements Message {
         return SENDER.equals(PersonalConstants.FACEBOOK_NAME);
     }
 
-    public static FacebookMessage[] createFromFolder(File messageParentFolder) throws IOException {
+    public static List<FacebookMessage> createFromFolder(File messageParentFolder) throws IOException {
         ArrayList<FacebookMessage> output = new ArrayList<>(100000);
         for (File messageFolder : messageParentFolder.listFiles()) {
             for (File messageFile : messageFolder.listFiles(pathname -> !pathname.isDirectory())) {
                 output.addAll(createFromHtml(messageFile));
             }
         }
-        return output.toArray(new FacebookMessage[output.size()]);
+        return output;
     }
 
     public static ArrayList<FacebookMessage> createFromHtml(File messageFile) throws IOException {

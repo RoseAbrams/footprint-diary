@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary.entries.apple;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -80,7 +81,7 @@ public class HealthData extends DiaryEntry {
                 "dBASPL", "cm", "count", "%", "%", "km/hr", "cm" };
     }
 
-    public static HealthData[] createAllFromXml(File exportFile) throws IOException {
+    public static List<HealthData> createAllFromXml(File exportFile) throws IOException {
         ArrayList<HealthData> output = new ArrayList<>(800000);
         Document d = Util.readXmlFile(exportFile);
         NodeList allNodes = d.getDocumentElement().getChildNodes();
@@ -91,7 +92,7 @@ public class HealthData extends DiaryEntry {
                 output.add(createFromXml(node));
             }
         }
-        return output.toArray(new HealthData[output.size()]);
+        return output;
     }
 
     public static HealthData createFromXml(Node node) {
