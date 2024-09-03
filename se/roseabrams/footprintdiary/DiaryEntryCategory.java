@@ -342,6 +342,11 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         public String describeInProse(List<DiaryEntry> fl) {
             return "I sent " + fl.size() + " messages" + p(fl) + " on Twitch.";
         }
+    },
+    MYANIMELIST {
+        @Override
+        public String describeInProse(List<DiaryEntry> fl) {
+        }
     };
 
     public abstract String describeInProse(List<DiaryEntry> filteredList);
