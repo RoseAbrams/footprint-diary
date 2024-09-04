@@ -10,7 +10,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -125,5 +128,53 @@ public class Util {
             output = output.replace("%" + charRef, String.valueOf(charResult));
         }
         return output;
+    }
+
+    // manual converter: https://ldu2.github.io/rfc2047/
+    // untested written by MSCopilot because i'm tired
+    public static String decodeRfc2047(String encoded) {
+        Pattern pattern = Pattern.compile("=\\?([^?]+)\\?([BQbq])\\?([^?]+)\\?=");
+        Matcher matcher = pattern.matcher(encoded);
+        StringBuffer decoded = new StringBuffer();
+
+        while (matcher.find()) {
+            String charsetS = matcher.group(1);
+            Charset charset = Charset.forName(charsetS);
+            String encoding = matcher.group(2);
+            String encodedText = matcher.group(3);
+            String decodedText = "";
+
+            if (encoding.equalsIgnoreCase("B")) {
+                decodedText = new String(Base64.getDecoder().decode(encodedText), charset);
+            } else if (encoding.equalsIgnoreCase("Q")) {
+                StringBuilder decodedQ = new StringBuilder();
+                byte[] bytes = new byte[encodedText.length()];
+                int byteIndex = 0;
+
+                for (int i = 0; i < encodedText.length(); i++) {
+                    char c = encodedText.charAt(i);
+                    if (c == '_') {
+                        bytes[byteIndex++] = (byte) ' ';
+                    } else if (c == '=') {
+                        int hex1 = Character.digit(encodedText.charAt(i + 1), 16);
+                        int hex2 = Character.digit(encodedText.charAt(i + 2), 16);
+                        bytes[byteIndex++] = (byte) ((hex1 << 4) + hex2);
+                        i += 2;
+                    } else {
+                        bytes[byteIndex++] = (byte) c;
+                    }
+                }
+
+                decodedQ.append(new String(bytes, 0, byteIndex, charset));
+
+                decodedText = decodedQ.toString();
+            } else {
+                throw new AssertionError();
+            }
+
+            matcher.appendReplacement(decoded, Matcher.quoteReplacement(decodedText));
+        }
+        matcher.appendTail(decoded);
+        return decoded.toString();
     }
 }

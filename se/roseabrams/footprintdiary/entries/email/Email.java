@@ -3,14 +3,10 @@ package se.roseabrams.footprintdiary.entries.email;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
@@ -30,9 +26,12 @@ import com.pff.PSTTask;
 
 public class Email extends DiaryEntry implements Message {
 
+    // TODO rethink these vars
     public final String SENDER_NAME;
     public final String SENDER_ADDRESS;
     public final String RECIPIENT;
+    //public final String RECIPIENT_NAME;
+    //public final String RECIPIENT_ADDRESS;
     public final String SUBJECT;
     public final Folder FOLDER;
     public final boolean IMPORTANT;
@@ -46,6 +45,12 @@ public class Email extends DiaryEntry implements Message {
         SUBJECT = subject;
         FOLDER = folder;
         IMPORTANT = important;
+    }
+
+    public Email(DiaryDate dd, String senderName, String senderAddress, String recipient,
+            String subject, Folder folder, boolean important, String[] categories) {
+        this(dd, senderName, senderAddress, recipient, subject, folder, important);
+        // TODO
     }
 
     @Override
@@ -78,6 +83,7 @@ public class Email extends DiaryEntry implements Message {
 
     //public enum EmailType {...}
 
+    @SuppressWarnings("unused")
     public static List<Email> createFromMbox(File emailFile) throws IOException {
         ArrayList<Email> output = new ArrayList<>();
         List<String> mboxLines = Util.readFileLines(emailFile);
@@ -85,7 +91,6 @@ public class Email extends DiaryEntry implements Message {
             String mboxLine = mboxLines.get(i);
             boolean currentIsEmail = false;
             long id;
-            DiaryDateTime bestDate = null;
             DiaryDateTime firstlineDate = null;
             DiaryDateTime fieldDate = null;
             String senderName = null;
@@ -98,13 +103,13 @@ public class Email extends DiaryEntry implements Message {
             if (mboxLine.matches(MBOX_MESSAGE_START_LINE.pattern())) {
                 if (currentIsEmail) {
                     currentIsEmail = false;
+                    DiaryDateTime bestDate = fieldDate; // TODO evaluate
                     Email e = new Email(bestDate, senderName, senderAddress, recipient, subject,
                             folder, important, categories.toArray(new String[categories.size()]));
                     output.add(e);
                 }
                 currentIsEmail = true;
                 id = 0;
-                bestDate = null;
                 firstlineDate = null;
                 fieldDate = null;
                 senderName = null;
@@ -122,17 +127,7 @@ public class Email extends DiaryEntry implements Message {
                     subject += mboxLines.get(i + 1);
                     i++;
                 }
-                while (subject.contains("=?") && subject.contains("?=")) {
-                    /// TODO doesn't solve partial encodes
-                    int posEncodeStart = subject.indexOf("=?") + 2;
-                    int posEncodeEnd = subject.indexOf("?=");
-                    int posEncodePayloadStart = subject.lastIndexOf("?", posEncodeEnd) + 1;
-                    String encode = subject.substring(posEncodeStart - 2, posEncodeEnd + 2);
-                    String encodingName = subject.substring(posEncodeStart, posEncodePayloadStart - 1);
-                    String payload = subject.substring(posEncodePayloadStart, posEncodeEnd);
-                    String payloadDecoded = new String(Base64.getDecoder().decode(payload.getBytes(encodingName)));
-                    subject = subject.replace(payload, payloadDecoded);
-                }
+                subject = Util.decodeRfc2047(subject);
             } else if (mboxLine.startsWith("To: ")) {
                 recipient = mboxLine.substring(mboxLine.indexOf(":") + 2);
             } else if (mboxLine.startsWith("From: ") && !mboxLine.startsWith("From: From:")) {
@@ -173,9 +168,10 @@ public class Email extends DiaryEntry implements Message {
                 s.close();
             }
         }
+        return output;
     }
 
-    private static DiaryDateTime parseDate(String substring) {
+    private static DiaryDateTime parseDate(String s) {
     }
 
     public static List<Email> createFromPst(File emailFile) throws IOException {
