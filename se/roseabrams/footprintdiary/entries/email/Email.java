@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
@@ -14,6 +18,15 @@ import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.Util;
 import se.roseabrams.footprintdiary.common.Message;
+
+import com.pff.PSTAppointment;
+import com.pff.PSTContact;
+import com.pff.PSTException;
+import com.pff.PSTFile;
+import com.pff.PSTFolder;
+import com.pff.PSTMessage;
+import com.pff.PSTObject;
+import com.pff.PSTTask;
 
 public class Email extends DiaryEntry implements Message {
 
@@ -25,7 +38,7 @@ public class Email extends DiaryEntry implements Message {
     public final boolean IMPORTANT;
 
     public Email(DiaryDate dd, String senderName, String senderAddress, String recipient,
-            String subject, Folder folder, boolean important, String[] strings) {
+            String subject, Folder folder, boolean important) {
         super(DiaryEntryCategory.EMAIL, dd);
         SENDER_NAME = senderName;
         SENDER_ADDRESS = senderAddress;
@@ -162,9 +175,91 @@ public class Email extends DiaryEntry implements Message {
         }
     }
 
-    public static List<Email> createFromPstJson(File emailFile) {
+    private static DiaryDateTime parseDate(String substring) {
     }
 
-    private static DiaryDateTime parseDate(String substring) {
+    public static List<Email> createFromPst(File emailFile) throws IOException {
+        try {
+            PSTFile f = new PSTFile(emailFile);
+            return createFromPstRecurse(f.getRootFolder(), "root");
+        } catch (PSTException e) {
+            throw new Error(e);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static List<Email> createFromPstRecurse(PSTFolder f, String folderPath) throws PSTException, IOException {
+        String folderName = folderPath + "/" + f.getDisplayName();
+        ArrayList<Email> output;
+        Folder folderType;
+        // TODO confirm folder paths, these are mostly guesses
+        if (folderName.equals("root/Inbox")) {
+            output = new ArrayList<>(12000);
+            folderType = Folder.INBOX;
+        } else if (folderName.equals("root/Inbox/KYM")) {
+            output = new ArrayList<>(1000);
+            folderType = Folder.INBOX;
+        } else if (folderName.equals("root/Sent")) {
+            output = new ArrayList<>(1000);
+            folderType = Folder.SENT;
+        } else {
+            return new ArrayList<>(0);
+        }
+        int nContent = f.getContentCount();
+        int nEmails = f.getEmailCount();
+        int nContantActual = 0;
+        for (PSTFolder sf : f.getSubFolders()) {
+            createFromPstRecurse(sf, folderName);
+        }
+        while (true) {
+            PSTObject o = f.getNextChild();
+            if (o == null) {
+                break;
+            }
+            int typeOfNodeI = o.getNodeType();
+            if (o instanceof PSTAppointment || o instanceof PSTTask) {
+                // ignore, probably very little useful data
+            } else if (o instanceof PSTContact c) {
+                // TODO "Recipient Cache" might have useful info
+            } else if (o instanceof PSTMessage m) {
+                int typeOfObjectI = m.getObjectType();
+                String subject = m.getSubject();
+                String body = m.getBody();
+                String bodyHtml = m.getBodyHTML();
+                String bodyPrefix = m.getBodyPrefix();
+                String headers = m.getTransportMessageHeaders();
+                Date receivedDate = m.getMessageDeliveryTime();
+                Date submitDate = m.getClientSubmitTime();
+                Date createdDate = m.getCreationTime();
+                String senderName = m.getSenderName();
+                String senderAddress = m.getSenderEmailAddress();
+                String senderType = m.getSenderAddrtype();
+                String recipientName = m.getReceivedByName();
+                String recipientAddress = m.getReceivedByAddress();
+                String recipientType = m.getReceivedByAddressType();
+                String id = m.getInternetMessageId();
+                int importance = m.getImportance();
+                int priority = m.getPriority();
+                boolean toMe = m.getMessageToMe();
+                boolean fromMe = m.isFromMe();
+                String address = m.getEmailAddress();
+                boolean flagged = m.isFlagged();
+                boolean read = m.isRead();
+                /*Document bodyD = Jsoup.parse(bodyHtml);
+                String bodyParsed = bodyD.text();*/
+
+                DiaryDateTime date = new DiaryDateTime(receivedDate);
+                Email e = new Email(date, senderName, senderAddress, recipientName, subject, folderType,
+                        importance > 0);
+                output.add(e);
+            } else {
+                System.err.println();
+            }
+            nContantActual++;
+        }
+        if (nContent != nContantActual) { // all seems to work, although main folder lacks ~800 (6 %) of emails
+            System.err.println();
+        }
+        return output;
     }
 }

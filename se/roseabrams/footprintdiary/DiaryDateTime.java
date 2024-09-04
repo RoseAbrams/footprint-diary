@@ -33,6 +33,10 @@ public class DiaryDateTime extends DiaryDate {
                 Byte.parseByte(dateString.substring(14, 16)), Byte.parseByte(dateString.substring(17, 19)));
     }
 
+    public DiaryDateTime(java.util.Date javaDate) {
+        this(javaDate.getTime());
+    }
+
     public DiaryDateTime(long unixMs) {
         this(new Date(unixMs > 10000000000L ? unixMs : unixMs * 1000).toInstant().atZone(ZoneId.systemDefault()));
     }
