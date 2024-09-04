@@ -124,7 +124,8 @@ public class DiaryWriter {
                 output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old watch.html")));
                 output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube watch.html")));
                 output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube search and ads.html")));
-                output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old search and ads.html")));
+                output.addAll(
+                        YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old search and ads.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
                 //output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
@@ -140,7 +141,7 @@ public class DiaryWriter {
                 output.addAll(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
                 output.addAll(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
                 break;
-            case FACEBOOK:
+            case FACEBOOK: // needs redebug
                 output.addAll(FacebookPost.createFromHtml(
                         new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html"))); // needs redebug
                 //output.addAll(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html"))); // not working, is it worth fixing?
@@ -166,6 +167,9 @@ public class DiaryWriter {
                 break;
             case EMAIL_GMAIL: // untested
                 output.addAll(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
+                break;
+            case EMAIL_HOTMAIL: // untested
+                output.addAll(Email.createFromPst(new File(I + "outlook\\outlook backup 2023-05-04 - 8fbe75217ef14aa3a4fdfc010ace07f9.pst")));
                 break;
             case TWITCH: // untested
                 output.addAll(TwitchChatMessage.createFromCsv(new File(I + "twitch\\site_history\\chat_messages.csv")));

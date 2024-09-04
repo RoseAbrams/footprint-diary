@@ -172,6 +172,16 @@ public class Email extends DiaryEntry implements Message {
     }
 
     private static DiaryDateTime parseDate(String s) {
+        String[] dateComps = s.split(" ");
+        assert dateComps.length == 6;
+        byte day = Byte.parseByte(dateComps[1]);
+        byte month = DiaryDate.parseMonthName(dateComps[2]);
+        short year = Short.parseShort(dateComps[3]);
+        String[] timeComps = dateComps[4].split(":");
+        byte hour = Byte.parseByte(timeComps[0]);
+        byte minute = Byte.parseByte(timeComps[1]);
+        byte second = Byte.parseByte(timeComps[2]);
+        return new DiaryDateTime(year, month, day, hour, minute, second);
     }
 
     public static List<Email> createFromPst(File emailFile) throws IOException {

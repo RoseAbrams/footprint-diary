@@ -329,6 +329,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     TWITCH_PLAYBACK {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
+            throw new UnsupportedOperationException();
         }
     },
     TWITCH_CHAT {
@@ -340,12 +341,13 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     TWITCH_FOLLOW {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            return "I sent " + fl.size() + " messages" + p(fl) + " on Twitch.";
+            return "I followed " + fl.size() + " channel" + p(fl) + " on Twitch.";
         }
     },
     MYANIMELIST {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
+            throw new UnsupportedOperationException();
         }
     };
 
