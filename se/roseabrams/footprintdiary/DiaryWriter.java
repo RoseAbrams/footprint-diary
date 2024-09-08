@@ -185,6 +185,7 @@ public class DiaryWriter {
         }
 
         Util.serialize(output, categorySer);
+        System.out.println("ingested and saved " + output.size() + " entries from " + c);
         System.gc();
         return output;
     }
