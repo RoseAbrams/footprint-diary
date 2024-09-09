@@ -112,6 +112,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
 
     private static final int EDIT_LIMIT = 10000;
 
+    // TODO something seriously wrong, entries returned are ~1/3 of expected
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
         Connection c = Jsoup.newSession();
         c.timeout(120000);
@@ -122,25 +123,31 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);
         Elements edits = d.body().select("div#mw-content-text > section.mw-pager-body > ul.mw-contributions-list > li");
         for (Element edit : edits) {
-            String oldidS = edit.select("li").first().attr("data-mw-revid");
-            int oldid = Integer.parseInt(oldidS);
-            String editSizeS = edit.select(".mw-diff-bytes").first().text();
-            int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", "").replace(" ", ""));
-            Elements dateQ = edit.select(".mw-changeslist-date");
-            String dateS = dateQ.first().text();
-            DiaryDateTime date = parseDate(dateS);
-            String pageTitle = edit.select("a.mw-contributions-title").first().text();
-            String editSummary = edit.select("span.comment").first().text();
-            if (editSummary.equals("No edit summary"))
-                editSummary = "";
-            Elements tagsE = edit.select("span.mw-tag-markers > span.mw-tag-marker");
-            String[] tags = new String[tagsE.size()];
-            for (int i = 0; i < tagsE.size(); i++) {
-                tags[i] = tagsE.get(i).text().intern();
-            }
+            try {
+                String oldidS = edit.select("li").first().attr("data-mw-revid");
+                int oldid = Integer.parseInt(oldidS);
+                String editSizeS = edit.select(".mw-diff-bytes").first().text();
+                int editSize = Integer.parseInt(editSizeS.replace("−", "-").replace(",", "").replace(" ", ""));
+                Elements dateQ = edit.select(".mw-changeslist-date");
+                String dateS = dateQ.first().text();
+                DiaryDateTime date = parseDate(dateS);
+                String pageTitle = edit.select("a.mw-contributions-title").first().text();
+                String editSummary = edit.select("span.comment").first().text();
+                if (editSummary.equals("No edit summary"))
+                    editSummary = "";
+                Elements tagsE = edit.select("span.mw-tag-markers > span.mw-tag-marker");
+                String[] tags = new String[tagsE.size()];
+                for (int i = 0; i < tagsE.size(); i++) {
+                    tags[i] = tagsE.get(i).text().intern();
+                }
 
-            WikimediaEdit w = new WikimediaEdit(date, site, pageTitle, editSize, oldid, editSummary, tags);
-            output.add(w);
+                WikimediaEdit w = new WikimediaEdit(date, site, pageTitle, editSize, oldid, editSummary, tags);
+                output.add(w);
+            } catch (RuntimeException e) {
+                // at least one unreproducable bug
+                System.err.println("Something went wrong during Wikimedia ingest, skipping entry");
+                continue;
+            }
         }
         return output;
     }

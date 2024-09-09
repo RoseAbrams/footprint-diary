@@ -110,7 +110,7 @@ public class DiaryWriter {
                 output.addAll(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 output.addAll(SteamAchievment.createFromWebsite());*/
                 SteamFetcher steamApi = new SteamFetcher(Util.readFile(new File(I + "steam api key.txt")));
-                output.addAll(SteamAchievment.createFromApi(steamApi)); // untested
+                output.addAll(SteamAchievment.createFromApi(steamApi));
                 break;
             case APPLE_ACTIVITY:
                 output.addAll(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
@@ -119,7 +119,7 @@ public class DiaryWriter {
                 output.addAll(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 break;
             case WIKIMEDIA:
-                output.addAll(WikimediaEdit.createFromWebsites());
+                output.addAll(WikimediaEdit.createFromWebsites());//needs further work
                 break;
             case REDDIT:
                 output.addAll(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));//needs further work
