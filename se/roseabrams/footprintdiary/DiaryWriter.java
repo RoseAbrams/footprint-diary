@@ -50,8 +50,8 @@ public class DiaryWriter {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    if (c == DiaryIngestCategory.REDDIT) // quick swap for debug
-                        DW.add(ingest(c), c);
+                    //if (c == DiaryIngestCategory.REDDIT) // quick swap for debug
+                    DW.add(ingest(c), c);
                 }
 
                 DW.D.addFillerPages();
@@ -124,7 +124,8 @@ public class DiaryWriter {
                 break;
             case REDDIT:
                 output.addAll(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
-                output.addAll(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));//needs further work
+                output.addAll(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
+                // TODO messages
                 break;
             case YOUTUBE:
                 output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old watch.html")));

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import se.roseabrams.footprintdiary.CSVParser;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
@@ -29,14 +29,13 @@ public class RedditComment extends RedditSubmission {
         return BODY;
     }
 
-    /// TODO needs multiline support
     @SuppressWarnings("unused")
     public static List<RedditComment> createFromCsv(File commentsFile) throws IOException {
         ArrayList<RedditComment> output = new ArrayList<>(1000);
-        List<String> commentsLines = Util.readFileLines(commentsFile);
-        for (int i = 1; i < commentsLines.size(); i++) {
-            Scanner s = new Scanner(commentsLines.get(i));
-            s.useDelimiter(",");
+        String comments = Util.readFile(commentsFile);
+        CSVParser s = new CSVParser(comments, ",", "\r\n");
+        s.nextLine(); // skip past headers
+        while (s.hasNext()) {
             String id = s.next();
             String linkFull = s.next();
             String dateS = s.next();
@@ -45,31 +44,20 @@ public class RedditComment extends RedditSubmission {
             String subreddit = s.next();
             int gildings = Integer.parseInt(s.next());
             String postLink = s.next();
+            assert linkFull.startsWith(postLink);
             String parentId = s.next();
             if (parentId.isBlank())
                 parentId = null;
             String body = s.nextLine();
-            while (commentsLines.get(i + 1).subSequence(7, 12).equals(",http")) {
-                i++;
-                body += commentsLines.get(i);
-            }
-            //String media = s.nextLine(); // seems to always be empty...
-            assert body.endsWith(","); // ... but let's make sure
-            if (body.charAt(0) == '\"')
-                body = body.substring(1, body.length() - 3);
-            else
-                body = body.substring(0, body.length() - 2);
-            body = body.replace("\"\"", "\"");
-            body = body.replace("\\*", "*");
-            assert !body.contains("\\"); // in case of other escaped chars
+            // is media always empty?
 
             int postIdIndex = postLink.indexOf("/comments/") + "/comments/".length();
             String postId = postLink.substring(postIdIndex, postLink.indexOf("/", postIdIndex));
 
             RedditComment r = new RedditComment(date, id, subreddit, gildings, body, postId, parentId);
             output.add(r);
-            s.close();
         }
+        s.close();
 
         return output;
     }
