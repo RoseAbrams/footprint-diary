@@ -1,8 +1,10 @@
 package se.roseabrams.footprintdiary.entries.spotify;
 
+import java.io.Serializable;
+
 import se.roseabrams.footprintdiary.DiaryDate;
 
-public class SpotifyPlaylist {
+public class SpotifyPlaylist implements Serializable {
 
     public final String NAME;
     public final String DESCRIPTION;

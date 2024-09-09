@@ -10,6 +10,6 @@ public class GeoLocation3D extends GeoLocation {
     }
 
     public String toString() {
-        return super.toString() + String.valueOf(ALTITUDE).substring(0, 5);
+        return super.toString() + " – altitude " + String.valueOf(ALTITUDE).substring(0, 5);
     }
 }

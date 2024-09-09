@@ -1,6 +1,8 @@
 package se.roseabrams.footprintdiary.common;
 
-public class GeoLocation {
+import java.io.Serializable;
+
+public class GeoLocation implements Serializable {
 
     public final double LATITUDE;
     public final double LONGITUDE;
@@ -12,6 +14,6 @@ public class GeoLocation {
 
     public String toString() {
         return String.valueOf(LATITUDE).substring(0, 8) + "° N "
-                + String.valueOf(LONGITUDE).substring(0, 8) + "° E – altitude ";
+                + String.valueOf(LONGITUDE).substring(0, 8) + "° E";
     }
 }

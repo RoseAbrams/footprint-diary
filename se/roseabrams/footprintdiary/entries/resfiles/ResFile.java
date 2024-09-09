@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.roseabrams.footprintdiary.DiaryDateTime;
+import se.roseabrams.footprintdiary.DiaryDateYearException;
 import se.roseabrams.footprintdiary.DiaryEntry;
 import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.common.Content;
@@ -20,7 +21,7 @@ public class ResFile extends DiaryEntry implements ContentContainer {
         super(source, dd);
         assert source == DiaryEntryCategory.MEME_SAVED || source == DiaryEntryCategory.MEME_CREATED
                 || source == DiaryEntryCategory.WALLPAPER_SAVED || source == DiaryEntryCategory.ARTWORK_SAVED
-                || source == DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
+                || source == DiaryEntryCategory.TORRENT || source == DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
         CONTENT = new LocalContent(file);
     }
 
@@ -77,6 +78,7 @@ public class ResFile extends DiaryEntry implements ContentContainer {
                 case "mus":
                 case "snd":
                 case "omgl":
+                case "oo":
                     return output;
                 default:
                     c = DiaryEntryCategory.OTHER_MEMESQUE_SAVED;
@@ -90,8 +92,16 @@ public class ResFile extends DiaryEntry implements ContentContainer {
             if (file.isDirectory())
                 output.addAll(createFromFilesRecursion(file, depth + 1, subfolder));
             else {
-                assert c != null;
-                DiaryDateTime dd = new DiaryDateTime(file.lastModified());
+                if (c == null)
+                    continue; // only the dummy file should be in root
+                DiaryDateTime dd;
+                try {
+                    dd = new DiaryDateTime(file.lastModified());
+                } catch (DiaryDateYearException e) {
+                    System.err.println("File \"" + file.getAbsolutePath()
+                            + "\" had an invalid modified date. This entry will be scrapped!");
+                    continue;
+                }
                 ResFile r = new ResFile(c, dd, file);
                 output.add(r);
             }

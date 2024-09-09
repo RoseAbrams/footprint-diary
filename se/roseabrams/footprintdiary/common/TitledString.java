@@ -12,4 +12,10 @@ public class TitledString implements Serializable {
         TITLE = title.intern();
         BODY = body;
     }
+
+    @Override
+    @Deprecated /// only for human-readability during debugging, never use for program logic
+    public String toString() {
+        return "––– " + TITLE + " –––\n" + BODY;
+    }
 }

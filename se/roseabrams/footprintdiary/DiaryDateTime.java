@@ -14,9 +14,12 @@ public class DiaryDateTime extends DiaryDate {
     public DiaryDateTime(short year, byte month, byte day, byte hour, byte minute, byte second) {
         super(year, month, day);
 
-        assert hour >= 0 && hour < 24;
-        assert minute >= 0 && minute < 60;
-        assert second >= 0 && second < 60;
+        if (hour < 0 || hour >= 24)
+            throw new DiaryDateException("Invalid hour: " + year);
+        if (minute < 0 || minute >= 60)
+            throw new DiaryDateException("Invalid minute: " + year);
+        if (second < 0 || second >= 60)
+            throw new DiaryDateException("Invalid second: " + year);
 
         HOUR = hour;
         MINUTE = minute;

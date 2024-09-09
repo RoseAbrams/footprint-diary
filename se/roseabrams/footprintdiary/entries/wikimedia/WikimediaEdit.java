@@ -110,7 +110,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
         return output;
     }
 
-    private static final int EDIT_LIMIT = 1000;//10000;
+    private static final int EDIT_LIMIT = 10000;
 
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
         Connection c = Jsoup.newSession();

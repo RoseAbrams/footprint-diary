@@ -75,8 +75,14 @@ public class SteamFetcher {
         HttpURLConnection c = (HttpURLConnection) url.openConnection();
         c.setRequestMethod("GET");
         int responseCode = c.getResponseCode();
-        if (responseCode != 200)
-            throw new IllegalStateException("API call failed with response code " + responseCode);
+        switch (responseCode) {
+            case 200:
+                break;
+            case 400: // Steam usees this when no data, weird when they can use 204
+                return null;
+            default:
+                throw new IllegalStateException("API call failed with response code " + responseCode);
+        }
 
         StringBuilder output = new StringBuilder();
         BufferedReader response = new BufferedReader(new InputStreamReader(c.getInputStream()));

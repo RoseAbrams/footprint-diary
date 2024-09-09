@@ -74,8 +74,13 @@ public class DiaryWriter {
 
     private static List<DiaryEntry> ingest(DiaryIngestCategory c) throws IOException {
         File categorySer = new File(O + c.serializationFilename());
-        if (categorySer.exists())
-            return (List<DiaryEntry>) Util.deserialize(categorySer);
+        if (categorySer.exists()) {
+            Object deserO = Util.deserialize(categorySer);
+            assert deserO instanceof List;
+            List<DiaryEntry> deserL = (List<DiaryEntry>) deserO;
+            System.out.println("deserialized " + deserL.size() + " ingested entries from " + c);
+            return deserL;
+        }
 
         ArrayList<DiaryEntry> output = new ArrayList<>();
         switch (c) {
@@ -169,7 +174,8 @@ public class DiaryWriter {
                 output.addAll(Email.createFromMbox(new File(I + "google\\All mail Including Spam and Trash.mbox")));
                 break;
             case EMAIL_HOTMAIL: // untested
-                output.addAll(Email.createFromPst(new File(I + "outlook\\outlook backup 2023-05-04 - 8fbe75217ef14aa3a4fdfc010ace07f9.pst")));
+                output.addAll(Email.createFromPst(
+                        new File(I + "outlook\\outlook backup 2023-05-04 - 8fbe75217ef14aa3a4fdfc010ace07f9.pst")));
                 break;
             case TWITCH: // untested
                 output.addAll(TwitchChatMessage.createFromCsv(new File(I + "twitch\\site_history\\chat_messages.csv")));
