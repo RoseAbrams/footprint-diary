@@ -11,9 +11,10 @@ public class CSVParser implements Iterator<String>, Closeable {
     private String fBuffer;
     private int fPosition = 0;
     private final String delim;
-    private final String newline = "\n";
+    private final String newline;
     private final String quote = "\"";
     private static final String DELIM = ",";
+    private static final String NEWLINE = "\n";
     private static final String BACKTICKS = "```";
     private static final String INTR_QUOTE = "\"\"";
 
@@ -30,8 +31,17 @@ public class CSVParser implements Iterator<String>, Closeable {
     }
 
     public CSVParser(String input, String delim) {
+        this(input, delim, NEWLINE);
+    }
+
+    public CSVParser(File input, String delim, String newline) throws IOException {
+        this(Util.readFile(input), delim, newline);
+    }
+
+    public CSVParser(String input, String delim, String newline) {
         fBuffer = input;
         this.delim = delim;
+        this.newline = newline;
     }
 
     @Override
@@ -117,7 +127,8 @@ public class CSVParser implements Iterator<String>, Closeable {
         ArrayList<String> output = new ArrayList<>();
         do {
             output.add(next());
-        } while (!fBuffer.substring(fPosition - 1, fPosition).equals(newline));
+        } while (!fBuffer.substring(fPosition - 1, fPosition + newline.length() - 1).equals(newline));
+        fPosition += newline.length() - 1;
         return output.toArray(new String[output.size()]);
     }
 
@@ -129,7 +140,7 @@ public class CSVParser implements Iterator<String>, Closeable {
     public void expectHasNext() {
         if (!hasNext())
             throw new IllegalStateException("No more data (already read "
-                    + fPosition + " out of " + fBuffer.length() + "characters)");
+                    + fPosition + " out of " + fBuffer.length() + " characters)");
     }
 
     @Override

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import se.roseabrams.footprintdiary.CSVParser;
 import se.roseabrams.footprintdiary.DiaryDate;
 import se.roseabrams.footprintdiary.DiaryDateTime;
 import se.roseabrams.footprintdiary.Util;
@@ -26,41 +26,28 @@ public class RedditPost extends RedditSubmission {
         return TITLE;
     }
 
-    /// TODO needs multiline support
     @SuppressWarnings("unused")
     public static List<RedditPost> createFromCsv(File postsFile) throws IOException {
         ArrayList<RedditPost> output = new ArrayList<>(1000);
-        List<String> postsLines = Util.readFileLines(postsFile);
-        for (int i = 1; i < postsLines.size(); i++) {
-            Scanner s = new Scanner(postsLines.get(i));
-            s.useDelimiter(",");
+        String posts = Util.readFile(postsFile);
+        CSVParser s = new CSVParser(posts, ",", "\r\n");
+        s.nextLine(); // skip past headers
+        while (s.hasNext()) {
             String id = s.next();
             String linkFull = s.next();
             String dateS = s.next();
             DiaryDateTime date = new DiaryDateTime(dateS);
-            String ip = s.next();
-            assert ip.isEmpty(); // not sure why this exists or is supposed to mean
+            String ip = s.next(); // almost always empty, probably a recently added field
             String subreddit = s.next();
             int gildings = Integer.parseInt(s.next());
-            String title = s.next(); // TODO handle internal commas
-            if (title.charAt(0) == '\"')
-                title = title.substring(1, title.length() - 1);
-            title = title.replace("\"\"", "\"");
+            String title = s.next();
             String mediaS = s.next();
-            if (mediaS.startsWith("/r/")) // sometimes it points to itself for text posts // TODO check behavior when crossposting
-                mediaS = "";
-            String body = s.nextLine(); // TODO handle internal commas
-            body = body.substring(1); // remove opening comma
-            while (i + 1 < postsLines.size() && postsLines.get(i + 1).length() < 100
-                    || (!postsLines.get(i + 1).subSequence(6, 11).equals(",http")
-                            && !postsLines.get(i + 1).subSequence(7, 12).equals(",http"))) {
-                i++;
-                body += "\n" + postsLines.get(i);
+            if (mediaS.contains("/r/")) {
+                String linkedSubreddit = mediaS.substring(mediaS.indexOf("/r/") + 3, mediaS.indexOf("/comments"));
+                if (subreddit.equals(linkedSubreddit))
+                    mediaS = ""; // sometimes text posts links to itself
             }
-            if (!body.isEmpty() && body.charAt(0) == '\"')
-                body = body.substring(1, body.length() - 1);
-            body = body.replace("\"\"", "\"");
-            body = body.replace("\"*", "*");
+            String body = s.nextLine();
 
             RedditPost r;
             if (!mediaS.isBlank())
@@ -68,8 +55,8 @@ public class RedditPost extends RedditSubmission {
             else
                 r = new RedditPost(date, id, subreddit, gildings, title, body);
             output.add(r);
-            s.close();
         }
+        s.close();
 
         return output;
     }

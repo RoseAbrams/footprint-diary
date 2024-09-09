@@ -36,9 +36,23 @@ public class RemoteContent extends Content {
     }
 
     static ContentType getTypeFromContextOrExt(String p) {
-        if (p.contains("youtube.com/watch?v="))
+        if (p.contains("youtube.com/watch?v=") || p.contains("youtu.be/") || p.contains("v.redd.it/"))
             return ContentType.VIDEO;
+        if (p.contains("reddit.com/gallery") || p.contains("imgur.com/"))
+            return ContentType.PICTURE;
+        if (p.contains("docs.google.com/document/"))
+            return ContentType.DOCUMENT;
+        if (p.contains("wikipedia.org/") || p.contains("knowyourmeme.com/"))
+            return ContentType.BOOK;
+        if (p.contains("/r/") && p.contains("/comments/")) // crosspost
+            return null;
+        if (p.contains("/reddit.com/")) // weird unexplorable edge case
+            return null;
 
-        return ContentType.parseExtension(getExtFromPath(p));
+        try {
+            return ContentType.parseExtension(getExtFromPath(p));
+        } catch (RuntimeException e) {
+            return ContentType.WEBPAGE;
+        }
     }
 }

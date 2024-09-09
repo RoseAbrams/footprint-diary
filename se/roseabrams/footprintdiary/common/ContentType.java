@@ -10,6 +10,9 @@ public enum ContentType {
     }
 
     public static ContentType parseExtension(String ext, boolean allowNull) {
+        if (ext.contains("/") || ext.contains("\\"))
+            throw new IllegalArgumentException(
+                    "Filename contains seperator character(s) and is thus clearly incorrectly ingested");
         String extNormalized = ext.toLowerCase();
         switch (extNormalized) {
             case "jpg":
@@ -123,7 +126,7 @@ public enum ContentType {
                 if (allowNull) {
                     if (extNormalized.equals("glocalnet") || extNormalized.equals("wp")
                             || extNormalized.equals("demon") || extNormalized.equals("kdbx"))
-                        // obscure enough that it feels verbose to create a category
+                        // so obscure that it feels verbose to create a category
                         System.err.println("Known uncategorized filetype extension: " + ext);
                     else
                         System.err.println("Unrecognized filetype extension: " + ext);
