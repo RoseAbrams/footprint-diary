@@ -50,7 +50,7 @@ public class DiaryWriter {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    if (c == DiaryIngestCategory.FACEBOOK) // quick swap for debug
+                    //if (c == DiaryIngestCategory.FACEBOOK) // quick swap for debug
                     DW.add(ingest(c), c);
                 }
 
@@ -120,7 +120,7 @@ public class DiaryWriter {
                 output.addAll(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 break;
             case WIKIMEDIA:
-                output.addAll(WikimediaEdit.createFromWebsites());//needs further work
+                output.addAll(WikimediaEdit.createFromWebsites());
                 break;
             case REDDIT:
                 output.addAll(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
@@ -148,9 +148,9 @@ public class DiaryWriter {
                 output.addAll(CalendarEvent.createFromIcs(new File(I + "apple\\Hem2.ics")));
                 output.addAll(CalendarEvent.createFromIcs(new File(I + "apple\\Hem3.ics")));
                 break;
-            case FACEBOOK: // needs redebug
+            case FACEBOOK:
                 output.addAll(FacebookPost.createFromHtml(
-                        new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html"))); // needs redebug
+                        new File(I + "facebook\\your_posts__check_ins__photos_and_videos_1.html")));
                 //output.addAll(FacebookPost.createFromHtml(new File(I + "facebook\\group_posts_and_comments.html"))); // not working, is it worth fixing?
                 output.addAll(FacebookComment.createFromHtml(new File(I + "facebook\\comments.html")));
                 output.addAll(FacebookComment.createFromHtml(new File(I + "facebook\\your_comments_in_groups.html")));
@@ -160,9 +160,9 @@ public class DiaryWriter {
                 /* "your_photos.html", "your_videos.html", "your_uncategorized_photos.html" */
                 /* "profile_update_history.html", "pages_you've_liked.html" */
                 /* "connected_apps_and_websites.html", "recently_viewed.html", "who_you've_followed.html" */
-                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox"))); // needs redebug
-                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads"))); // needs redebug
-                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads"))); // needs redebug
+                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
+                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
+                output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
                 output.addAll(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
                 break;
             case MEDICAL: // untested
