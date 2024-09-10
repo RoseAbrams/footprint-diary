@@ -11,7 +11,7 @@ public class FacebookLinkPost extends FacebookPost implements ContentContainer {
 
     public FacebookLinkPost(DiaryDateTime dd, String body, Type type, String timeline, String app, String linkS) {
         super(dd, body, type, timeline, app);
-        LINK = new Webpage(linkS);
+        LINK = linkS != null ? new Webpage(linkS) : null; // some cases where the link simply isn't provided, so far I've only seen it with Spotify embeds
     }
 
     @Override

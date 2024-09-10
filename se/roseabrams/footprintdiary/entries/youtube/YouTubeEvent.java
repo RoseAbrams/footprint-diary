@@ -8,6 +8,7 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import se.roseabrams.footprintdiary.DiaryDate;
@@ -29,9 +30,9 @@ public abstract class YouTubeEvent extends DiaryEntry {
             if (!playbackE.hasText())
                 continue; // half of the matches are empty, no idea how to filter them away with CSS
 
-            YouTubeEvent newEvent;
+            YouTubeEvent y;
 
-            Element dateE = playbackE.select("br").last().nextElementSibling();
+            Node dateE = playbackE.select("br").last().nextSibling();
             String dateS = dateE.toString().trim();
             DiaryDateTime date = new DiaryDateTime(
                     Short.parseShort(dateS.substring(dateS.indexOf(",") + 2, dateS.lastIndexOf(","))),
@@ -83,17 +84,17 @@ public abstract class YouTubeEvent extends DiaryEntry {
 
                     v = YouTubeVideo.getOrCreate(videoId, videoTitle, channelId, channelName);
                 }
-                newEvent = new YouTubePlayback(date, v, isAd);
+                y = new YouTubePlayback(date, v, isAd);
             } else if (playbackE.text().startsWith("Searched for")) {
                 String searchTerm = primaryLink.text();
 
-                newEvent = new YouTubeSearch(date, searchTerm);
+                y = new YouTubeSearch(date, searchTerm);
             } else if (playbackE.text().startsWith("Visited")) {
                 continue; // website arrived at when adverts clicked on, probably not very interesting
             } else {
                 throw new AssertionError();
             }
-            output.add(newEvent);
+            output.add(y);
         }
         return output;
     }

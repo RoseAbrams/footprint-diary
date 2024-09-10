@@ -185,7 +185,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
                 year++;
                 month -= 12;
             }
-            day -= daysInMonth(year, (byte) (month - 1));
+            day -= daysInMonth(year, (byte) (month == 1 ? 12 : - 1));
         }
         while (day < 1) {
             month--;

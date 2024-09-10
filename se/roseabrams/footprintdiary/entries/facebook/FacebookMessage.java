@@ -103,10 +103,9 @@ public class FacebookMessage extends DiaryEntry implements Message {
             String sender;
             if (senderQ != null)
                 sender = senderQ.text();
-            else if (isUnknownChannel)
+            else {
                 sender = null; // deleted user
-            else
-                throw new AssertionError(); // investigate – probably indicator of system measage?
+            }
             String body = messageE.selectFirst("div._2ph_._a6-p").text();
             String dateS = messageE.selectFirst("div._3-94._a6-o div._a72d").text();
 

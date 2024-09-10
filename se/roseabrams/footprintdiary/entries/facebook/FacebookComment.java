@@ -43,7 +43,7 @@ public class FacebookComment extends FacebookWallEvent {
             else if (description.endsWith("commented.") || description.endsWith("comment."))
                 op = null; // sometimes just empty, i guess OP was deleted
             else if (description.contains(" your "))
-                op = null; // what???
+                op = null; // what??? weird edge case
             else {
                 int opIndexStart = description.indexOf("commented on ") + "commented on ".length();
                 int opIndexEnd = description.lastIndexOf("'s ");

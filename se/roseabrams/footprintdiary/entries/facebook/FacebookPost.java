@@ -48,7 +48,7 @@ public class FacebookPost extends FacebookWallEvent {
             String body = null;
             String timeline;
             String app = null;
-            String linkS;
+            String linkS = null;
             if (desc.endsWith("timeline.") || desc.contains(" in ")) {
                 // other timeline
                 int opIndexStart;
@@ -92,17 +92,8 @@ public class FacebookPost extends FacebookWallEvent {
                     else
                         body = body.substring(0, body.lastIndexOf("Updated ") - 1);
             }
-            Elements linkQ = postE.select("a").not("a img");
-            if (linkQ.size() > 0) {
-                assert linkQ.size() == 1;
-                linkS = linkQ.get(0).text();
-                assert linkS.equals(linkQ.get(0).attr("href"));
-                body = body.replace(linkS, "").trim();
-            } else
-                linkS = null;
-            String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
 
-            Element mediaE = postE.selectFirst("img");
+            Element mediaE = postE.selectFirst("img"); // TODO what about more than one picture/video in post?
             if (mediaE == null)
                 mediaE = postE.selectFirst("video");
 
@@ -112,7 +103,25 @@ public class FacebookPost extends FacebookWallEvent {
             } else
                 media = null;
 
-            assert (type == Type.LINK) == (linkS != null);
+            if (media == null && (type == Type.TEXT || type == Type.LINK)) {
+                Elements linkQ = new Elements();
+                postE.select("a").forEach(l -> {
+                    if (l.select("img").isEmpty() && l.select("div").isEmpty())
+                        linkQ.add(l);
+                });
+                if (linkQ.size() > 0) {
+                    if (linkQ.size() > 1)
+                        System.err.println("Multiple links in post! Will assuming first one is main");
+                    //assert linkQ.get(0).text().equals(linkQ.get(0).attr("href")); // only URL-encode differs them afaict
+                    linkS = linkQ.get(0).attr("href");
+                    body = body.replace(linkS, "");
+                }
+            }
+            if (linkS != null && type != Type.LINK)
+                type = Type.LINK;
+
+            body = body.trim();
+            String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();
             FacebookPost f;
             if (media != null || (type == Type.PHOTO || type == Type.VIDEO))
                 f = new FacebookMediaPost(parseDate(dateS), body, type, timeline, app, media);

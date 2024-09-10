@@ -50,7 +50,7 @@ public class DiaryWriter {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    //if (c == DiaryIngestCategory.REDDIT) // quick swap for debug
+                    if (c == DiaryIngestCategory.FACEBOOK) // quick swap for debug
                     DW.add(ingest(c), c);
                 }
 
