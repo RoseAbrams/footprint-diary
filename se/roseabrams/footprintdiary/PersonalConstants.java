@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary;
 
 public class PersonalConstants {
 
+    // TODO ungit file
     public static final String WHATSAPP_NAME = "Rosa";
     public static final String DISCORD_USERNAME = "ormen3757";
     public static final String SKYPE_USERNAME = "Jennifer Olsson";
