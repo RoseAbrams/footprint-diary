@@ -16,6 +16,7 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 import se.roseabrams.footprintdiary.PersonalConstants;
 import se.roseabrams.footprintdiary.common.TitledString;
 
+@Deprecated /// replaced with steam2.SteamAchievment
 public class SteamAchievment extends SteamEvent {
 
     public final SteamGame GAME;

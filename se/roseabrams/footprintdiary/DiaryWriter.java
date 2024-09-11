@@ -141,6 +141,7 @@ public class DiaryWriter {
                 break;
             case BANKING:
                 output.addAll(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
+                output.addAll(BankEvent.createFromAzureJson(new File(I + "bank\\pdfs to jsons")));
                 break;
             case APPLE_CALENDAR:
                 output.addAll(CalendarEvent.createFromIcs(new File(I + "apple\\Hem.ics")));

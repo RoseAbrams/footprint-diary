@@ -8,14 +8,14 @@ public class TitledString implements Serializable {
 
     public TitledString(String title, String body) {
         assert title != null && !title.isBlank();
-        assert body == null || !body.isBlank();
+        assert body != null && !body.isBlank();
         TITLE = title.intern();
         BODY = body;
     }
 
     @Override
-    @Deprecated /// only for human-readability during debugging, never use for program logic
+    @Deprecated /// only for human-readability during debugging, not practical for anything internal
     public String toString() {
-        return "––– " + TITLE + " –––\n" + BODY;
+        return TITLE + ": " + (BODY.length() > 20 ? BODY.substring(0, 17) + "..." : BODY);
     }
 }
