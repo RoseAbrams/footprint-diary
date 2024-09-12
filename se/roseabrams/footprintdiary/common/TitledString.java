@@ -8,7 +8,7 @@ public class TitledString implements Serializable {
 
     public TitledString(String title, String body) {
         assert title != null && !title.isBlank();
-        assert body != null && !body.isBlank();
+        assert body != null;// && !body.isBlank(); // TODO consider how to handle this
         TITLE = title.intern();
         BODY = body;
     }
@@ -16,6 +16,6 @@ public class TitledString implements Serializable {
     @Override
     @Deprecated /// only for human-readability during debugging, not practical for anything internal
     public String toString() {
-        return TITLE + ": " + (BODY.length() > 20 ? BODY.substring(0, 17) + "..." : BODY);
+        return TITLE + ": " + (BODY.length() > 50 ? BODY.substring(0, 47) + "..." : BODY);
     }
 }

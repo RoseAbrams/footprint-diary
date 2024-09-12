@@ -17,7 +17,7 @@ public abstract class FacebookWallEvent extends DiaryEntry {
     public static enum Type {
         TEXT, PHOTO, VIDEO, LINK, COMMENT, NOTE, CHECKIN, PAGE, EVENT, MEMORY, RECOMMENDATION, ALBUM, LIFE_EVENT;
 
-        public static Type parse(String s) {
+        static Type parse(String s) {
             switch (s) {
                 case "post":
                     return TEXT;

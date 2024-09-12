@@ -50,7 +50,7 @@ public class DiaryWriter {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    //if (c == DiaryIngestCategory.FACEBOOK) // quick swap for debug
+                    //if (c == DiaryIngestCategory.MEDICAL) // quick swap for debug
                     DW.add(ingest(c), c);
                 }
 
@@ -166,7 +166,7 @@ public class DiaryWriter {
                 output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));
                 output.addAll(FacebookFriend.createFromFolder(new File(I + "facebook\\friends")));
                 break;
-            case MEDICAL: // untested
+            case MEDICAL:
                 output.addAll(MedicalRecord.createFromHtml(new File(I + "1177.html")));
                 break;
             case TINDER: // untested
