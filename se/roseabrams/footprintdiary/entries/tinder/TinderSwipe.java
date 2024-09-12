@@ -58,7 +58,9 @@ public class TinderSwipe extends DiaryEntry {
 
             DiaryDateTime date = new DiaryDateTime(id);
             SwipeResult swipeResult = SwipeResult.valueOf(swipeResultS);
-            SwipeReason swipeReason = swipeReasonS.equals("UNSPECIFIED") ? null : SwipeReason.valueOf(swipeReasonS);
+            SwipeReason swipeReason = swipeReasonS.equals("UNDEFINED") || swipeReasonS.equals("UNSPECIFIED")
+                    ? null
+                    : SwipeReason.valueOf(swipeReasonS);
 
             TinderSwipe t = new TinderSwipe(date, id, name, swipeResult, swipeReason);
             output.add(t);

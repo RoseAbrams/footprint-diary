@@ -50,7 +50,7 @@ public class DiaryWriter {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    //if (c == DiaryIngestCategory.MEDICAL) // quick swap for debug
+                    if (c == DiaryIngestCategory.TINDER) // quick swap for debug
                     DW.add(ingest(c), c);
                 }
 
@@ -77,7 +77,6 @@ public class DiaryWriter {
         File categorySer = new File(O + c.serializationFilename());
         if (categorySer.exists()) {
             Object deserO = Util.deserialize(categorySer);
-            assert deserO instanceof List;
             List<DiaryEntry> deserL = (List<DiaryEntry>) deserO;
             System.out.println("deserialized " + deserL.size() + " ingested entries from " + c);
             return deserL;
@@ -139,7 +138,7 @@ public class DiaryWriter {
                 //output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
                 //output.addAll(youtubeCommentHack());
                 break;
-            case BANKING:
+            case BANKING: // needs redebug
                 output.addAll(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
                 output.addAll(BankEvent.createFromAzureJson(new File(I + "bank\\pdfs to jsons")));
                 break;
@@ -169,7 +168,7 @@ public class DiaryWriter {
             case MEDICAL:
                 output.addAll(MedicalRecord.createFromHtml(new File(I + "1177.html")));
                 break;
-            case TINDER: // untested
+            case TINDER:
                 output.addAll(TinderSwipe.createFromJson(
                         new File("D:\\Dropbox\\Privat\\postGym program\\gasoline\\final data\\tinder dataset.json")));
                 break;

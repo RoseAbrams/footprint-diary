@@ -8,7 +8,7 @@ public class TitledString implements Serializable {
 
     public TitledString(String title, String body) {
         assert title != null && !title.isBlank();
-        assert body != null;// && !body.isBlank(); // TODO consider how to handle this
+        assert body != null && !body.isBlank();
         TITLE = title.intern();
         BODY = body;
     }
