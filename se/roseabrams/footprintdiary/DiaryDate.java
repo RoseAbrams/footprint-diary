@@ -10,12 +10,12 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
     public final byte MONTH;
     public final byte DAY;
     public transient GregorianCalendar detailedDate = null;
-    public static final short YEAR_MIN = 2009;
+    public static final short YEAR_MIN = 2000;
     public static final short YEAR_LOW = 2009;
     public static final short YEAR_MAX = 2050;
-    public static final short YEAR_HIGH = 2025;
+    public static final short YEAR_HIGH = 2024;
     private static final boolean DEFAULT_STRICTNESS = true;
-    public static final short CURRENT_YEAR = 2024;
+    public static final DiaryDate TODAY = new DiaryDateTime(new java.util.Date()).reduce();
 
     public DiaryDate(short year, byte month, byte day) {
         if (year < YEAR_MIN || year >= YEAR_MAX)
@@ -30,11 +30,12 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
         DAY = day;
 
         if (year < YEAR_LOW || year > YEAR_HIGH)
-            System.err.println("DiaryDate " + this + " is far from the expeted daterange. Is it correctly ingested?");
+            System.err.println("DiaryDate " + this + " is outside of the expeted daterange. Is it correctly ingested?");
     }
 
     public DiaryDate(String dateString) {
-        this(Short.parseShort(dateString.substring(0, 4)), Byte.parseByte(dateString.substring(5, 7)),
+        this(Short.parseShort(dateString.substring(0, 4)),
+                Byte.parseByte(dateString.substring(5, 7)),
                 Byte.parseByte(dateString.substring(8, 10)));
     }
 
@@ -185,7 +186,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
                 year++;
                 month -= 12;
             }
-            day -= daysInMonth(year, (byte) (month == 1 ? 12 : - 1));
+            day -= daysInMonth(year, (byte) (month == 1 ? 12 : -1));
         }
         while (day < 1) {
             month--;

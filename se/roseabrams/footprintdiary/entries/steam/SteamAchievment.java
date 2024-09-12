@@ -53,7 +53,7 @@ public class SteamAchievment extends SteamEvent {
                 DiaryDateTime date = new DiaryDateTime(
                         dateS.contains(", ")
                                 ? Short.parseShort(dateS.substring(dateS.indexOf(", ") + 2, dateS.indexOf("@")).trim())
-                                : DiaryDate.CURRENT_YEAR,
+                                : DiaryDate.TODAY.YEAR,
                         DiaryDate.parseMonthName(dateS.substring(2, 5).trim()),
                         Byte.parseByte(dateS.substring(0, 2).trim()),
                         Byte.parseByte(dateS.substring(dateS.indexOf("@") + 2, dateS.indexOf(":"))),

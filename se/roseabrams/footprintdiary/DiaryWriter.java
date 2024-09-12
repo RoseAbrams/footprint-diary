@@ -44,16 +44,19 @@ public class DiaryWriter {
         try {
             File diarySer = new File(O + "diary.ser");
             final DiaryWriter DW;
+
             if (diarySer.exists())
                 DW = (DiaryWriter) Util.deserialize(diarySer);
             else {
+
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
-                    if (c == DiaryIngestCategory.TINDER) // quick swap for debug
-                    DW.add(ingest(c), c);
+                    if (c.enabled())
+                        DW.add(ingest(c), c);
                 }
 
+                // TODO silently remove days located in the future
                 DW.D.addFillerPages();
                 Util.serialize(DW.D, diarySer);
             }
