@@ -12,12 +12,6 @@ import se.roseabrams.footprintdiary.PersonalConstants;
 
 public class SteamFetcher {
 
-    private final String API_KEY;
-
-    public SteamFetcher(String apiKey) {
-        API_KEY = apiKey;
-    }
-
     /// https://developer.valvesoftware.com/wiki/Steam_Web_API
     public static enum Endpoint {
         PLAYER_SUMMARY, PLAYER_FRIENDS, PLAYER_ACHIEVMENTS, PLAYER_STATS, PLAYER_OWNED_GAMES,
@@ -51,7 +45,7 @@ public class SteamFetcher {
     public JSONObject call(Endpoint endpoint, int appId) throws IOException {
         StringBuilder urlS = new StringBuilder(150);
         urlS.append("http://api.steampowered.com/").append(endpoint.toString())
-                .append("/?key=").append(API_KEY)
+                .append("/?key=").append(PersonalConstants.STEAM_API_KEY)
                 .append("&format=json")
                 .append("&steamid").append(endpoint == Endpoint.PLAYER_SUMMARY ? "s" : "").append("=")
                 .append(PersonalConstants.STEAM_USERID);

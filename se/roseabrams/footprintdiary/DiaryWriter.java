@@ -23,6 +23,8 @@ import se.roseabrams.footprintdiary.entries.resfiles.ResFile;
 import se.roseabrams.footprintdiary.entries.skype.SkypeMessage;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
+import se.roseabrams.footprintdiary.entries.steam.SteamLicenseEvent;
+import se.roseabrams.footprintdiary.entries.steam.SteamStoreEvent;
 import se.roseabrams.footprintdiary.entries.steam2.SteamAchievment;
 import se.roseabrams.footprintdiary.entries.steam2.SteamFetcher;
 import se.roseabrams.footprintdiary.entries.tinder.TinderSwipe;
@@ -107,18 +109,16 @@ public class DiaryWriter {
                 output.addAll(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
                 output.addAll(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
                 break;
-            case STEAM:
-                /*SteamGame.cacheFromWebsite();
+            case STEAM: // probably needs redebug
                 output.addAll(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 output.addAll(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
-                output.addAll(SteamAchievment.createFromWebsite());*/
-                SteamFetcher steamApi = new SteamFetcher(Util.readFile(new File(I + "steam api key.txt")));
+                SteamFetcher steamApi = new SteamFetcher();
                 output.addAll(SteamAchievment.createFromApi(steamApi));
                 break;
             case APPLE_ACTIVITY:
                 output.addAll(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 break;
-            case SKYPE:
+            case SKYPE: // needs redebug
                 output.addAll(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 break;
             case WIKIMEDIA:
@@ -127,7 +127,7 @@ public class DiaryWriter {
             case REDDIT:
                 output.addAll(RedditPost.createFromCsv(new File(I + "reddit\\posts.csv")));
                 output.addAll(RedditComment.createFromCsv(new File(I + "reddit\\comments.csv")));
-                // TODO messages
+                // messages?
                 break;
             case YOUTUBE:
                 output.addAll(YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old watch.html")));
@@ -137,9 +137,9 @@ public class DiaryWriter {
                         YouTubeEvent.createHistoryFromHtml(new File(I + "google\\youtube old search and ads.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube comments.html")));
                 output.addAll(YouTubeComment.createFromHtml(new File(I + "google\\youtube old comments.html")));
-                //output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
-                //output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
-                //output.addAll(youtubeCommentHack());
+                /*output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube comments.csv")));
+                output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
+                output.addAll(youtubeCommentHack());*/
                 break;
             case BANKING: // needs redebug
                 output.addAll(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
@@ -160,9 +160,9 @@ public class DiaryWriter {
                 output.addAll(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_1.html")));
                 output.addAll(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_2.html")));
                 output.addAll(FacebookReaction.createFromHtml(new File(I + "facebook\\likes_and_reactions_3.html")));
-                /* "your_photos.html", "your_videos.html", "your_uncategorized_photos.html" */
-                /* "profile_update_history.html", "pages_you've_liked.html" */
-                /* "connected_apps_and_websites.html", "recently_viewed.html", "who_you've_followed.html" */
+                // "your_photos.html", "your_videos.html", "your_uncategorized_photos.html"
+                // "profile_update_history.html", "pages_you've_liked.html"
+                // "connected_apps_and_websites.html", "recently_viewed.html", "who_you've_followed.html"
                 output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\inbox")));
                 output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\archived_threads")));
                 output.addAll(FacebookMessage.createFromFolder(new File(I + "facebook\\messages\\filtered_threads")));

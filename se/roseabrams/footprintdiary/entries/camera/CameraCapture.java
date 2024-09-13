@@ -51,7 +51,7 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
         return output;
     }
 
-    // TODO make generic for all kinds of file collection?
+    // i could make generic for all kinds of file collection
     public static ArrayList<CameraCapture> createFromFilesRecursion(File folder) throws IOException {
         ArrayList<CameraCapture> output = new ArrayList<>(5000);
         for (File file : folder.listFiles()) {

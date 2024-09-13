@@ -18,6 +18,11 @@ import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
+import se.roseabrams.footprintdiary.entries.twitch.TwitchWatchEvent;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubeReaction;
+import se.roseabrams.footprintdiary.entries.youtube.YouTubeSearch;
 
 public enum DiaryEntryCategory { // categorization intent is for human displaying
 
@@ -188,8 +193,42 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     YOUTUBE {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            return "I watched " + fl.size() + " video" + p(fl) + " on YouTube.";
-            // TODO update when more classes are finished
+            int nWatched = 0;
+            int nComments = 0;
+            int nSearches = 0;
+            int nReactions = 0;
+            for (DiaryEntry e : fl) {
+                if (e instanceof YouTubePlayback)
+                    nWatched++;
+                else if (e instanceof YouTubeComment)
+                    nComments++;
+                else if (e instanceof YouTubeSearch)
+                    nSearches++;
+                else if (e instanceof YouTubeReaction)
+                    nReactions++;
+                else
+                    throw new AssertionError();
+            }
+
+            assert nWatched > 0; // might fail and need correction, but i doubt it
+            StringBuilder output = new StringBuilder(20);
+            output.append("I watched ").append(fl.size()).append(" video").append(p(fl)).append(" on YouTube.");
+            if (nComments > 0 || nSearches > 0 || nReactions > 0) {
+                output.append(" I also ");
+                if (nComments > 0) {
+                    output.append("left ").append(nComments).append(" comment").append(p(nComments)).append(", ");
+                }
+                if (nReactions > 0) {
+                    output.append("liked or disliked ").append(nReactions).append(" video").append(p(nReactions))
+                            .append(", ");
+                }
+                if (nSearches > 0) {
+                    output.append("searched the site ").append(nSearches).append(" time").append(p(nSearches))
+                            .append(", ");
+                }
+                output.setCharAt(output.length() - 2, '.');
+            }
+            return output.toString();
         }
     },
     SPAN_BOUNDARY {
@@ -299,14 +338,14 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
             StringBuilder output = new StringBuilder(100);
-            output.append("I interacted with healthcare ").append(fl.size()).append(" time").append(p(fl)).append(",");
+            output.append("I interacted with healthcare ").append(fl.size()).append(" time").append(p(fl))
+                    .append(", at ");
             TreeSet<String> providers = new TreeSet<>();
             TreeSet<String> authors = new TreeSet<>();
             for (DiaryEntry e : fl) {
                 providers.add(((MedicalRecord) e).PROVIDER);
                 authors.add(((MedicalRecord) e).AUTHOR);
             }
-            output.append(" at ");
             if (providers.size() == 1)
                 output.append(providers.first());
             else
@@ -329,7 +368,11 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     TWITCH_PLAYBACK {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            throw new UnsupportedOperationException();
+            int totalWatchtime = 0;
+            for (DiaryEntry twitchWatch : fl) {
+                totalWatchtime += ((TwitchWatchEvent) twitchWatch).getWatchtimeMinutes();
+            }
+            return "I watched livestreams on Twitch for " + totalWatchtime + " minute" + p(fl) + ".";
         }
     },
     TWITCH_CHAT {
@@ -347,13 +390,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     MYANIMELIST {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            throw new UnsupportedOperationException();
         }
     };
 
     public abstract String describeInProse(List<DiaryEntry> filteredList);
 
-    /// quick debug swapping of what's being printed
+    /// quick debug swap
     public final boolean enabled() {
         switch (this) {
             case WEB_HISTORY:

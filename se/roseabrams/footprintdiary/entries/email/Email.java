@@ -26,31 +26,36 @@ import com.pff.PSTTask;
 
 public class Email extends DiaryEntry implements Message {
 
-    // TODO rethink these vars
     public final String SENDER_NAME;
     public final String SENDER_ADDRESS;
-    public final String RECIPIENT;
-    //public final String RECIPIENT_NAME;
-    //public final String RECIPIENT_ADDRESS;
+    public final String RECIPIENT_NAME;
+    public final String RECIPIENT_ADDRESS;
     public final String SUBJECT;
     public final Folder FOLDER;
-    public final boolean IMPORTANT;
+    public final int IMPORTANCE;
+    public final int PRIORITY;
 
-    public Email(DiaryDate dd, String senderName, String senderAddress, String recipient,
-            String subject, Folder folder, boolean important) {
+    public Email(DiaryDate dd, String senderName, String senderAddress, String recipientName, String recipientAddress,
+            String subject, Folder folder, int importance, int priority, String[] categories) {
         super(DiaryEntryCategory.EMAIL, dd);
+
+        assert senderName != null || senderAddress != null;
+        assert senderName == null || !senderName.isBlank();
+        assert senderAddress == null || !senderAddress.isBlank();
+        assert recipientName != null || recipientAddress != null;
+        assert recipientName == null || !recipientName.isBlank();
+        assert recipientAddress == null || !recipientAddress.isBlank();
+        assert subject != null && !subject.isBlank();
+        assert categories == null || categories.length > 0;
+
         SENDER_NAME = senderName;
         SENDER_ADDRESS = senderAddress;
-        RECIPIENT = recipient;
+        RECIPIENT_NAME = recipientName;
+        RECIPIENT_ADDRESS = recipientAddress;
         SUBJECT = subject;
         FOLDER = folder;
-        IMPORTANT = important;
-    }
-
-    public Email(DiaryDate dd, String senderName, String senderAddress, String recipient,
-            String subject, Folder folder, boolean important, String[] categories) {
-        this(dd, senderName, senderAddress, recipient, subject, folder, important);
-        // TODO
+        IMPORTANCE = importance;
+        PRIORITY = priority;
     }
 
     @Override
@@ -60,12 +65,24 @@ public class Email extends DiaryEntry implements Message {
 
     @Override
     public String getSender() {
-        return SENDER_ADDRESS;
+        if (SENDER_NAME != null && SENDER_ADDRESS != null)
+            return SENDER_NAME + " <" + SENDER_ADDRESS + ">";
+        if (SENDER_NAME != null)
+            return SENDER_NAME;
+        if (SENDER_ADDRESS != null)
+            return SENDER_ADDRESS;
+        throw new AssertionError();
     }
 
     @Override
     public String getRecipient() {
-        return RECIPIENT;
+        if (RECIPIENT_NAME != null && RECIPIENT_ADDRESS != null)
+            return RECIPIENT_NAME + " <" + RECIPIENT_ADDRESS + ">";
+        if (RECIPIENT_NAME != null)
+            return RECIPIENT_NAME;
+        if (RECIPIENT_ADDRESS != null)
+            return RECIPIENT_ADDRESS;
+        throw new AssertionError();
     }
 
     @Override
@@ -79,7 +96,7 @@ public class Email extends DiaryEntry implements Message {
 
     private static final Pattern MBOX_MESSAGE_START_LINE = Pattern.compile("From [0-9]{19}@.*");
 
-    //public EmailType guessType() {...} // keywords in subject and body
+    //public EmailType guessType() {...} // keywords in subject and body, or use ML clustering+classification
 
     //public enum EmailType {...}
 
@@ -87,25 +104,28 @@ public class Email extends DiaryEntry implements Message {
     public static List<Email> createFromMbox(File emailFile) throws IOException {
         ArrayList<Email> output = new ArrayList<>();
         List<String> mboxLines = Util.readFileLines(emailFile);
-        for (int i = 0; i < mboxLines.size(); i++) {
-            String mboxLine = mboxLines.get(i);
-            boolean currentIsEmail = false;
-            long id;
-            DiaryDateTime firstlineDate = null;
-            DiaryDateTime fieldDate = null;
-            String senderName = null;
-            String senderAddress = null;
-            String recipient = null;
-            String subject = null;
-            Folder folder = null;
-            boolean important = false;
-            ArrayList<String> categories = new ArrayList<>(5);
+
+        boolean currentIsEmail = false;
+        long id;
+        DiaryDateTime firstlineDate = null;
+        DiaryDateTime fieldDate = null;
+        String senderName = null;
+        String senderAddress = null;
+        String recipientName = null;
+        String recipientAddress = null;
+        String subject = null;
+        Folder folder = null;
+        boolean important = false;
+        ArrayList<String> categories = new ArrayList<>(5);
+
+        for (int iLine = 0; iLine < mboxLines.size(); iLine++) {
+            String mboxLine = mboxLines.get(iLine);
             if (mboxLine.matches(MBOX_MESSAGE_START_LINE.pattern())) {
                 if (currentIsEmail) {
                     currentIsEmail = false;
                     DiaryDateTime bestDate = fieldDate; // TODO evaluate
-                    Email e = new Email(bestDate, senderName, senderAddress, recipient, subject,
-                            folder, important, categories.toArray(new String[categories.size()]));
+                    Email e = new Email(bestDate, senderName, senderAddress, recipientName, recipientAddress, subject,
+                            folder, important ? 1 : 0, 0, categories.toArray(new String[categories.size()]));
                     output.add(e);
                 }
                 currentIsEmail = true;
@@ -114,7 +134,8 @@ public class Email extends DiaryEntry implements Message {
                 fieldDate = null;
                 senderName = null;
                 senderAddress = null;
-                recipient = null;
+                recipientName = null;
+                recipientAddress = null;
                 subject = null;
                 folder = null;
                 important = false;
@@ -123,17 +144,19 @@ public class Email extends DiaryEntry implements Message {
                 firstlineDate = parseDate(mboxLine.substring(mboxLine.indexOf("@") + 4)); // looks like always UTC-0
             } else if (mboxLine.startsWith("Subject: ")) {
                 subject = mboxLine.substring(mboxLine.indexOf(":") + 2);
-                while (mboxLines.get(i + 1).startsWith(" ")) {
-                    subject += mboxLines.get(i + 1);
-                    i++;
+                while (mboxLines.get(iLine + 1).startsWith(" ")) {
+                    subject += mboxLines.get(iLine + 1);
+                    iLine++;
                 }
                 subject = Util.decodeRfc2047(subject);
             } else if (mboxLine.startsWith("To: ")) {
-                recipient = mboxLine.substring(mboxLine.indexOf(":") + 2);
+                String[] recipient = parseContact(mboxLine.substring(mboxLine.indexOf(":") + 2));
+                recipientName = recipient[0];
+                recipientAddress = recipient[1];
             } else if (mboxLine.startsWith("From: ") && !mboxLine.startsWith("From: From:")) {
-                String sender = mboxLine.substring(mboxLine.indexOf(":") + 2);
-                senderName = sender.substring(0, sender.indexOf("<"));
-                senderAddress = sender.substring(sender.indexOf("<") + 1, sender.indexOf(">"));
+                String[] sender = parseContact(mboxLine.substring(mboxLine.indexOf(":") + 2));
+                senderName = sender[0];
+                senderAddress = sender[1];
             } else if (mboxLine.startsWith("Date: ")) {
                 fieldDate = parseDate(mboxLine.substring(mboxLine.indexOf(":") + 2));
             } else if (mboxLine.startsWith("X-Gmail-Labels: ")) {
@@ -141,9 +164,9 @@ public class Email extends DiaryEntry implements Message {
                 s.useDelimiter(",");
                 while (s.hasNext()) {
                     String label = s.next();
-                    if (label.startsWith("Category ")) {
+                    if (label.startsWith("Category "))
                         categories.add(label.substring("Category ".length()).intern());
-                    } else {
+                    else {
                         switch (label) {
                             case "Inbox":
                                 folder = Folder.INBOX;
@@ -168,6 +191,30 @@ public class Email extends DiaryEntry implements Message {
                 s.close();
             }
         }
+        return output;
+    }
+
+    private static String[] parseContact(String s) {
+        String[] output = { null, null };
+
+        if (s.contains("<")) {
+            output[0] = s.substring(0, s.indexOf("<"));
+            output[1] = s.substring(s.indexOf("<") + 1, s.indexOf(">"));
+        } else if (s.contains("@") && !s.trim().contains(" "))
+            output[1] = s;
+        else
+            output[0] = s; // don't think this will ever happen, keep on lookout
+
+        for (int i = 0; i < output.length; i++) {
+            if (output[i] == null)
+                continue;
+            output[i] = output[i].trim();
+            if (output[i].startsWith("\"") && output[i].endsWith("\"")) {
+                output[i] = output[i].substring(1, output[i].length() - 1);
+                output[i] = output[i].trim();
+            }
+        }
+
         return output;
     }
 
@@ -198,7 +245,7 @@ public class Email extends DiaryEntry implements Message {
         String folderName = folderPath + "/" + f.getDisplayName();
         ArrayList<Email> output;
         Folder folderType;
-        // TODO confirm folder paths, these are mostly guesses
+        // TODO confirm folder paths, these are just guesses
         if (folderName.equals("root/Inbox")) {
             output = new ArrayList<>(12000);
             folderType = Folder.INBOX;
@@ -219,9 +266,9 @@ public class Email extends DiaryEntry implements Message {
         }
         while (true) {
             PSTObject o = f.getNextChild();
-            if (o == null) {
+            if (o == null)
                 break;
-            }
+
             int typeOfNodeI = o.getNodeType();
             if (o instanceof PSTAppointment || o instanceof PSTTask) {
                 // ignore, probably very little useful data
@@ -255,17 +302,16 @@ public class Email extends DiaryEntry implements Message {
                 String bodyParsed = bodyD.text();*/
 
                 DiaryDateTime date = new DiaryDateTime(receivedDate);
-                Email e = new Email(date, senderName, senderAddress, recipientName, subject, folderType,
-                        importance > 0);
+                Email e = new Email(date, senderName, senderAddress, recipientName, recipientAddress, subject,
+                        folderType, importance, priority, null);
                 output.add(e);
-            } else {
-                System.err.println();
-            }
+            } else
+                throw new AssertionError();
+
             nContantActual++;
         }
-        if (nContent != nContantActual) { // all seems to work, although main folder lacks ~800 (6 %) of emails
-            System.err.println();
-        }
+        assert nContent == nContantActual;// all seems to work, although main folder lacks ~800 (6 %) of emails
+
         return output;
     }
 }

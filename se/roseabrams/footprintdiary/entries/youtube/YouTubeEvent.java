@@ -18,7 +18,7 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 
 public abstract class YouTubeEvent extends DiaryEntry {
 
-    public YouTubeEvent(DiaryDate dd) {
+    YouTubeEvent(DiaryDate dd) {
         super(DiaryEntryCategory.YOUTUBE, dd);
     }
 
@@ -87,7 +87,6 @@ public abstract class YouTubeEvent extends DiaryEntry {
                 y = new YouTubePlayback(date, v, isAd);
             } else if (playbackE.text().startsWith("Searched for")) {
                 String searchTerm = primaryLink.text();
-
                 y = new YouTubeSearch(date, searchTerm);
             } else if (playbackE.text().startsWith("Visited")) {
                 continue; // website arrived at when adverts clicked on, probably not very interesting

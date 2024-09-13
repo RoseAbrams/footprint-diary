@@ -102,6 +102,7 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
                 + ")";
     }
 
+    // TODO something seriously wrong, entries returned are ~1/3 of expected
     public static List<WikimediaEdit> createFromWebsites() throws IOException {
         ArrayList<WikimediaEdit> output = new ArrayList<>(7000);
         for (String wiki : PersonalConstants.WIKIS_WITH_EDITS) {
@@ -112,12 +113,12 @@ public class WikimediaEdit extends DiaryEntry implements ContentContainer {
 
     private static final int EDIT_LIMIT = 10000;
 
-    // TODO something seriously wrong, entries returned are ~1/3 of expected
     public static ArrayList<WikimediaEdit> createFromWebsite(String site) throws IOException {
         Connection c = Jsoup.newSession();
         c.timeout(120000);
-        c.url("https://" + site + ".org/w/index.php?title="
-                + "Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit=" + EDIT_LIMIT);
+        c.url("https://" + site
+                + ".org/w/index.php?title=Special:Contributions/Rose_Abrams&target=Rose+Abrams&offset=&limit="
+                + EDIT_LIMIT);
         Document d = c.get();
 
         ArrayList<WikimediaEdit> output = new ArrayList<>(5000);

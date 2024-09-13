@@ -20,6 +20,11 @@ public class SkypeMessage extends DiaryEntry implements Message {
 
     public SkypeMessage(DiaryDateTime dd, String sender, String recipient, String message) {
         super(DiaryEntryCategory.SKYPE, dd);
+
+        assert !sender.isBlank();
+        assert !recipient.isBlank();
+        assert message != null && !message.isBlank();
+
         SENDER = sender.intern();
         RECIPIENT = recipient.intern();
         MESSAGE = message;
@@ -85,11 +90,17 @@ public class SkypeMessage extends DiaryEntry implements Message {
                 throw new AssertionError();
             }
             String sender;
+            String messageBody = null;
             if (message.contains("] ***"))
-                sender = "SYSTEM"; // TODO media messages also looks like this, with syntax of "*** USERNAME sent FILENAME ***"
+                if (message.contains(" sent ")) {
+                    sender = message.substring(0, message.indexOf(" sent "));
+                    messageBody = message.substring(message.indexOf(" sent ") + " sent ".length());
+                } else
+                    sender = "SYSTEM";
             else
                 sender = message.substring(message.indexOf("]") + 2, message.indexOf(": "));
-            String messageBody = message.substring(message.indexOf(":", message.indexOf("]")) + 2);
+            if (messageBody == null)
+                messageBody = message.substring(message.indexOf(":", message.indexOf("]")) + 2);
 
             while (i < messages.size() - 1 && !messages.get(i + 1).startsWith("[")) {
                 messageBody += messageBody + "\n" + messages.get(i + 1);
