@@ -5,11 +5,9 @@ import se.roseabrams.footprintdiary.DiaryEntryCategory;
 
 abstract class TwitchWatchEvent extends TwitchEvent {
 
-    public final int WATCHTIME_MINUTES;
-
-    TwitchWatchEvent(DiaryDate dd, String channel, int watchtimeMinutes) {
+    TwitchWatchEvent(DiaryDate dd, String channel) {
         super(DiaryEntryCategory.TWITCH_PLAYBACK, dd, channel);
-        assert watchtimeMinutes > 0;
-        WATCHTIME_MINUTES = watchtimeMinutes;
     }
+
+    public abstract int getWatchtimeMinutes();
 }

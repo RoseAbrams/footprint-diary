@@ -14,11 +14,14 @@ public class TwitchPlayback extends TwitchWatchEvent {
 
     public final String HOSTED_CHANNEL;
     public final String STREAM_CATEGORY;
+    public final int WATCHTIME_MINUTES;
     public final boolean IS_EMBED;
 
     public TwitchPlayback(DiaryDate date, String channel, String hostedChannel, String streamCategory,
             int watchtimeMinutes, boolean isEmbed) {
-        super(date, channel, watchtimeMinutes);
+        super(date, channel);
+        assert watchtimeMinutes > 0;
+        WATCHTIME_MINUTES = watchtimeMinutes;
         assert !streamCategory.isBlank();
         HOSTED_CHANNEL = hostedChannel.isBlank() ? null : hostedChannel.intern();
         STREAM_CATEGORY = streamCategory.intern();
@@ -26,9 +29,18 @@ public class TwitchPlayback extends TwitchWatchEvent {
     }
 
     @Override
+    public int getWatchtimeMinutes() {
+        return WATCHTIME_MINUTES;
+    }
+
+    public String getChannelOrHosted() {
+        return HOSTED_CHANNEL != null ? HOSTED_CHANNEL : CHANNEL;
+    }
+
+    @Override
     public String getStringSummary() {
-        return "watched " + (HOSTED_CHANNEL != null ? HOSTED_CHANNEL : CHANNEL)
-                + " play " + STREAM_CATEGORY + " for " + WATCHTIME_MINUTES + " minutes";
+        return "watched " + getChannelOrHosted() + " stream " + STREAM_CATEGORY + " for " + WATCHTIME_MINUTES
+                + " minutes";
     }
 
     @SuppressWarnings("unused")

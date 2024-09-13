@@ -28,7 +28,7 @@ import se.roseabrams.footprintdiary.entries.steam2.SteamFetcher;
 import se.roseabrams.footprintdiary.entries.tinder.TinderSwipe;
 import se.roseabrams.footprintdiary.entries.twitch.TwitchChatMessage;
 import se.roseabrams.footprintdiary.entries.twitch.TwitchFollow;
-import se.roseabrams.footprintdiary.entries.twitch.TwitchPlayback;
+import se.roseabrams.footprintdiary.entries.twitch.TwitchSession;
 import se.roseabrams.footprintdiary.entries.whatsapp.WhatsAppMessage;
 import se.roseabrams.footprintdiary.entries.wikimedia.WikimediaEdit;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;
@@ -187,8 +187,7 @@ public class DiaryWriter {
                 output.addAll(TwitchFollow.createFromCsv(
                         new File(I + "twitch\\community\\follows\\follow.csv"),
                         new File(I + "twitch\\community\\follows\\unfollow.csv")));
-                output.addAll(TwitchPlayback.createFromCsv(new File(I + "twitch\\site_history\\minute_watched.csv")));
-                // TwitchSession ...
+                output.addAll(TwitchSession.createSessions(new File(I + "twitch\\site_history\\minute_watched.csv")));
                 break;
             default:
                 System.err.println("DiaryIngestCategory not implemented:" + c);

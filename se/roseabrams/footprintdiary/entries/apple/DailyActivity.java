@@ -43,13 +43,15 @@ public class DailyActivity extends DiaryEntry implements CustomCountable {
     }
 
     public static List<DailyActivity> createDays(File exportFile) throws IOException {
-        ArrayList<DailyActivity> output = new ArrayList<>();
+        ArrayList<DailyActivity> output = new ArrayList<>(2000);
         List<HealthData> h = HealthData.createAllFromXml(exportFile);
         for (HealthData d : h) {
             DailyActivity foundA = null;
             for (DailyActivity iA : output) {
-                if (d.DATE.equals(iA.DATE, false))
+                if (d.DATE.equals(iA.DATE, false)) {
                     foundA = iA;
+                    break;
+                }
             }
             if (foundA == null) {
                 foundA = new DailyActivity(d.DATE);
