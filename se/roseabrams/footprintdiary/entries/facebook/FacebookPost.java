@@ -84,6 +84,22 @@ public class FacebookPost extends FacebookWallEvent {
                     type = Type.parse(desc.substring(desc.lastIndexOf(" ") + 1, desc.length() - 1));
             }
 
+            Element bodyE = postE.selectFirst("div._2ph_._a6-p");
+            Element imageQ = bodyE.selectFirst("div._a7nf");
+            assert (imageQ == null) == (bodyE.selectFirst("img") == null && bodyE.selectFirst("video") == null);
+            if (imageQ != null)
+                imageQ.attr("display", "none");
+
+            if (body == null) {
+                body = textWithNewlines(bodyE).toString();
+                if (body.contains("Updated "))
+                    if (body.startsWith("Updated "))
+                        body = "";
+                    else
+                        body = body.substring(0, body.lastIndexOf("Updated ") - 1);
+                // TODO remove metadata classed as "Place:" and "Address:"
+            }
+
             Element mediaE = postE.selectFirst("img"); // TODO what about more than one picture/video in post?
             if (mediaE == null)
                 mediaE = postE.selectFirst("video");
@@ -110,21 +126,6 @@ public class FacebookPost extends FacebookWallEvent {
             }
             if (linkS != null && type != Type.LINK)
                 type = Type.LINK;
-
-            Element bodyE = postE.selectFirst("div._2ph_._a6-p");
-            Element imageQ = bodyE.selectFirst("div._a7nf");
-            assert (imageQ == null) == (bodyE.selectFirst("img") == null);
-            if (imageQ != null)
-                imageQ.remove();
-
-            if (body == null) {
-                body = textWithNewlines(bodyE);
-                if (body.contains("Updated "))
-                    if (body.startsWith("Updated "))
-                        body = "";
-                    else
-                        body = body.substring(0, body.lastIndexOf("Updated ") - 1);
-            }
 
             body = body.trim();
             String dateS = postE.selectFirst("div._3-94._a6-o div._a72d").text();

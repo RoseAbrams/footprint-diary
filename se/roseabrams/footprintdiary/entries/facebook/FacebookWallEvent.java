@@ -49,16 +49,18 @@ public abstract class FacebookWallEvent extends DiaryEntry {
         return new DiaryDateTime(year, month, day, hour, minute, second);
     }
 
-    static String textWithNewlines(Element e) {
-        String output = "";
+    static StringBuilder textWithNewlines(Element e) {
+        StringBuilder output = new StringBuilder();
         for (Node child : e.childNodes()) {
-            if (child instanceof Element childE)
+            if (child instanceof Element childE) {
+                if (childE.attr("display").equals("none"))
+                    return output;
                 if (childE.normalName().equals("br"))
-                    output += "\n";
+                    output.append("\n");
                 else
-                    output += textWithNewlines(childE);
-            else
-                output += child;
+                    output.append(textWithNewlines(childE));
+            } else
+                output.append(child);
         }
         return output;
     }
