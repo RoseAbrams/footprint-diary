@@ -72,7 +72,7 @@ public class CameraCapture extends DiaryEntry implements ContentContainer {
 
             GeoLocation location = null;
             DiaryDateTime exifDate = null;
-            if (filetype == ContentType.PICTURE && /* why?? */!filetypeS.equals("heic")) {
+            if (filetype == ContentType.PICTURE && !filetypeS.equals("heic")) { // TODO find new library that can handle heic
                 /// https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/MetadataExample.java
                 ImageMetadata metadata;
                 try {

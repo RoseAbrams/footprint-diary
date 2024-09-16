@@ -3,7 +3,7 @@ package se.roseabrams.footprintdiary.common;
 public enum ContentType {
 
     PLAINTEXT, PICTURE, VIDEO, AUDIO, GIF, SYSTEM, BOOK, DOCUMENT, TORRENT, COMICS, WEBPAGE, APPLICATION, ARCHIVE, DATA,
-    MODEL, FONT, CODE, MISC_PROPRIETARY;
+    MODEL, FONT, CODE, CONTACT, MISC_PROPRIETARY;
 
     public static ContentType parseExtension(String ext) {
         return parseExtension(ext, true);
@@ -114,6 +114,8 @@ public enum ContentType {
             case "java":
             case "cpp":
                 return CODE;
+            case "vcf":
+                return CONTACT;
             case "ggb": // Geogebra
             case "epr": // Adobe export preset
             case "stl": // Google Earth

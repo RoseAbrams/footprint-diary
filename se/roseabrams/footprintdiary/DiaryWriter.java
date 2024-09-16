@@ -109,7 +109,7 @@ public class DiaryWriter {
                 output.addAll(SpotifyPlayback.createAllFromJson(new File(I + "spotify\\endsong_2.json")));
                 output.addAll(SpotifyPlaylisting.createFromJson(new File(I + "spotify\\Playlist1.json")));
                 break;
-            case STEAM: // probably needs redebug
+            case STEAM:
                 output.addAll(SteamStoreEvent.createFromHtml(new File(I + "steam\\Purchase History.html")));
                 output.addAll(SteamLicenseEvent.createFromHtml(new File(I + "steam\\Licenses.html")));
                 SteamFetcher steamApi = new SteamFetcher();
@@ -118,7 +118,7 @@ public class DiaryWriter {
             case APPLE_ACTIVITY:
                 output.addAll(DailyActivity.createDays(new File(I + "apple\\health export.xml")));
                 break;
-            case SKYPE: // needs redebug
+            case SKYPE:
                 output.addAll(SkypeMessage.createAllFromTxt(new File(I + "skype")));
                 break;
             case WIKIMEDIA:
@@ -141,7 +141,7 @@ public class DiaryWriter {
                 output.addAll(YouTubeComment.createFromCsv(new File(I + "google\\youtube old comments.csv")));
                 output.addAll(youtubeCommentHack());*/
                 break;
-            case BANKING: // needs redebug
+            case BANKING:
                 output.addAll(BankEvent.createFromCsv(new File(I + "bank\\PERSONKONTO.csv")));
                 output.addAll(BankEvent.createFromAzureJson(new File(I + "bank\\pdfs to jsons")));
                 break;

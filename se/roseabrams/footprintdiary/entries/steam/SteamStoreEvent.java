@@ -14,29 +14,26 @@ import se.roseabrams.footprintdiary.common.MoneyTransaction;
 
 public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
 
-    public final long TRANSACTION_ID;
+    public final long TRANSACTION_ID; // undefined as -1 when MARKET_TRANSACTION
     private final String[] ITEMS;
-    private final SteamGame[] GAMES;
     public final Type TYPE;
     public final String PAYMENT_METHOD;
     public final float PAYMENT_TOTAL;
     public final float WALLET_CHANGE;
     public final float WALLET_BALANCE;
 
-    public SteamStoreEvent(DiaryDate dd, long transactionId, String[] items, SteamGame[] games, Type type,
-            String paymentMethod,
+    public SteamStoreEvent(DiaryDate dd, long transactionId, String[] items, Type type, String paymentMethod,
             float paymentTotal, float walletChange, float walletBalance) {
         super(DiaryEntryCategory.STEAM_PURCHASE, dd);
         assert dd != null;
 
-        assert items != null && items.length != 0;
+        assert items != null && (items.length != 0 || type == Type.REFUND);
         assert type != null;
         assert !Float.isNaN(paymentTotal);
         assert paymentMethod != null;
 
         TRANSACTION_ID = transactionId;
         ITEMS = items;
-        GAMES = games;
         TYPE = type;
         PAYMENT_METHOD = paymentMethod.intern();
         PAYMENT_TOTAL = paymentTotal;
@@ -80,25 +77,35 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
             Element tableRow = tableRows.get(i);
 
             String tableRowLink = tableRow.attr("onclick");
-            String tranIdS = tableRowLink.substring(tableRowLink.indexOf("transid=") + 8, 18);
-            long tranId = Long.parseLong(tranIdS);
+            long tranId;
+            if (tableRowLink.contains("transid=")) {
+                String tranIdS = tableRowLink.substring(tableRowLink.indexOf("transid=") + 8);
+                if (tranIdS.contains("&"))
+                    tranIdS = tranIdS.substring(0, tranIdS.indexOf("&"));
+                else
+                    tranIdS = tranIdS.substring(0, tranIdS.length() - 1);
+                tranId = Long.parseLong(tranIdS);
+            } else
+                tranId = -1;
 
             String dateS = tableRow.selectFirst("td.wht_date").text();
             DiaryDate date = new DiaryDate(Short.parseShort(dateS.substring(dateS.indexOf(",") + 2)),
                     DiaryDate.parseMonthName(dateS.substring(dateS.indexOf(" ") + 1, dateS.indexOf(","))),
                     Byte.parseByte(dateS.substring(0, 2).trim()));
 
-            Elements itemE = tableRow.select("td.wht_items");
-            Elements itemsE = itemE.select("div");
+            Elements itemCellE = tableRow.select("td.wht_items");
+            Elements itemsE = itemCellE.select("div:not([class])");
             String[] items;
             if (itemsE.size() == 0) {
                 items = new String[1];
-                items[0] = itemE.text();
+                items[0] = itemCellE.text();
             } else {
                 items = new String[itemsE.size()];
                 for (int j = 0; j < itemsE.size(); j++) {
                     items[j] = itemsE.get(j).text();
                 }
+                //if (items[items.length - 1].equals("Refund"))
+                //    items = Arrays.copyOf(items, items.length - 1);
             }
 
             Element typeE = tableRow.selectFirst("td.wht_type");
@@ -119,7 +126,7 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
 
             //Element paymentMethodE = typeE.selectFirst("div.wht_payment");
             Element paymentMethodE = typeE.lastElementChild();
-            String paymentMethod = paymentMethodE.text();
+            String paymentMethod = paymentMethodE.text(); // unoptimized when multiple payment methods, worth fixing?
 
             Element totalE = tableRow.selectFirst("td.wht_total");
             float total = parseCurrency(totalE.text());
@@ -130,16 +137,8 @@ public class SteamStoreEvent extends SteamEvent implements MoneyTransaction {
             Element walletBalanceE = tableRow.selectFirst("td.wht_wallet_balance");
             float walletBalance = walletBalanceE.text().isEmpty() ? 0 : parseCurrency(walletBalanceE.text());
 
-            SteamGame[] itemsGames = null;
-            if (type == Type.STORE_PURCHASE) {
-                itemsGames = new SteamGame[items.length];
-                for (int j = 0; j < items.length; j++) {
-                    itemsGames[j] = SteamGame.get(items[j], true);
-                }
-            }
-
-            SteamStoreEvent s = new SteamStoreEvent(date, tranId, items, itemsGames, type, paymentMethod, total,
-                    walletChange, walletBalance);
+            SteamStoreEvent s = new SteamStoreEvent(date, tranId, items, type, paymentMethod, total, walletChange,
+                    walletBalance);
             output.add(s);
         }
 

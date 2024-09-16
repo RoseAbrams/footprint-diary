@@ -18,6 +18,7 @@ import se.roseabrams.footprintdiary.entries.reddit.RedditComment;
 import se.roseabrams.footprintdiary.entries.reddit.RedditPost;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlayback;
 import se.roseabrams.footprintdiary.entries.spotify.SpotifyPlaylisting;
+import se.roseabrams.footprintdiary.entries.steam.SteamLicenseEvent;
 import se.roseabrams.footprintdiary.entries.twitch.TwitchWatchEvent;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubeComment;
 import se.roseabrams.footprintdiary.entries.youtube.YouTubePlayback;
@@ -152,7 +153,12 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
     STEAM_PURCHASE {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
-            return "I bought " + fl.size() + " game" + p(fl) + " on Steam.";
+            int n = 0;
+            for (DiaryEntry e : fl) {
+                if (e instanceof SteamLicenseEvent)
+                    n++;
+            }
+            return "I acquired " + n + " new game" + p(n) + " on Steam.";
         }
     },
     STEAM_ACHIEVMENT {

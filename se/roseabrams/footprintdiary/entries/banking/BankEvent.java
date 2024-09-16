@@ -59,7 +59,7 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
     }
 
     public static enum Type {
-        CARD, SWISH, BANKGIRO, PLUSGIRO, AUTOGIRO, ATM, BANKING_FEE, BANKING_TRANSFER;
+        CARD, SWISH, BANKGIRO, PLUSGIRO, AUTOGIRO, ATM, BANKING_FEE, SELF_TRANSFER, INCOME;
 
         static Type parseDesc(String desc) {
             String[] split = desc.split(" ");
@@ -84,16 +84,20 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                 case "Kontantuttag":
                 case "Kontantinsättning":
                     return ATM;
+                case "Nordea":
                 case "Vardagspaket":
                     return BANKING_FEE;
                 case "Överföring":
-                    return BANKING_TRANSFER;
+                    return SELF_TRANSFER;
                 case "Lön":
                 case "A-KASSA":
                 case "FK/PMYND":
-                    return null; // unspecified known
+                case "Skatt":
+                    return INCOME;
                 default:
-                    return null; // unspecified unknown
+                    if (desc.contains("REFUN"))
+                        return AUTOGIRO;
+                    return null;
             }
         }
     }
@@ -107,7 +111,6 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
             String dateS = s.next();
             if (dateS.contains("Bokföringsdag") || dateS.contains("Reserverat"))
                 continue;
-            DiaryDate date = new DiaryDate(dateS);
             String amountS = s.next();
             float amount = Float.parseFloat(amountS.replace(',', '.'));
             String fromAccount = s.next();
@@ -115,37 +118,37 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
             assert fromAccount.isBlank() || toAccount.isBlank();
             String toAccountName = s.next();
             assert toAccountName.isBlank(); // not sure what this should contain... "egen notering" maybe?
-            String description = s.next();
+            String desc = s.next();
             String balanceS = s.next();
             float balance = Float.parseFloat(balanceS.replace(',', '.'));
             String currencyS = s.next();
             Currency currency = Currency.valueOf(currencyS);
 
-            Type type = Type.parseDesc(description);
+            Type type = Type.parseDesc(desc);
             String descTrimmed = null;
-            String[] split = description.split(" ");
-            if (type == null || split.length == 1)
-                toAccount = null;
-            else {
+            String[] split = desc.split(" ");
+            if (type != null) {
                 switch (type) {
                     case AUTOGIRO:
-                    case BANKING_TRANSFER:
+                    case SELF_TRANSFER:
                         toAccount = truncateSplit(split, 1);
                         break;
                     case BANKING_FEE:
-                        toAccount = null;
+                        toAccount = "Nordea";
                         descTrimmed = truncateSplit(split, 1);
                         break;
                     case CARD:
                     case SWISH:
+                    case ATM:
                         toAccount = truncateSplit(split, 2);
                         break;
                     case BANKGIRO:
                     case PLUSGIRO:
                         if (amount < 0)
                             toAccount = truncateSplit(split, 2);
-                        else
-                            toAccount = null;
+                        break;
+                    case INCOME:
+                        toAccount = "960106-3853";
                         break;
                     default:
                         s.close();
@@ -153,8 +156,18 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                 }
             }
 
+            DiaryDate date;
+            if (type == Type.CARD) {
+                dateS = desc.substring(8, 14);
+                date = new DiaryDate(
+                        Short.parseShort("20" + dateS.substring(0, 2)),
+                        Byte.parseByte(dateS.substring(2, 4)),
+                        Byte.parseByte(dateS.substring(4, 6)));
+            } else
+                date = new DiaryDate(dateS);
+
             BankEvent b = new BankEvent(date, amount, balance, type, fromAccount, toAccount,
-                    descTrimmed != null ? descTrimmed : description, currency);
+                    descTrimmed != null ? descTrimmed : desc, currency);
             output.add(b);
             s.close();
         }
@@ -178,7 +191,7 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                 for (Object cellO : table.getJSONArray("cells")) {
                     JSONObject cell = (JSONObject) cellO;
                     if (cell.has("kind") && cell.getString("kind").equals("columnHeader"))
-                        continue;
+                        continue; // header row
                     int column = cell.getInt("columnIndex");
                     int row = cell.getInt("rowIndex");
                     assert row < BUFFER_SIZE;
@@ -186,11 +199,19 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                 }
 
                 for (String[] row : tableBuffer) {
+                    if (row[0] == null)
+                        continue; // header row
                     String dateS = row[0];
                     String desc = row[1];
-                    String amountS = row[2].replace(",", ".");
-                    String balanceS = row[3].replace(",", ".");
-                    float amount = Float.parseFloat(amountS.replace("-", ""));
+                    if (desc.equals("Ingående saldo"))
+                        continue; // not a transaction
+                    String amountS = row[2].replace(",", ".").replace(" ", "");
+                    String balanceS = row[3].replace(",", ".").replace(" ", "");
+                    float amount;
+                    if (amountS.isBlank())
+                        amount = 0;
+                    else
+                        amount = Float.parseFloat(amountS.replace("-", ""));
                     if (amountS.endsWith("-"))
                         amount = -amount;
                     float balance = Float.parseFloat(balanceS.replace("-", ""));
@@ -198,22 +219,22 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                         balance = -balance;
 
                     Type type = Type.parseDesc(desc);
-                    String toAccount;
+                    String toAccount = "";
                     String descTrimmed = null;
                     String[] split = desc.split(" ");
-                    if (type == null || split.length == 1)
-                        toAccount = null;
-                    else {
+                    if (type != null) {
                         switch (type) {
                             case AUTOGIRO:
+                            case SELF_TRANSFER:
                                 toAccount = truncateSplit(split, 1);
                                 break;
                             case BANKING_FEE:
-                                toAccount = null;
+                                toAccount = "Nordea";
                                 descTrimmed = truncateSplit(split, 1);
                                 break;
                             case CARD:
                             case SWISH:
+                            case ATM:
                                 toAccount = truncateSplit(split, 2);
                                 break;
                             case BANKGIRO:
@@ -221,7 +242,10 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                                 if (amount < 0)
                                     toAccount = truncateSplit(split, 2);
                                 else
-                                    toAccount = null;
+                                    toAccount = truncateSplit(split, 1);
+                                break;
+                            case INCOME:
+                                toAccount = "960106-3853";
                                 break;
                             default:
                                 throw new AssertionError();
@@ -236,7 +260,7 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
                                 Byte.parseByte(dateS.substring(2, 4)),
                                 Byte.parseByte(dateS.substring(4, 6)));
                     } else
-                        date = new DiaryDate(dateS);
+                        date = new DiaryDate("20" + dateS);
 
                     BankEvent b = new BankEvent(date, amount, balance, type, fromAccount, toAccount,
                             descTrimmed != null ? descTrimmed : desc, Currency.SEK);
@@ -250,8 +274,8 @@ public class BankEvent extends DiaryEntry implements MoneyTransaction {
     private static String truncateSplit(String[] split, int startIndex) {
         StringBuilder output = new StringBuilder();
         for (int i = startIndex; i < split.length; i++) {
-            output.append(split[i]);
+            output.append(split[i]).append(" ");
         }
-        return output.toString();
+        return output.toString().trim();
     }
 }

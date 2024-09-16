@@ -93,8 +93,8 @@ public class SkypeMessage extends DiaryEntry implements Message {
             String messageBody = null;
             if (message.contains("] ***"))
                 if (message.contains(" sent ")) {
-                    sender = message.substring(0, message.indexOf(" sent "));
-                    messageBody = message.substring(message.indexOf(" sent ") + " sent ".length());
+                    sender = message.substring(message.indexOf("]") + 6, message.indexOf(" sent "));
+                    messageBody = message.substring(message.indexOf(" sent ") + " sent ".length(), message.length() - 4);
                 } else
                     sender = "SYSTEM";
             else
