@@ -2,7 +2,6 @@ package se.roseabrams.footprintdiary;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +57,9 @@ public class DiaryWriter {
             if (DW == null) {
                 DW = new DiaryWriter();
 
-                for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
+                for (DiaryIngestCategory c : DiaryIngestCategory.values())
                     if (c.enabled())
                         DW.add(ingest(c), c);
-                }
 
                 DW.D.trimPagesAfter(DiaryDate.TODAY.yesterday());
                 DW.D.addFillerPages();
