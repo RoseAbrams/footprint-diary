@@ -237,7 +237,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
             return output.toString();
         }
     },
-    SPAN_BOUNDARY {
+    DATA_BOUNDARY {
         @Override
         public String describeInProse(List<DiaryEntry> fl) {
             StringBuilder output = new StringBuilder(50);
@@ -246,7 +246,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
                 DiaryDataBoundary d = (DiaryDataBoundary) e;
                 output.append(" Today is the ").append((d.IS_START ? "first" : "last"))
                         .append(" day I have information about ")
-                        .append(d.C).append(".");
+                        .append(d.INGEST_CATEGORY).append(".");
             }
             return output.toString();
         }
@@ -421,7 +421,7 @@ public enum DiaryEntryCategory { // categorization intent is for human displayin
 
     public final int customOrder() {
         switch (this) {
-            case SPAN_BOUNDARY:
+            case DATA_BOUNDARY:
                 return Integer.MAX_VALUE - 1;
             case MANUAL:
                 return Integer.MAX_VALUE;

@@ -107,7 +107,8 @@ public class SkypeMessage extends DiaryEntry implements Message {
                 i++;
             }
 
-            output.add(new SkypeMessage(timestamp, sender, recipient, messageBody));
+            SkypeMessage s = new SkypeMessage(timestamp, sender, recipient, messageBody);
+            output.add(s);
         }
         return output;
     }

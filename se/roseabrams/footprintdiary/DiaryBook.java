@@ -3,6 +3,7 @@ package se.roseabrams.footprintdiary;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Predicate;
 
 public class DiaryBook extends Diary implements Serializable {
 
@@ -48,11 +49,22 @@ public class DiaryBook extends Diary implements Serializable {
     }
 
     public DiaryPage randomPage() {
-        return PAGES.get((int) (PAGES.size() * Math.random()));
+        return PAGES.get((int) (PAGES.size() * Math.random()) - 1);
     }
 
     public DiaryEntry randomEntry() {
         return randomPage().randomEntry();
+    }
+
+    void trimPagesAfter(DiaryDate endExcl) {
+        PAGES.removeIf(p -> p.DATE.compareTo(endExcl, false) > 0);
+    }
+
+    public ArrayList<DiaryEntry> filter(Predicate<DiaryEntry> p) {
+        ArrayList<DiaryEntry> output = new ArrayList<>();
+        for (DiaryPage dp : PAGES)
+            output.addAll(dp.filter(p));
+        return output;
     }
 
     public String sumsCsv(boolean blankZeroes) {

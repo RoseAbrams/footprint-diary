@@ -2,6 +2,7 @@ package se.roseabrams.footprintdiary;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,14 +44,18 @@ public class DiaryWriter {
     private static final String O = "D:\\Dropbox\\Privat\\postGym program\\footprint diary\\outputs\\";
 
     public static void main(String[] args) {
+        System.out.println("DiaryWriter started");
         try {
             File diarySer = new File(O + "diary.ser");
-            final DiaryWriter DW;
+            DiaryWriter DW = null;
 
-            if (diarySer.exists())
-                DW = (DiaryWriter) Util.deserialize(diarySer);
-            else {
+            if (diarySer.exists()) {
+                Object dwO = Util.deserializeOrDelete(diarySer);
+                if (dwO != null)
+                    DW = (DiaryWriter) dwO;
+            }
 
+            if (DW == null) {
                 DW = new DiaryWriter();
 
                 for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
@@ -58,11 +63,12 @@ public class DiaryWriter {
                         DW.add(ingest(c), c);
                 }
 
-                // TODO silently remove days located in the future
+                DW.D.trimPagesAfter(DiaryDate.TODAY.yesterday());
                 DW.D.addFillerPages();
                 Util.serialize(DW.D, diarySer);
             }
 
+            DW.writeDataBounds(new File(O + "diaryDataBounds.csv"));
             DW.writeCsvSum(new File(O + "diarySumTable.csv"));
             DW.writeCsvIndex(new File(O + "diaryIndexTable.csv"));
             DW.writeProseSummary(new File(O + "diaryProse.rtf"));
@@ -76,15 +82,18 @@ public class DiaryWriter {
             }
             System.exit(1);
         }
+        System.out.println("DiaryWriter exited normally");
     }
 
     private static List<DiaryEntry> ingest(DiaryIngestCategory c) throws IOException {
         File categorySer = new File(O + c.serializationFilename());
         if (categorySer.exists()) {
-            Object deserO = Util.deserialize(categorySer);
-            List<DiaryEntry> deserL = (List<DiaryEntry>) deserO;
-            System.out.println("deserialized " + deserL.size() + " ingested entries from " + c);
-            return deserL;
+            Object deserO = Util.deserializeOrDelete(categorySer);
+            if (deserO != null) {
+                List<DiaryEntry> deserL = (List<DiaryEntry>) deserO;
+                System.out.println("deserialized " + deserL.size() + " ingested entries from " + c);
+                return deserL;
+            }
         }
 
         ArrayList<DiaryEntry> output = new ArrayList<>();
@@ -205,7 +214,21 @@ public class DiaryWriter {
 
     public void add(List<DiaryEntry> de, DiaryIngestCategory c) {
         D.add(de);
-        D.add(DiaryDataBoundary.createForSet(de, c));
+        D.add(DiaryDataBoundary.createForList(de, c));
+    }
+
+    public void writeDataBounds(File outputFile) throws IOException {
+        ArrayList<DiaryEntry> bounds = D.filter(e -> e.CATEGORY == DiaryEntryCategory.DATA_BOUNDARY);
+        StringBuilder csvBounds = new StringBuilder(1000);
+        for (DiaryIngestCategory c : DiaryIngestCategory.values()) {
+            csvBounds.append(c).append(",");
+            for (DiaryEntry e : bounds) {
+                if (e instanceof DiaryDataBoundary eb && eb.INGEST_CATEGORY == c)
+                    csvBounds.append(e.DATE).append(","); // start and finish will sort itself from chronology
+            }
+            csvBounds.append("\n");
+        }
+        Util.writeFile(outputFile, csvBounds.toString());
     }
 
     public void writeCsvSum(File outputFile) throws IOException {

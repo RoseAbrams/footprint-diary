@@ -5,20 +5,20 @@ import java.util.List;
 public class DiaryDataBoundary extends DiaryEntry {
 
     public final boolean IS_START;
-    public final DiaryIngestCategory C;
+    public final DiaryIngestCategory INGEST_CATEGORY;
 
-    DiaryDataBoundary(DiaryDate date, boolean isStart, DiaryIngestCategory c) {
-        super(DiaryEntryCategory.SPAN_BOUNDARY, date);
+    DiaryDataBoundary(DiaryDate date, boolean isStart, DiaryIngestCategory ingestCategory) {
+        super(DiaryEntryCategory.DATA_BOUNDARY, date);
         IS_START = isStart;
-        C = c;
+        INGEST_CATEGORY = ingestCategory;
     }
 
     @Override
     public String getStringSummary() {
-        return "METAINFO: data " + (IS_START ? "start" : "end") + " for " + C + "";
+        return "METAINFO: data " + (IS_START ? "start" : "end") + " for " + INGEST_CATEGORY;
     }
 
-    static DiaryDataBoundary[] createForSet(List<DiaryEntry> de, DiaryIngestCategory c) {
+    static DiaryDataBoundary[] createForList(List<DiaryEntry> de, DiaryIngestCategory c) {
         DiaryDate earliest = null;
         DiaryDate latest = null;
         for (DiaryEntry e : de) {

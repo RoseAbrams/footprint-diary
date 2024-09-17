@@ -62,11 +62,9 @@ public class FacebookMessage extends DiaryEntry implements Message {
 
     public static List<FacebookMessage> createFromFolder(File messageParentFolder) throws IOException {
         ArrayList<FacebookMessage> output = new ArrayList<>(100000);
-        for (File messageFolder : messageParentFolder.listFiles()) {
-            for (File messageFile : messageFolder.listFiles(pathname -> !pathname.isDirectory())) {
+        for (File messageFolder : messageParentFolder.listFiles())
+            for (File messageFile : messageFolder.listFiles(pathname -> !pathname.isDirectory()))
                 output.addAll(createFromHtml(messageFile));
-            }
-        }
         return output;
     }
 
@@ -93,9 +91,8 @@ public class FacebookMessage extends DiaryEntry implements Message {
             Element messageE = messagesE.get(i);
             if (messageE.text().startsWith("Participants: ") || messageE.text().startsWith("Group Invite Link: ")) {
                 isGroupChannel = true;
-                while (messagesE.get(i + 1).text().startsWith("Group")) {
+                while (messagesE.get(i + 1).text().startsWith("Group"))
                     i++;
-                }
                 continue;
             }
 
@@ -103,9 +100,8 @@ public class FacebookMessage extends DiaryEntry implements Message {
             String sender;
             if (senderQ != null)
                 sender = senderQ.text();
-            else {
+            else
                 sender = null; // deleted user
-            }
             String body = messageE.selectFirst("div._2ph_._a6-p").text();
             String dateS = messageE.selectFirst("div._3-94._a6-o div._a72d").text();
 

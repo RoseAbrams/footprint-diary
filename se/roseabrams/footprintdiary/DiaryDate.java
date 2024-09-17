@@ -186,7 +186,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
                 year++;
                 month -= 12;
             }
-            day -= daysInMonth(year, (byte) (month == 1 ? 12 : -1));
+            day -= daysInMonth(year, (byte) (month == 1 ? 12 : month - 1));
         }
         while (day < 1) {
             month--;
@@ -217,7 +217,7 @@ public class DiaryDate implements Serializable, Comparable<DiaryDate> {
             case 2:
                 return (byte) (year % 4 == 0 ? 29 : 28); // gregorian anomalies aren't important
             default:
-                throw new AssertionError();
+                throw new IllegalArgumentException();
         }
     }
 }

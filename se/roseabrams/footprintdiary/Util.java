@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
@@ -74,11 +75,9 @@ public class Util {
         if (input == null || input.isEmpty())
             return null;
         String inputM = input.toUpperCase().replace('-', '_');
-        for (E v : enumValues) {
-            if (inputM.equals(v.name())) {
+        for (E v : enumValues)
+            if (inputM.equals(v.name()))
                 return v;
-            }
-        }
         throw new IllegalArgumentException("No value " + input + " in enum " + enumValues.getClass());
     }
 
@@ -92,16 +91,23 @@ public class Util {
         fos.close();
     }
 
-    public static Object deserialize(File inputFile) throws IOException {
+    public static Object deserialize(File inputFile) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(inputFile);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object output = ois.readObject();
+        ois.close();
+        fis.close();
+        return output;
+    }
+
+    public static Object deserializeOrDelete(File inputFile) throws IOException {
         try {
-            FileInputStream fis = new FileInputStream(inputFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object output = ois.readObject();
-            ois.close();
-            fis.close();
-            return output;
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e);
+            return deserialize(inputFile);
+        } catch (ClassNotFoundException | InvalidClassException e) {
+            System.err.println("Failed to deserialize file \"" + inputFile.getName()
+                    + "\", will delete. Did any class signatures change?");
+            inputFile.delete();
+            return null;
         }
     }
 
